@@ -28,7 +28,7 @@ const Bridge = () => {
           return;
         }
 
-        ignorePromise(() => router.replace(Urls.purchase.success.url({ pk: res.pk })));
+        ignorePromise(() => router.replace(Urls.purchase.success["[pk]"].url({ pk: res.pk })));
       },
     },
   );
