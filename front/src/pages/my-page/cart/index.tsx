@@ -8,7 +8,6 @@ import { ignorePromise } from "../../../ex/utils";
 import { Replace } from "../../../layout/App";
 import { Urls } from "../../../url/url.g";
 import CartListView from "../../../view/myPage/CartListView";
-import PurchaseSkeleton from "../../../view/skeleton/PurchaseSkeleton";
 
 const CartPage = () => {
   const router = useRouter();
@@ -23,8 +22,7 @@ const CartPage = () => {
 
   if (isLoading) {
     // TODO :: 스켈레톤
-    // 임시로 구매 페이지 스켈레톤 추가
-    return <PurchaseSkeleton />;
+    return <></>;
   }
 
   if (isNil(cartList)) {
