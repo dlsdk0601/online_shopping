@@ -7,6 +7,7 @@ import { AddPurchaseReqDto, AddPurchaseResDto } from "./dto/add-purchase.dto";
 import { GetUser } from "../../decorator/user.decorator";
 import { User } from "../../entities/user.entity";
 import { TossPaymentApproveReqDto, TossPaymentApproveResDto } from "./dto/toss-payment.dto";
+import { FailPurchaseReqDto, FailPurchaseResDto } from "./dto/fail-purchase.dto";
 
 @Controller("/purchase")
 @ApiTags("구매")
@@ -36,5 +37,12 @@ export class PurchaseController {
     @GetUser() user: User
   ): Promise<TossPaymentApproveResDto> {
     return this.purchaseService.tossPaymentApprove(body, user);
+  }
+
+  @Post("fail-purchase")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiCreatedResponse({ type: FailPurchaseResDto })
+  async failPurchase(@Body() body: FailPurchaseReqDto): Promise<FailPurchaseResDto> {
+    return this.purchaseService.failPurchase(body);
   }
 }
