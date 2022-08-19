@@ -87,7 +87,7 @@ const CartEditView = memo((props: { res?: ShowCartRes }) => {
         isShowingLabel
         disabled
       />
-      <div className="mt-2  flex w-11/12 justify-between">
+      <div className="mt-2 flex w-11/12 justify-between">
         <p className="text-m font-bold uppercase text-blueGray-600">상품 리스트</p>
         <p className="text-m pr-2 text-end font-bold uppercase text-blueGray-600">
           총 합: $ {mf2(totalPrice)}
