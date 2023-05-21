@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - '15432:5432'
+    environment:
+      - 'POSTGRES_PASSWORD='
+      - POSTGRES_DB=nest_typeorm
+    volumes:
+      - /Users/global/workspace/DB/pgdata:/var/lib/postgresql/data

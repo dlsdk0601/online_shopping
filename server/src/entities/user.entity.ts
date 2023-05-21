@@ -1,0 +1,34 @@
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import TimeSet from "./timeSet.entity";
+import { UserType } from "../type/commonType";
+import { LocalUser } from "./local-user.entity";
+import { GoogleUser } from "./google-user.entity";
+import { KakaoUser } from "./kakao-user.entity";
+import { NaverUser } from "./naver-user.entity";
+
+@Entity("user")
+export class User extends TimeSet {
+  @PrimaryGeneratedColumn({ comment: "pk" })
+  pk: number;
+
+  @Column({ type: "varchar", nullable: false, comment: "유저 이름", length: 32 })
+  name: string;
+
+  @Column({ type: "varchar", nullable: true, comment: "유저 휴대폰", length: 32 })
+  phone: string | null;
+
+  @Column({ enum: UserType, type: "enum", nullable: false })
+  type: UserType;
+
+  @OneToOne(() => LocalUser, (localUser) => localUser.user)
+  localUser: LocalUser;
+
+  @OneToOne(() => GoogleUser, (googleUser) => googleUser.user)
+  googleUser: GoogleUser;
+
+  @OneToOne(() => KakaoUser, (kakaoUser) => kakaoUser.user)
+  kakaoUser: KakaoUser;
+
+  @OneToOne(() => NaverUser, (naverUser) => naverUser.user)
+  naverUser: NaverUser;
+}

@@ -1,0 +1,36 @@
+import * as Joi from "joi";
+
+export const envValidation: Joi.Schema = Joi.object({
+  NODE_ENV: Joi.string().valid("development", "test", "production").required(),
+  PORT: Joi.number().required(),
+  VERSION: Joi.number().required(),
+  FRONT_ORIGIN_URL: Joi.string().required(),
+  FRONT_SNS_SIGN_UP: Joi.string().required(),
+  FRONT_SNS_REDIRECT: Joi.string().required(),
+  GOOGLE_CLIENT_REDIRECT_URL: Joi.string().required(),
+  COOKIE_EXP: Joi.number().required(),
+  JWT_SECRET: Joi.string().required(),
+  KAKAO_ID: Joi.string().required(),
+  KAKAO_GET_USER_URI: Joi.string().required(),
+  KAKAO_CODE_VERIFY_URI: Joi.string().required(),
+  KAKAO_FRONT_REDIRECT: Joi.string().required(),
+  NAVER_REDIRECT_URL: Joi.string().required(),
+  NAVER_GET_USER_URI: Joi.string().required(),
+  NAVER_CLIENT_ID: Joi.string().required(),
+  NAVER_CLIENT_SECRET_KEY: Joi.string().required(),
+  NAVER_CODE_VERIFY_URI: Joi.string().required(),
+  AWS_ACCESS_KEY: Joi.string().required(),
+  AWS_SECRET_KEY: Joi.string().required(),
+  AWS_BUCKET_NAME: Joi.string().required(),
+  AWS_REGION: Joi.string().required(),
+  POSTGRES_HOST: Joi.string().required(),
+  POSTGRES_PORT: Joi.string().required(),
+  POSTGRES_USERNAME: Joi.string().required(),
+  POSTGRES_PASSWORD: Joi.string().required(),
+  POSTGRES_DATABASE: Joi.string().required(),
+  DB_TYPE: Joi.string().valid("postgres").required(),
+  POSTGRES_SYNCHRONIZE: Joi.string().required(),
+  POSTGRES_LOGGING: Joi.string().required(),
+}).options({
+  abortEarly: true, // 첫 번째 오류가 발생하면 즉시 유효성 검사를 중지하고 모든 오류를 반환
+});
