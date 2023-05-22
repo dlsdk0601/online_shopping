@@ -5,9 +5,10 @@ services:
     image: postgres:latest
     restart: always
     ports:
-      - '15432:5432'
+      - '30230:5432'
     environment:
       - 'POSTGRES_PASSWORD='
       - POSTGRES_DB=online_shopping
     volumes:
       - /Users/global/workspace/DB/pgdata:/var/lib/postgresql/data
+
