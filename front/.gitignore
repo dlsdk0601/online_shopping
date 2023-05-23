@@ -42,3 +42,5 @@ next-env.d.ts
 *.g.d.ts
 *.g.ts
 
+# template
+/src/tamplate/
