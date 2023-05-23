@@ -6,6 +6,7 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Favicon from "../../public/favicon.ico";
+import { Urls } from "../url/url.g";
 
 // 로그인 유저가 보는 화면 (ex 어드민 메인화면)
 export const LayoutView = (props: PropsWithChildren) => {
@@ -45,54 +46,54 @@ export const DefaultLayoutView = (props: PropsWithChildren<Record<never, any>>) 
 };
 
 const headerMenuList = [
-  { name: "Home", path: "/" },
-  { name: "Men's", path: "" },
+  { name: "Men's", path: Urls.mens.index },
   {
     name: "Women's",
-    path: "",
+    path: Urls.womens.index,
   },
-  { name: "Kid's", path: "" },
-  { name: "Account", path: "" },
+  { name: "Kid's", path: Urls.kids.index },
+  { name: "Account", path: Urls.auth.signIn },
 ];
 export const HeaderView = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      <header className="header-area header-sticky">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <nav className="main-nav">
-                <Link href="/" className="logo">
-                  <img src="/images/logo.png" alt="" style={{ height: "90px" }} />
-                </Link>
-                <ul className={classNames("nav", { show: isOpen })}>
-                  {headerMenuList.map((menu) => (
-                    <li className="scroll-to-section">
-                      <Link
-                        href={menu.path}
-                        className={classNames({ active: router.pathname === menu.path })}
-                      >
-                        {menu.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  type="button"
-                  className={classNames("menu-trigger", { active: isOpen })}
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  <span>Menu</span>
-                </button>
-              </nav>
-            </div>
+    <header className="header-area header-sticky">
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <nav className="main-nav">
+              <Link href="/" className="logo">
+                <img src="/images/logo.png" alt="" style={{ height: "90px" }} />
+              </Link>
+              <ul className={classNames("nav", { show: isOpen })}>
+                {headerMenuList.map((menu) => (
+                  <li className="scroll-to-section">
+                    <Link
+                      href={menu.path}
+                      className={classNames({
+                        active:
+                          router.pathname !== Urls.index && menu.path.startsWith(router.pathname),
+                      })}
+                    >
+                      {menu.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                className={classNames("menu-trigger", { active: isOpen })}
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <span>Menu</span>
+              </button>
+            </nav>
           </div>
         </div>
-      </header>
-    </>
+      </div>
+    </header>
   );
 };
 
