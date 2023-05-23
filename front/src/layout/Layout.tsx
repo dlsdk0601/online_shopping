@@ -18,7 +18,7 @@ export const LayoutView = (props: PropsWithChildren) => {
       {/*  <div className="-m-24 mx-auto w-full px-4 md:px-10"> */}
       {props.children}
       <BlockView />
-      {/*    <FooterView /> */}
+      <FooterView />
       {/*  </div> */}
       {/* </div> */}
       {/* <BlockView /> */}
@@ -34,10 +34,6 @@ export const DefaultLayoutView = (props: PropsWithChildren<Record<never, any>>) 
       <Head>
         {/* TODO :: Favicon 변경 */}
         <link rel="shortcut icon" type="image/x-icon" href={Favicon.src} />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
-          rel="stylesheet"
-        />
       </Head>
       {props.children}
     </>
@@ -96,15 +92,108 @@ export const HeaderView = () => {
   );
 };
 
+const FooterView = () => {
+  return (
+    <footer>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-3">
+            <div className="first-item">
+              <div className="logo">
+                <img
+                  src="/images/white-logo.png"
+                  alt="hexashop ecommerce templatemo"
+                  style={{ width: "100%" }}
+                />
+              </div>
+              <ul>
+                <li>
+                  <span>16501 Collins Ave, Sunny Isles Beach, FL 33160, United States</span>
+                </li>
+                <li>
+                  <Link href="mailto:inajung7008@gmail.com">inajung7008@gmail.com</Link>
+                </li>
+                <li>
+                  <Link href="tel:+821065675303">010-6567-5303</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="col-lg-3">
+            <h4>Shopping &amp; Categories</h4>
+            <ul>
+              <li>
+                <Link href={Urls.mens.index}>Men’s Shopping</Link>
+              </li>
+              <li>
+                <Link href={Urls.womens.index}>Women’s Shopping</Link>
+              </li>
+              <li>
+                <Link href={Urls.kids.index}>Kid's Shopping</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="col-lg-3">
+            <h4>Useful Links</h4>
+            <ul>
+              <li>
+                <Link href="#">Homepage</Link>
+              </li>
+              <li>
+                <Link href="#">About Us</Link>
+              </li>
+              <li>
+                <Link href="#">Contact Us</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="col-lg-3">
+            <h4>Help &amp; Information</h4>
+            <ul>
+              <li>
+                <Link href="#">Help</Link>
+              </li>
+              <li>
+                <Link href="#">FAQ's</Link>
+              </li>
+              <li>
+                <Link href="#">Tracking ID</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="col-lg-12">
+            <div className="under-footer">
+              <p>
+                Copyright © 2022 HexaShop Co., Ltd. All Rights Reserved.
+                <br />
+                Design:{" "}
+                <a href="https://templatemo.com" target="_parent" title="free css templates">
+                  TemplateMo
+                </a>
+                <br />
+                Distributed By:
+                <a
+                  href="https://themewagon.com"
+                  target="_blank"
+                  title="free & premium responsive templates"
+                  rel="noreferrer"
+                >
+                  ThemeWagon
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
 const BlockView = () => {
   const loadingCount = useIsMutating();
   const isLocked = loadingCount > 0;
   return (
-    <div
-      id="preloader"
-      // style={{ visibility: isLocked ? "visible" : "hidden", display: isLocked ? "block" : "none" }}
-      className={classNames({ show: isLocked })}
-    >
+    <div id="preloader" className={classNames({ show: isLocked })}>
       <div className="jumper">
         <div />
         <div />
