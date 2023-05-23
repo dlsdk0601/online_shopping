@@ -423,7 +423,7 @@ header
 
     .header-area .main-nav .nav.show {
         /*display: block;*/
-        height: 350px;
+        height: 256px;
         transition: height 0.3s ease 0s;
     }
 
