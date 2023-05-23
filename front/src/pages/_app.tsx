@@ -5,6 +5,8 @@ import "../styles/owl-carousel.css";
 import "../styles/templatemo-hexashop.css";
 import "../styles/bootstrap.min.css";
 import "../styles/globals.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
 import type { AppProps, AppType } from "next/app";
 import { App } from "../layout/App";
