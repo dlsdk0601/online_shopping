@@ -1,6 +1,5 @@
 import React, { PropsWithChildren, useState } from "react";
 import Head from "next/head";
-import { ClipLoader } from "react-spinners";
 import { useIsMutating } from "react-query";
 import classNames from "classnames";
 import Link from "next/link";
@@ -102,22 +101,15 @@ const BlockView = () => {
   const isLocked = loadingCount > 0;
   return (
     <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        zIndex: 9999,
-        pointerEvents: isLocked ? "auto" : "none",
-        opacity: isLocked ? 1 : 0,
-        transition: "opacity .3s .1s",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      id="preloader"
+      // style={{ visibility: isLocked ? "visible" : "hidden", display: isLocked ? "block" : "none" }}
+      className={classNames({ show: isLocked })}
     >
-      <ClipLoader />
+      <div className="jumper">
+        <div />
+        <div />
+        <div />
+      </div>
     </div>
   );
 };
