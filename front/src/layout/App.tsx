@@ -6,6 +6,7 @@ import { isNil, some } from "lodash";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot, useSetRecoilState } from "recoil";
 import { ReactQueryDevtools } from "react-query/devtools";
+import Head from "next/head";
 import { ignorePromise } from "../ex/utils";
 import { DefaultLayoutView, LayoutView } from "./Layout";
 import { userToken } from "../store/user";
@@ -30,14 +31,23 @@ export const App = ({ Component, pageProps }: AppProps) => {
     },
   });
   return (
-    <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <LayoutSelector>
-          <Component {...pageProps} />
-        </LayoutSelector>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </RecoilRoot>
+    <>
+      <Head>
+        <script
+          src={`https://kit.fontawesome.com/${process.env.NEXT_PUBLIC_FONT_AWESOME}.js`}
+          crossOrigin="anonymous"
+        />
+        <title>online</title>
+      </Head>
+      <RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+          <LayoutSelector>
+            <Component {...pageProps} />
+          </LayoutSelector>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </RecoilRoot>
+    </>
   );
 };
 
