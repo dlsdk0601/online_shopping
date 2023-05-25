@@ -248,40 +248,97 @@
     border: 1px solid black;
 }
 
-/*.slick-next {*/
-/*    top: 35%;*/
-/*    right: -50px;*/
-/*}*/
 
-/*.slick-prev {*/
-/*    top: 35%;*/
-/*    left: -80px;*/
-/*}*/
+.slick-prev:before {
+    content: '\f104';
+}
 
-/*.slick-prev:before, .slick-next:before {*/
-/*    display: inline-block;*/
-/*    font-family: 'FontAwesome';*/
-/*    color: #2a2a2a;*/
-/*    font-size: 25px;*/
-/*    font-weight: 700;*/
-/*    width: 50px;*/
-/*    height: 50px;*/
-/*    background-color: transparent;*/
-/*    line-height: 48px;*/
-/*    border: 1px solid #2a2a2a;*/
-/*}*/
+.slick-next:before {
+    content: '\f105';
+}
 
-/*.slick-prev:before {*/
-/*    content: '\f104';*/
-/*}*/
+.slick-container {
+    margin: 0 auto;
+    width: 370px;
+}
 
-/*.slick-next:before {*/
-/*    content: '\f105';*/
-/*}*/
+@media (min-width: 576px) {
+    .slick-container {
+        width: 370px;
+    }
+}
+
+@media (min-width: 768px) {
+    .slick-container {
+        width: 760px;
+    }
+
+    .slick-prev {
+        left: -70px;
+    }
+
+    .slick-next {
+        right: -60px;
+    }
+
+    .slick-prev:before, .slick-next:before {
+        width: 30px;
+        height: 30px;
+        line-height: 27px;
+        font-weight: 400;
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 992px) {
+    .slick-prev {
+        left: -70px;
+    }
+
+    .slick-next {
+        right: -60px;
+    }
+
+    .slick-prev:before, .slick-next:before {
+        width: 30px;
+        height: 30px;
+        line-height: 27px;
+        font-weight: 400;
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .slick-container {
+        width: 1140px;
+    }
+
+    .slick-prev:before, .slick-next:before {
+        display: inline-block;
+        font-family: 'FontAwesome';
+        color: #2a2a2a;
+        font-size: 25px;
+        font-weight: 700;
+        width: 50px;
+        height: 50px;
+        background-color: transparent;
+        line-height: 48px;
+        border: 1px solid #2a2a2a;
+    }
+
+    .slick-next {
+        top: 35%;
+        right: -30px;
+    }
+
+    .slick-prev {
+        top: 35%;
+        left: -80px;
+    }
+
+}
 
 
-/*@media (max-width: 991px) {*/
-/*    .owl-carousel {*/
-/*        width: 800px;*/
-/*    }*/
-/*}*/
+
+
+
