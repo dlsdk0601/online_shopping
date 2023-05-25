@@ -1,7 +1,5 @@
 import Link from "next/link";
-import SwiperCore, { Navigation } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { useRef } from "react";
+import Slider from "react-slick";
 import { Urls } from "../url/url.g";
 
 const settings = {
@@ -14,21 +12,20 @@ const settings = {
     {
       breakpoint: 991,
       settings: {
-        slidesToShow: 2,
-      },
+        slidesToShow: 2
+      }
     },
     {
-      breakpoint: 470,
+      breakpoint: 767,
       settings: {
         slidesToShow: 1,
-      },
-    },
-  ],
+        arrows: false
+      }
+    }
+  ]
 };
 
 export default function Home() {
-  SwiperCore.use([Navigation]);
-  const ref = useRef<SwiperCore>();
   return (
     <>
       <div className="main-banner" id="top">
@@ -161,206 +158,122 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="container">
+        <div className="slick-container">
           <div className="row">
-            <div className="col-lg-12">
-              <div className="men-item-carousel">
-                <div className="owl-carousel owl-loaded">
-                  <Swiper
-                    modules={[Navigation]}
-                    navigation
-                    spaceBetween={30}
-                    slidesPerView={3}
-                    loop
-                    className="mySwiper"
-                    onSwiper={(swiper) => {
-                      ref.current = swiper;
-                    }}
-                  >
-                    <SwiperSlide className="item">
-                      <div className="thumb">
-                        <div className="hover-content">
-                          <ul>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-eye" />
-                              </a>
-                            </li>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-star" />
-                              </a>
-                            </li>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-shopping-cart" />
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <img src="/images/men-01.jpg" alt="" />
-                      </div>
-                      <div className="down-content">
-                        <h4>Classic Spring</h4>
-                        <span>$120.00</span>
-                        <ul className="stars">
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                        </ul>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide className="item">
-                      <div className="thumb">
-                        <div className="hover-content">
-                          <ul>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-eye" />
-                              </a>
-                            </li>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-star" />
-                              </a>
-                            </li>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-shopping-cart" />
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <img src="/images/men-02.jpg" alt="" />
-                      </div>
-                      <div className="down-content">
-                        <h4>Air Force 1 X</h4>
-                        <span>$90.00</span>
-                        <ul className="stars">
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                        </ul>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide className="item">
-                      <div className="thumb">
-                        <div className="hover-content">
-                          <ul>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-eye" />
-                              </a>
-                            </li>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-star" />
-                              </a>
-                            </li>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-shopping-cart" />
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <img src="/images/men-03.jpg" alt="" />
-                      </div>
-                      <div className="down-content">
-                        <h4>Love Nana ‘20</h4>
-                        <span>$150.00</span>
-                        <ul className="stars">
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                        </ul>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide className="item">
-                      <div className="thumb">
-                        <div className="hover-content">
-                          <ul>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-eye" />
-                              </a>
-                            </li>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-star" />
-                              </a>
-                            </li>
-                            <li>
-                              <a href="single-product.html">
-                                <i className="fa fa-shopping-cart" />
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <img src="/images/men-01.jpg" alt="" />
-                      </div>
-                      <div className="down-content">
-                        <h4>Classic Spring</h4>
-                        <span>$120.00</span>
-                        <ul className="stars">
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                          <li>
-                            <i className="fa fa-star" />
-                          </li>
-                        </ul>
-                      </div>
-                    </SwiperSlide>
-                  </Swiper>
+            <Slider {...settings} className="owl-carousel owl-loaded">
+              <li className="item">
+                <div className="thumb">
+                  <div className="hover-content">
+                    <ul>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-eye" />
+                        </a>
+                      </li>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-star" />
+                        </a>
+                      </li>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-shopping-cart" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <img src="/images/men-01.jpg" alt="" />
                 </div>
-              </div>
-            </div>
+                <div className="down-content">
+                  <h4>Classic Spring</h4>
+                  <span>$120.00</span>
+                </div>
+              </li>
+              <li className="item">
+                <div className="thumb">
+                  <div className="hover-content">
+                    <ul>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-eye" />
+                        </a>
+                      </li>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-star" />
+                        </a>
+                      </li>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-shopping-cart" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <img src="/images/men-02.jpg" alt="" />
+                </div>
+                <div className="down-content">
+                  <h4>Air Force 1 X</h4>
+                  <span>$90.00</span>
+                </div>
+              </li>
+              <li className="item">
+                <div className="thumb">
+                  <div className="hover-content">
+                    <ul>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-eye" />
+                        </a>
+                      </li>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-star" />
+                        </a>
+                      </li>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-shopping-cart" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <img src="/images/men-03.jpg" alt="" />
+                </div>
+                <div className="down-content">
+                  <h4>Love Nana ‘20</h4>
+                  <span>$150.00</span>
+                </div>
+              </li>
+              <li className="item">
+                <div className="thumb">
+                  <div className="hover-content">
+                    <ul>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-eye" />
+                        </a>
+                      </li>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-star" />
+                        </a>
+                      </li>
+                      <li>
+                        <a href="single-product.html">
+                          <i className="fa fa-shopping-cart" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <img src="/images/men-01.jpg" alt="" />
+                </div>
+                <div className="down-content">
+                  <h4>Classic Spring</h4>
+                  <span>$120.00</span>
+                </div>
+              </li>
+            </Slider>
           </div>
         </div>
       </section>
