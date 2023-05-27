@@ -90,7 +90,7 @@ const FooterView = () => {
   return (
     <footer>
       <div className="container">
-        <div className="row">
+        <div className="row" style={{ justifyContent: "space-between" }}>
           <div className="col-lg-3">
             <div className="first-item">
               <div className="logo">
