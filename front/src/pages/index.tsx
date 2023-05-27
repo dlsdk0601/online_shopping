@@ -297,7 +297,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="container">
+        <div className="slick-container">
           <div className="row">
             <Slider {...settings} className="owl-carousel owl-loaded">
               <div className="item">
