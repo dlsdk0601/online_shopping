@@ -12,17 +12,24 @@ const settings = {
     {
       breakpoint: 991,
       settings: {
-        slidesToShow: 2
-      }
+        slidesToShow: 2,
+      },
     },
     {
       breakpoint: 767,
       settings: {
         slidesToShow: 1,
-        arrows: false
-      }
-    }
-  ]
+        arrows: false,
+      },
+    },
+    {
+      breakpoint: 576,
+      settings: {
+        slidesToShow: 1,
+        arrows: false,
+      },
+    },
+  ],
 };
 
 export default function Home() {
