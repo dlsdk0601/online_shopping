@@ -54,7 +54,7 @@ const GoogleSignInView = (props: {
   });
 
   return (
-    <div className="relative mt-2">
+    <div className="">
       <div ref={googleBtn} />
     </div>
   );

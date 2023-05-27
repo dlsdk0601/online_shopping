@@ -29,7 +29,7 @@ const SignIn = () => {
   }, []);
 
   return (
-    <div className="mx-auto mt-14 w-[400px] rounded border p-4">
+    <div className="">
       <LocalSignInView onSuccess={onSuccess} />
       <GoogleSignInView onSuccess={onSuccess} onPushSnsSignUp={onPushSnsSingUp} />
       <KakaoSignInView />

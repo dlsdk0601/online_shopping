@@ -60,12 +60,7 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
         onChange={(e) => setPassword.set(e.target.value)}
         type="password"
       />
-      <button
-        type="submit"
-        className="mt-2 w-full rounded border p-2 transition-colors hover:bg-black hover:text-white"
-      >
-        Sign In
-      </button>
+      <button type="submit">Sign In</button>
     </form>
   );
 };
