@@ -42,6 +42,7 @@ const headerMenuList = [
   { name: "Kid's", path: Urls.kids.index },
   { name: "Account", path: Urls.auth.signIn },
 ];
+
 export const HeaderView = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -95,7 +96,7 @@ const FooterView = () => {
               <div className="logo">
                 <img
                   src="/images/white-logo.png"
-                  alt="hexashop ecommerce templatemo"
+                  alt="hexashop-ecommerce-templatemo"
                   style={{ width: "100%" }}
                 />
               </div>
@@ -130,30 +131,30 @@ const FooterView = () => {
             <h4>Useful Links</h4>
             <ul>
               <li>
-                <Link href="#">Homepage</Link>
+                <Link href={Urls.index}>Homepage</Link>
               </li>
               <li>
-                <Link href="#">About Us</Link>
+                <Link href="/">About Us</Link>
               </li>
               <li>
-                <Link href="#">Contact Us</Link>
+                <Link href={Urls.contact.index}>Contact Us</Link>
               </li>
             </ul>
           </div>
-          <div className="col-lg-3">
-            <h4>Help &amp; Information</h4>
-            <ul>
-              <li>
-                <Link href="#">Help</Link>
-              </li>
-              <li>
-                <Link href="#">FAQ's</Link>
-              </li>
-              <li>
-                <Link href="#">Tracking ID</Link>
-              </li>
-            </ul>
-          </div>
+          {/*<div className="col-lg-3">*/}
+          {/*  <h4>Help &amp; Information</h4>*/}
+          {/*  <ul>*/}
+          {/*    <li>*/}
+          {/*      <Link href="#">Help</Link>*/}
+          {/*//     </li>*/}
+          {/*//     <li>*/}
+          {/*      <Link href="#">FAQ's</Link>*/}
+          {/*    </li>*/}
+          {/*    <li>*/}
+          {/*      <Link href="#">Tracking ID</Link>*/}
+          {/*    </li>*/}
+          {/*  </ul>*/}
+          {/*</div>*/}
           <div className="col-lg-12">
             <div className="under-footer">
               <p>
