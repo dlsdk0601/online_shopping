@@ -29,12 +29,29 @@ const SignIn = () => {
   }, []);
 
   return (
-    <div className="">
-      <LocalSignInView onSuccess={onSuccess} />
-      <GoogleSignInView onSuccess={onSuccess} onPushSnsSignUp={onPushSnsSingUp} />
-      <KakaoSignInView />
-      <NaverSignInView />
-    </div>
+    <>
+      <div className="page-heading" id="top">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="inner-content">
+                <h2>Sign In</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section className="section">
+        <div className="container sign-container">
+          <LocalSignInView onSuccess={onSuccess} />
+          <div className="sns-button-wrapper">
+            <GoogleSignInView onSuccess={onSuccess} onPushSnsSignUp={onPushSnsSingUp} />
+            <KakaoSignInView />
+            <NaverSignInView />
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
 
