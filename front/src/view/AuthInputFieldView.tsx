@@ -11,10 +11,10 @@ const AuthInputFieldView = (props: {
 }) => {
   return (
     <>
-      <div className="m-1 flex items-center justify-between">
+      <div className="input-field">
         <label>{props.label}</label>
         <input
-          className={classNames("w-1/2 rounded border p-1", {
+          className={classNames({
             "border-red-400": !isBlank(props.field.error),
           })}
           value={props.field.value}
@@ -22,9 +22,7 @@ const AuthInputFieldView = (props: {
           type={props.type ?? "text"}
         />
       </div>
-      {!isBlank(props.field.error) && (
-        <p className="text-right text-[13px] text-red-400">{props.field.error}</p>
-      )}
+      {!isBlank(props.field.error) && <p className="">{props.field.error}</p>}
     </>
   );
 };
