@@ -134,7 +134,7 @@ const FooterView = () => {
                 <Link href={Urls.index}>Homepage</Link>
               </li>
               <li>
-                <Link href="/">About Us</Link>
+                <Link href={Urls.about.index}>About Us</Link>
               </li>
               <li>
                 <Link href={Urls.contact.index}>Contact Us</Link>
