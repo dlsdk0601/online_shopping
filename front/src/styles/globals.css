@@ -177,6 +177,97 @@ body {
     font-weight: 400;
 }
 
+/*
+---------------------------------------------
+form
+---------------------------------------------
+*/
+.sign-container {
+    border: 1px solid #2a2a2a;
+    border-radius: 20px;
+    padding: 2rem;
+}
+
+.form-container .sign-button {
+    display: block;
+    width: 80%;
+    margin: 10px auto;
+    background: none;
+    border: 1px solid #2a2a2a;
+    border-radius: 5px;
+    padding: 1rem;
+    transition: all 0.3s;
+}
+
+.form-container .sign-button:hover {
+    background-color: #2a2a2a;
+    color: #eee;
+}
+
+.input-field {
+    width: 80%;
+    margin: 10px auto;
+}
+
+.input-field label {
+    display: inline-block;
+    width: 20%;
+}
+
+
+.input-field input {
+    display: inline-block;
+    padding: 0.5rem;
+    width: 80%;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+}
+
+.sns-button-wrapper {
+    width: 80%;
+    margin: 10px auto;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sns-wrapper {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    background: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60px;
+    height: 60px;
+}
+
+.sns-button {
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    display: inline-block;
+    border: none;
+}
+
+.kakao-button {
+    background: url("/images/kakao-logo.png") no-repeat;
+    background-size: cover;
+}
+
+.naver-button {
+    background: url("/images/naver-logo.png") no-repeat;
+    background-size: cover;
+}
+
 
 /*
 ---------------------------------------------
@@ -268,3 +359,5 @@ footer .under-footer a:hover {
         margin-top: 30px;
     }
 }
+
+
