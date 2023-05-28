@@ -52,15 +52,17 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
   }, [id, password]);
 
   return (
-    <form onSubmit={preventDefaulted(() => onLocalSignIn())}>
-      <AuthInputFieldView field={id} label="아이디" onChange={(e) => setId.set(e.target.value)} />
+    <form className="form-container" onSubmit={preventDefaulted(() => onLocalSignIn())}>
+      <AuthInputFieldView field={id} label="ID" onChange={(e) => setId.set(e.target.value)} />
       <AuthInputFieldView
         field={password}
-        label="비밀번호"
+        label="PASSWORD"
         onChange={(e) => setPassword.set(e.target.value)}
         type="password"
       />
-      <button type="submit">Sign In</button>
+      <button type="submit" className="sign-button">
+        Sign In
+      </button>
     </form>
   );
 };
