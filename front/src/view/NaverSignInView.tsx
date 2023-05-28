@@ -9,8 +9,13 @@ const NaverSignInView = () => {
   }, []);
 
   return (
-    <button type="button" onClick={() => onClick()}>
-      <img src="https://static.nid.naver.com/oauth/small_g_in.PNG" alt="카카오 로그인" />
+    <button type="button" className="sns-button naver-button" onClick={() => onClick()}>
+      {/*<img*/}
+      {/*  className="naver-img"*/}
+      {/*  // src="https://static.nid.naver.com/oauth/small_g_in.PNG"*/}
+      {/*  src="/images/naver-logo.png"*/}
+      {/*  alt="naver-logo"*/}
+      {/*/>*/}
     </button>
   );
 };

@@ -12,6 +12,7 @@ const GoogleSignInView = (props: {
   onPushSnsSignUp: (res: GoogleTokenVerifyRes) => void;
 }) => {
   const googleBtn = useRef<HTMLDivElement | null>(null);
+  const googleWrapper = useRef<HTMLDivElement | null>(null);
 
   const { mutate } = useMutation((req: GoogleTokenVerifyReq) => api.googleTokenVerify(req), {
     onSuccess: (res: GoogleTokenVerifyRes) => {
@@ -37,6 +38,9 @@ const GoogleSignInView = (props: {
   );
 
   useScript(SNS_URL.google_client, () => {
+    if (typeof window === "undefined") {
+      return;
+    }
     // google 객체에 데이터 설정
     // @ts-ignore
     window.google.accounts.id.initialize({
@@ -46,16 +50,17 @@ const GoogleSignInView = (props: {
 
     // google 로그인 버튼 커스텀
     // @ts-ignore
-    window.google.accounts.id.renderButton(googleBtn.current, {
+    window.google.accounts.id.renderButton(googleWrapper.current, {
+      type: "icon",
       theme: "outline",
       size: "large",
-      width: "366",
     });
   });
 
   return (
-    <div className="">
+    <div ref={googleWrapper} className="sns-wrapper">
       <div ref={googleBtn} />
+      <img className="logo-img" src="/images/google-logo.png" alt="google-logo" />
     </div>
   );
 };

@@ -9,8 +9,8 @@ const KakaoSignInView = () => {
   }, []);
 
   return (
-    <button type="button" onClick={() => onClick()}>
-      <img src="/images/kakao_login.png" alt="카카오 로그인" />
+    <button type="button" className="sns-button kakao-button" onClick={() => onClick()}>
+      {/*<img src="/images/kakao-logo.png" alt="카카오 로그인" />*/}
     </button>
   );
 };
