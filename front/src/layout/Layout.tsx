@@ -6,6 +6,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Favicon from "../../public/favicon.ico";
 import { Urls } from "../url/url.g";
+import { useRecoilValue } from "recoil";
+import { userToken } from "../store/user";
+import { isNil } from "lodash";
 
 // 로그인 유저가 보는 화면 (ex 어드민 메인화면)
 export const LayoutView = (props: PropsWithChildren) => {
@@ -40,11 +43,11 @@ const headerMenuList = [
     path: Urls.womens.index,
   },
   { name: "Kid's", path: Urls.kids.index },
-  { name: "Account", path: Urls.auth.signIn },
 ];
 
 export const HeaderView = () => {
   const router = useRouter();
+  const token = useRecoilValue(userToken);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -70,6 +73,17 @@ export const HeaderView = () => {
                     </Link>
                   </li>
                 ))}
+                <li className="scroll-to-section">
+                  <Link
+                    // TODO :: token 있을 때는 마이페이지로
+                    href={isNil(token) ? Urls.auth.signIn : Urls.auth.signIn}
+                    className={classNames({
+                      active: router.pathname !== Urls.index && router.pathname.startsWith("/auth"),
+                    })}
+                  >
+                    Account
+                  </Link>
+                </li>
               </ul>
               <button
                 type="button"
