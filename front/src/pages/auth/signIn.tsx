@@ -44,6 +44,11 @@ const SignIn = () => {
       <section className="section">
         <div className="container sign-container">
           <LocalSignInView onSuccess={onSuccess} />
+          <div className="separator">
+            <hr className="line" />
+            <span>Or</span>
+            <hr className="line" />
+          </div>
           <div className="sns-button-wrapper">
             <GoogleSignInView onSuccess={onSuccess} onPushSnsSignUp={onPushSnsSingUp} />
             <KakaoSignInView />

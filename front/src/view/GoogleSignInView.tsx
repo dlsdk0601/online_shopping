@@ -37,28 +37,30 @@ const GoogleSignInView = (props: {
     [],
   );
 
-  useScript(SNS_URL.google_client, () => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    // google 객체에 데이터 설정
-    // @ts-ignore
-    window.google.accounts.id.initialize({
-      client_id: baseConfig.google_client_id,
-      callback: onGoogleSignIn,
-    });
+  useScript(
+    SNS_URL.google_client,
+    () => {
+      if (typeof window === "undefined") {
+        return;
+      }
+      // google 객체에 데이터 설정
+      // @ts-ignore
+      window.google.accounts.id.initialize({
+        client_id: baseConfig.google_client_id,
+        callback: onGoogleSignIn,
+      });
 
-    // google 로그인 버튼 커스텀
-    // @ts-ignore
-    window.google.accounts.id.renderButton(googleWrapper.current, {
-      type: "icon",
-      theme: "outline",
-      size: "large",
-    });
-  });
+      // google 로그인 버튼 커스텀
+      // @ts-ignore
+      window.google.accounts.id.renderButton(googleWrapper.current, {
+        type: "icon",
+      });
+    },
+    [googleWrapper.current],
+  );
 
   return (
-    <div ref={googleWrapper} className="sns-wrapper">
+    <div ref={googleWrapper} className="sns-button google-button">
       <div ref={googleBtn} />
       <img className="logo-img" src="/images/google-logo.png" alt="google-logo" />
     </div>
