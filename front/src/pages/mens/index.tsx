@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Urls } from "../../url/url.g";
 
 const MensPage = () => {
   return (
@@ -34,7 +35,7 @@ const MensPage = () => {
                   <div className="hover-content">
                     <ul>
                       <li>
-                        <Link href="/">
+                        <Link href={{ pathname: Urls.mens.show["[pk]"], query: { pk: 1 } }}>
                           <i className="fa fa-eye"></i>
                         </Link>
                       </li>
