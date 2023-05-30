@@ -3,13 +3,14 @@ import {
   IsArray,
   IsDate,
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
 } from "class-validator";
-import { UserSearchType } from "../../type/commonType";
+import { UserSearchType, UserType } from "../../type/commonType";
 import { PaginationDto } from "../../type/pagination.dto";
 
 export class ShowUserReqDto {
@@ -79,6 +80,10 @@ export class UserListResUserDto {
   @ApiProperty({ description: "create at" })
   @IsDate()
   create_at: Date;
+
+  @ApiProperty({ description: "가입 유형" })
+  @IsEnum(UserType)
+  type: UserType;
 }
 
 @ApiExtraModels(UserListResUserDto)
