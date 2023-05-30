@@ -8,12 +8,13 @@ import SearchBarView from "../../components/table/searchBarView";
 import { PaginationTableView } from "../../components/table/Table";
 import { Urls } from "../../url/url.g";
 import { d2 } from "../../ex/dateEx";
+import useIsReady from "../../hooks/useIsReady";
 
 const UserListPage = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [searchType, setSearchType] = useState<UserSearchType>(UserSearchType.NAME);
+  const [searchType, setSearchType] = useState<UserSearchType | null>(null);
   const [paginationUserList, setPaginationUserList] = useState<UserListRes | null>(null);
 
   const onInit = useCallback(async () => {
@@ -41,11 +42,20 @@ const UserListPage = () => {
     const ignore = router.push({ ...router, query });
   }, [page, search, searchType]);
 
-  useEffect(() => {
-    if (!router.isReady) {
-      return;
-    }
+  const enumToLabel = useCallback(
+    (type: string | undefined): UserSearchType | undefined => {
+      switch (type) {
+        case "NAME":
+          return UserSearchType.NAME;
+        case "PHONE":
+          return UserSearchType.PHONE;
+        default:
+      }
+    },
+    [searchType],
+  );
 
+  useIsReady(() => {
     const { page, search, searchType } = router.query;
 
     if (isArray(page) || isArray(search) || isArray(searchType)) {
@@ -54,11 +64,13 @@ const UserListPage = () => {
 
     setPage(Number(page ?? 1));
     setSearch(search ?? "");
-    setSearchType((searchType as UserSearchType) ?? null);
+    setSearchType(enumToLabel(searchType) ?? null);
+  });
 
+  useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const ignore = onInit();
-  }, [router.isReady]);
+  }, [page, search, searchType]);
 
   return (
     <div className="mt-4">
@@ -85,8 +97,8 @@ const UserListPage = () => {
           mapper={(value) => [
             ["name", value.name],
             ["phone", value.phone],
-            ["email", value.email],
-            ["create", d2(value.created_at)],
+            ["email", value.type],
+            ["create", d2(value.create_at)],
           ]}
         />
       </div>
