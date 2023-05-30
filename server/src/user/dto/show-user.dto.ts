@@ -41,12 +41,12 @@ export class ShowUserResDto {
   @IsEmail()
   email: string;
 
-  @ApiProperty({ description: "create at", nullable: false, type: "date" })
+  @ApiProperty({ description: "create at", nullable: false })
   @IsNotEmpty()
   @IsDate()
   create_at: Date;
 
-  @ApiProperty({ description: "update at", nullable: true, type: "date" })
+  @ApiProperty({ description: "update at", nullable: true })
   @IsOptional()
   @IsDate()
   update_at: Date | null;
@@ -85,7 +85,7 @@ export class UserListResUserDto {
   @IsOptional()
   phone: string | null;
 
-  @ApiProperty({ description: "create at", nullable: false, type: "date" })
+  @ApiProperty({ description: "create at", nullable: false })
   @IsDate()
   @IsNotEmpty()
   create_at: Date;
