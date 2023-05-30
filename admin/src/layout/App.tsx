@@ -77,9 +77,12 @@ const UserApp = (props: PropsWithChildren<Record<never, any>>) => {
   // if (!adminModel.initialized) {
   //   return <DefaultLayoutView />;
   // }
+  if (!router.isReady) {
+    return <DefaultLayoutView />;
+  }
 
   // 로그인 전
-  if (accessToken === null && router.isReady) {
+  if (accessToken === null) {
     return (
       <Replace
         url={{
