@@ -1,14 +1,14 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Like, Repository } from "typeorm";
-import { isNil } from "lodash";
+import { camelCase, isNil } from "lodash";
 import { User } from "../entities/user.entity";
 import { LIMIT } from "../type/pagination.dto";
 import { UserListReqDto, UserListResDto } from "./dto/show-user.dto";
 import errorMessage from "../config/errorMessage";
 import { EditUserReqDto } from "./dto/edit-user.dto";
 import { LocalUser } from "../entities/local-user.entity";
-import { isNotBlank } from "../ex/ex";
+import { isNotNil } from "../ex/ex";
 import { UserSearchType } from "../type/commonType";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class UserService {
   async getUserList(req: UserListReqDto) {
     // TODO :: 검색
     let where = {};
-    if (isNotBlank(req.search)) {
+    if (isNotNil(req.search)) {
       where = {
         name: req.searchType === UserSearchType.NAME ? Like(`${req.search}`) : undefined,
         phone: req.searchType === UserSearchType.PHONE ? Like(`${req.search}`) : undefined,
@@ -55,7 +55,7 @@ export class UserService {
   async findLocalUserOneOr404(pk: number) {
     const user = await LocalUser.findOne({
       where: { pk },
-      relations: { auth: true, user: true },
+      relations: { user: true },
     });
 
     if (isNil(user)) {
@@ -65,12 +65,32 @@ export class UserService {
     return user;
   }
 
+  async findUserOneOr404(pk: number) {
+    const user = await User.findOne({
+      where: { pk },
+      relations: { localUser: true, googleUser: true, kakaoUser: true, naverUser: true },
+    });
+
+    if (isNil(user)) {
+      throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
+    }
+    const userType = camelCase(`${user.type.toLowerCase()}User`);
+    return {
+      pk: user.pk,
+      name: user.name,
+      phone: user.phone,
+      create_at: user.create_at,
+      type: user.type,
+      email: user[userType].email,
+    };
+  }
+
   async findOneOrNull(pk: number) {
     return User.findOne({ where: { pk } });
   }
 
   async update(updateUserDto: EditUserReqDto) {
-    const localUser = await this.findOneOr404(updateUserDto.pk);
+    const localUser = await this.findLocalUserOneOr404(updateUserDto.pk);
 
     localUser.id = updateUserDto.id;
     localUser.email = updateUserDto.email;
@@ -87,7 +107,7 @@ export class UserService {
   }
 
   async remove(pk: number) {
-    const localUser = await this.findOneOr404(pk);
+    const localUser = await this.findLocalUserOneOr404(pk);
 
     try {
       await this.localUser.softDelete(localUser.pk);

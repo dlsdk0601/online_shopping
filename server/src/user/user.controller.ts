@@ -25,7 +25,7 @@ export class UserController {
   @Post("/show-user")
   @ApiCreatedResponse({ type: ShowUserResDto })
   async findOne(@Body() body: ShowUserReqDto) {
-    return this.userService.findOneOr404(body.pk);
+    return this.userService.findUserOneOr404(body.pk);
   }
 
   @Post("/delete-user")
