@@ -14,75 +14,85 @@ import { UserSearchType, UserType } from "../../type/commonType";
 import { PaginationDto } from "../../type/pagination.dto";
 
 export class ShowUserReqDto {
-  @ApiProperty({ description: "pk" })
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
   @IsNumber()
+  @IsNotEmpty()
   pk: number;
 }
 
 export class ShowUserResDto {
-  @ApiProperty({ description: "pk" })
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
   @IsNumber()
+  @IsNotEmpty()
   pk: number;
 
-  @ApiProperty({ description: "name" })
+  @ApiProperty({ description: "name", nullable: false, type: "string" })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ description: "phone" })
+  @ApiProperty({ description: "phone", nullable: true, type: "string" })
   @IsPhoneNumber()
   @IsOptional()
   phone: string | null;
 
-  @ApiProperty({ description: "email" })
-  @IsString()
+  @ApiProperty({ description: "email", nullable: false, type: "string" })
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @ApiProperty({ description: "create at" })
+  @ApiProperty({ description: "create at", nullable: false, type: "date" })
+  @IsNotEmpty()
+  @IsDate()
   create_at: Date;
 
-  @ApiProperty({ description: "update at" })
+  @ApiProperty({ description: "update at", nullable: true, type: "date" })
   @IsOptional()
+  @IsDate()
   update_at: Date | null;
 }
 
 export class UserListReqDto {
-  @ApiProperty({ description: "page number" })
+  @ApiProperty({ description: "page number", nullable: false, type: "number" })
   @IsNumber()
+  @IsNotEmpty()
   page: number;
 
   @ApiProperty({ description: "search type", enum: UserSearchType, nullable: true })
   @IsOptional()
+  @IsEnum(UserSearchType)
   searchType: UserSearchType | null;
 
-  @ApiProperty({ description: "search" })
+  @ApiProperty({ description: "search", nullable: true, type: "string" })
+  @IsOptional()
   @IsString()
-  search: string;
+  search: string | null;
 }
 
 export class UserListResUserDto {
-  @ApiProperty({ description: "pk" })
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
   @IsNumber()
   pk: number;
 
-  @ApiProperty({ description: "name" })
+  @ApiProperty({ description: "name", nullable: false, type: "string" })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ description: "phone" })
-  @IsOptional()
+  @ApiProperty({ description: "phone", nullable: true, type: "string" })
   @IsString()
-  @IsPhoneNumber()
+  @IsOptional()
   phone: string | null;
 
-  @ApiProperty({ description: "create at" })
+  @ApiProperty({ description: "create at", nullable: false, type: "date" })
   @IsDate()
+  @IsNotEmpty()
   create_at: Date;
 
-  @ApiProperty({ description: "가입 유형" })
+  @ApiProperty({ description: "가입 유형", nullable: false, enum: UserType })
   @IsEnum(UserType)
+  @IsNotEmpty()
   type: UserType;
 }
 

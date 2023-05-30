@@ -4,47 +4,52 @@ import { ApiProperty } from "@nestjs/swagger";
 export const LIMIT = 20;
 
 export class PaginationDto {
-  @ApiProperty({ description: "현재 페이지" })
+  @ApiProperty({ description: "현재 페이지", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()
   page: number;
 
-  @ApiProperty({ description: "다음 페이지" })
+  @ApiProperty({ description: "다음 페이지", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()
   nextPage: number;
 
-  @ApiProperty({ description: "이전 페이지" })
+  @ApiProperty({ description: "이전 페이지", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()
   prevPage: number;
 
-  @ApiProperty({ description: "다음 페이지 존재여부" })
+  @ApiProperty({ description: "다음 페이지 존재여부", nullable: false, type: "boolean" })
   @IsNotEmpty()
   @IsBoolean()
   hasNext: boolean;
 
-  @ApiProperty({ description: "이전 페이지 존재여부" })
+  @ApiProperty({ description: "이전 페이지 존재여부", nullable: false, type: "boolean" })
   @IsNotEmpty()
   @IsBoolean()
   hasPrev: boolean;
 
-  @ApiProperty({ description: "전체 갯수" })
+  @ApiProperty({ description: "전체 갯수", nullable: false, type: "number" })
   @IsNotEmpty()
   @IsNumber()
   total: number;
 
-  @ApiProperty({ description: "페이지 array" })
+  @ApiProperty({
+    description: "페이지 array",
+    nullable: false,
+    isArray: true,
+    type: () => "number",
+  })
   @IsNotEmpty()
   @IsArray()
   pages: number[];
 
-  @ApiProperty({ description: "첫 페이지" })
+  @ApiProperty({ description: "첫 페이지", nullable: false, type: "number" })
   @IsNotEmpty()
   @IsNumber()
   first: number;
 
-  @ApiProperty({ description: "마지막 페이지" })
+  @ApiProperty({ description: "마지막 페이지", nullable: false, type: "number" })
   @IsNotEmpty()
   @IsNumber()
   last: number;
