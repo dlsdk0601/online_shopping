@@ -52,7 +52,7 @@ export class UserService {
     return new UserListResDto(users, users.length, req.page);
   }
 
-  async findOneOr404(pk: number) {
+  async findLocalUserOneOr404(pk: number) {
     const user = await LocalUser.findOne({
       where: { pk },
       relations: { auth: true, user: true },

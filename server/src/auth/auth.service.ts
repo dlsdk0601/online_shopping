@@ -325,7 +325,7 @@ export class AuthService {
       newAuth = new Authentication();
       newAuth.manager = manager;
     } else {
-      const user = await this.userService.findOneOr404(pk);
+      const user = await this.userService.findLocalUserOneOr404(pk);
       newAuth = new LocalAuthentication();
       newAuth.local_user = user;
     }
@@ -416,7 +416,7 @@ export class AuthService {
 
     if (user.dataType === "FRONT") {
       if (user.type === "LOCAL") {
-        const localUser = await this.userService.findOneOr404(user.pk);
+        const localUser = await this.userService.findLocalUserOneOr404(user.pk);
 
         const lastAuth: LocalAuthentication | undefined = getLastAuth(localUser.auth);
 
