@@ -20,7 +20,6 @@ export class UserService {
 
   async getUserList(req: UserListReqDto) {
     // TODO :: 검색
-    // let users: User[] | null = null;
     let where = {};
     if (isNotBlank(req.search)) {
       where = {
@@ -45,8 +44,6 @@ export class UserService {
       },
       ...where,
     });
-
-    console.log(users);
 
     if (isNil(users)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
