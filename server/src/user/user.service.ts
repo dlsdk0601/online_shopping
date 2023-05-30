@@ -8,7 +8,7 @@ import { UserListReqDto, UserListResDto } from "./dto/show-user.dto";
 import errorMessage from "../config/errorMessage";
 import { EditUserReqDto } from "./dto/edit-user.dto";
 import { LocalUser } from "../entities/local-user.entity";
-import { isBlank } from "../ex/ex";
+import { isNotBlank } from "../ex/ex";
 import { UserSearchType } from "../type/commonType";
 
 @Injectable()
@@ -20,34 +20,33 @@ export class UserService {
 
   async getUserList(req: UserListReqDto) {
     // TODO :: 검색
-    let users: User[] | null = null;
-    if (isBlank(req.search)) {
-      users = await User.find({
-        take: LIMIT,
-        skip: LIMIT * (req.page - 1),
-        select: {
-          pk: true,
-          name: true,
-          phone: true,
-          create_at: true,
-        },
-      });
-    } else {
-      users = await User.find({
-        take: LIMIT,
-        skip: LIMIT * (req.page - 1),
-        where: {
-          name: req.searchType === UserSearchType.NAME ? Like(`${req.search}`) : undefined,
-          phone: req.searchType === UserSearchType.PHONE ? Like(`${req.search}`) : undefined,
-        },
-        select: {
-          pk: true,
-          name: true,
-          phone: true,
-          create_at: true,
-        },
-      });
+    // let users: User[] | null = null;
+    let where = {};
+    if (isNotBlank(req.search)) {
+      where = {
+        name: req.searchType === UserSearchType.NAME ? Like(`${req.search}`) : undefined,
+        phone: req.searchType === UserSearchType.PHONE ? Like(`${req.search}`) : undefined,
+      };
     }
+
+    const users = await User.find({
+      take: LIMIT,
+      skip: LIMIT * (req.page - 1),
+      select: {
+        pk: true,
+        name: true,
+        phone: true,
+        create_at: true,
+        type: true,
+        googleUser: { email: true },
+        kakaoUser: { email: true },
+        naverUser: { email: true },
+        localUser: { email: true },
+      },
+      ...where,
+    });
+
+    console.log(users);
 
     if (isNil(users)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
