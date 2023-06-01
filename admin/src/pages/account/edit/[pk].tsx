@@ -1,4 +1,4 @@
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
@@ -8,6 +8,8 @@ import useValueField from "../../../hooks/useValueField";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
 import { isNotNil } from "../../../ex/utils";
+import { Urls } from "../../../url/url.g";
+import useIsReady from "../../../hooks/useIsReady";
 
 const UserShowPage = () => {
   const router = useRouter();
@@ -19,14 +21,24 @@ const UserShowPage = () => {
   const pk = typeof router.query?.pk === "string" ? Number(router.query.pk) : undefined;
 
   if (isNil(pk)) {
-    return <></>;
+    // pk 가 제대로 되어있지 않다면 뒤로 보낸다.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return router.replace(Urls.account.index);
   }
 
   const { data: user } = useQuery([queryKeys.showUser, pk], () => api.showUser({ pk }), {
     enabled: router.isReady && isNotNil(pk),
   });
 
-  console.log(user);
+  useIsReady(() => {
+    if (isNil(user)) {
+      return;
+    }
+
+    setCreateAt.set(moment(user.create_at));
+    setName.set(user.name);
+    setPhone.set(user.phone);
+  }, [user]);
 
   return (
     <>
