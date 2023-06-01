@@ -1,13 +1,12 @@
 import React, { PropsWithChildren } from "react";
 import Head from "next/head";
 import { ClipLoader } from "react-spinners";
-import { useRecoilValue } from "recoil";
+import { useIsFetching, useIsMutating } from "react-query";
 import Favicon from "../../public/favicon.ico";
 import HeaderView from "../components/layoutView/HeaderView";
 import Cards from "../components/tailwindEx/CardListView";
 import FooterView from "../components/layoutView/FooterView";
 import LeftSideBarView from "../components/layoutView/LeftSideBarView";
-import { apiCount } from "../store/api";
 
 // 로그인 유저가 보는 화면 (ex 어드민 메인화면)
 export const LayoutView = (props: PropsWithChildren) => {
@@ -42,8 +41,7 @@ export const DefaultLayoutView = (props: PropsWithChildren<Record<never, any>>) 
 };
 
 const BlockView = () => {
-  const count = useRecoilValue(apiCount);
-  const isLocked = count > 0;
+  const isLocked = useIsMutating() + useIsFetching() > 0;
   return (
     <div
       style={{
