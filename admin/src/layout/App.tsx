@@ -4,7 +4,7 @@ import { AppProps } from "next/app";
 import Router, { useRouter } from "next/router";
 import { isNil, some } from "lodash";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { RecoilRoot, useRecoilValue, useSetRecoilState } from "recoil";
+import { RecoilRoot, useSetRecoilState } from "recoil";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ignorePromise } from "../ex/utils";
 import { DefaultLayoutView, LayoutView } from "./Layout";
@@ -71,18 +71,14 @@ const LayoutSelector = (props: PropsWithChildren) => {
 
 const UserApp = (props: PropsWithChildren<Record<never, any>>) => {
   const router = useRouter();
-  const accessToken = useRecoilValue(userToken);
+  const accessToken = sessionStorage.getItem(CONSTANT.sessionTokenKey);
 
-  // 계정 정보 초기화 중
-  // if (!adminModel.initialized) {
-  //   return <DefaultLayoutView />;
-  // }
   if (!router.isReady) {
     return <DefaultLayoutView />;
   }
 
   // 로그인 전
-  if (accessToken === null) {
+  if (isNil(accessToken)) {
     return (
       <Replace
         url={{
