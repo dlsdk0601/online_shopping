@@ -31,4 +31,19 @@ export class User extends TimeSet {
 
   @OneToOne(() => NaverUser, (naverUser) => naverUser.user)
   naverUser: NaverUser;
+
+  userData() {
+    const userType = `${this.type.toLowerCase()}User`;
+    const userData: LocalUser | GoogleUser | KakaoUser | NaverUser = this[userType];
+
+    return {
+      pk: this.pk,
+      name: this.name,
+      phone: this.phone,
+      type: this.type,
+      email: userData.email,
+      createAt: this.create_at,
+      updateAt: this.update_at,
+    };
+  }
 }
