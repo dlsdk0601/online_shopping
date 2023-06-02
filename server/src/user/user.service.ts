@@ -74,7 +74,15 @@ export class UserService {
     if (isNil(user)) {
       throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
     }
+
     const userType = camelCase(`${user.type.toLowerCase()}User`);
+
+    // TODO :: test
+    // user 에서 relations 옵션을 안줄떄 줄때 차이점 테스트 하기
+    const test = user.userData();
+    console.log("test");
+    console.log(test);
+
     return {
       pk: user.pk,
       name: user.name,
