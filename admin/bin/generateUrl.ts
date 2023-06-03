@@ -58,7 +58,7 @@ function generateSource(page: Page | Dir, parents: string[]): string[] {
     case "page": {
       const pathname = `/${newParents.join("/")}`;
       const key = `"${page.name}"`;
-      lines.push(`${key}: "${pathname}",`);
+      lines.push(`${key}: new PageUrl("${pathname}"),`);
       break;
     }
     case "dir":
@@ -81,6 +81,7 @@ const ts = Array<string>();
 ts.push("/* tslint:disable */");
 ts.push("/* eslint-disable */");
 ts.push(`// 자동 생성 파일 수정하지 말것 ${new Date().toString()}`);
+ts.push("import { PageUrl } from './url';");
 ts.push("export const Urls = {");
 ts.push(...generateSources(pages, []));
 ts.push("};");
