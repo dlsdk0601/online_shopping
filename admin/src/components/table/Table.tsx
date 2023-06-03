@@ -13,7 +13,7 @@ export function TableView(props: { rows: TableViewRow[]; links: (() => void)[] }
     <table className="w-full">
       <thead>
         <tr>
-          {(props.rows[0] ?? []).map(([header], index) => {
+          {(props.rows[0] ?? []).map(([header, _], index) => {
             return (
               <th
                 key={index}
