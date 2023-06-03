@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { isArray } from "lodash";
 import { useQuery } from "react-query";
 import { UserListResUser } from "../../api/type.g";
-import { UserSearchType } from "../../api/enum.g";
+import { UserSearchType, UserType } from "../../api/enum.g";
 import { api } from "../../api/url.g";
 import SearchBarView from "../../components/table/searchBarView";
 import { PaginationTableView } from "../../components/table/Table";
@@ -11,17 +11,20 @@ import { Urls } from "../../url/url.g";
 import { d2 } from "../../ex/dateEx";
 import useIsReady from "../../hooks/useIsReady";
 import { queryKeys } from "../../lib/contants";
+import UseValueField from "../../hooks/useValueField";
+import GoogleIcon from "../../components/icons/Google";
+import LocalIcon from "../../components/icons/LocalIcon";
 
 const UserListPage = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = UseValueField("");
   const [searchType, setSearchType] = useState<UserSearchType | null>(null);
 
   const onSearch = useCallback(() => {
     const query = {
       page,
-      search,
+      search: search.value,
       searchType,
     };
 
@@ -42,6 +45,16 @@ const UserListPage = () => {
     [searchType],
   );
 
+  const typeToIcon = (type: UserType) => {
+    switch (type) {
+      case UserType.GOOGLE:
+        return <GoogleIcon />;
+      case UserType.LOCAL:
+      default:
+        return <LocalIcon />;
+    }
+  };
+
   useIsReady(() => {
     const { page, search, searchType } = router.query;
 
@@ -50,15 +63,16 @@ const UserListPage = () => {
     }
 
     setPage(Number(page ?? 1));
-    setSearch(search ?? "");
+    setSearch.set(search ?? "");
     setSearchType(enumToLabel(searchType) ?? null);
   });
 
   const { data: paginationUserList } = useQuery(
     [queryKeys.userList, page],
-    () => api.userList({ page, search, searchType }),
+    () => api.userList({ page, search: search.value, searchType }),
     {
       keepPreviousData: true,
+      staleTime: 60 * 5,
     },
   );
 
@@ -68,8 +82,8 @@ const UserListPage = () => {
         <SearchBarView<UserSearchType>
           onSubmit={() => onSearch()}
           searchType={searchType}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={search.value}
+          onChange={(e) => setSearch.set(e.target.value)}
           onChangeType={(type) => setSearchType(type)}
           options={[
             [null, "전체"],
@@ -83,10 +97,10 @@ const UserListPage = () => {
             Urls.account.edit["[pk]"].url({ pk: item.pk }),
           )}
           mapper={(value) => [
-            ["name", value.name],
-            ["phone", value.phone],
-            ["email", value.type],
-            ["create", d2(value.create_at)],
+            ["이름", value.name],
+            ["핸드폰", value.phone],
+            ["가입유형", typeToIcon(value.type as UserType)],
+            ["가입 날짜", d2(value.create_at)],
           ]}
         />
       </div>
