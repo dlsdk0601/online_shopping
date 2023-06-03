@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { isArray } from "lodash";
 import { useQuery } from "react-query";
 import { UserListResUser } from "../../api/type.g";
@@ -79,10 +79,10 @@ const UserListPage = () => {
         />
         <PaginationTableView<UserListResUser>
           pagination={paginationUserList ?? null}
-          links={(paginationUserList?.rows ?? []).map(
-            (item) => () =>
-              Router.push({ pathname: Urls.account.edit["[pk]"], query: { pk: item.pk } }),
-          )}
+          links={(paginationUserList?.rows ?? []).map((item) => ({
+            pathname: Urls.account.edit["[pk]"],
+            query: { pk: item.pk },
+          }))}
           mapper={(value) => [
             ["name", value.name],
             ["phone", value.phone],
