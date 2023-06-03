@@ -103,7 +103,7 @@ export function PaginationTableView<T>(props: {
 export const PaginationView = (props: { pagination: Pagination<any> }) => {
   const router = useRouter();
   // const href = (page: number) => mergedUrl(props.query, { page });
-  const href = (page: number) => ({ ...router, query: { ...router.query, page } });
+  const href = (page: number) => ({ pathname: router.pathname, query: { ...router.query, page } });
 
   const pusher = (page: number) => Router.push(href(page));
 
