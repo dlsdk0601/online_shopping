@@ -8,20 +8,24 @@ import { MomentFieldView, TextFieldView } from "../../../components/field/field"
 import useValueField from "../../../hooks/useValueField";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
-import { isNotNil } from "../../../ex/utils";
+import { isNotNil, validatePk } from "../../../ex/utils";
 import { ShowUserRes } from "../../../api/type.g";
 
 const UserShowPage = () => {
   const router = useRouter();
-  const pk = typeof router.query?.pk === "string" ? Number(router.query.pk) : undefined;
+  const pkObject = validatePk(router.query.pk);
 
-  if (isNil(pk)) {
+  if (isNil(pkObject.pk)) {
     return <></>;
   }
 
-  const { data: user } = useQuery([queryKeys.showUser, pk], () => api.showUser({ pk }), {
-    enabled: router.isReady && isNotNil(pk),
-  });
+  const { data: user } = useQuery(
+    [queryKeys.showUser, pkObject],
+    () => api.showUser({ pk: pkObject.pk as Number }),
+    {
+      enabled: router.isReady && isNotNil(pkObject.pk),
+    },
+  );
 
   return (
     <div className="w-full px-4">
@@ -34,6 +38,7 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
   const [id, setId] = useValueField("");
   const [name, setName] = useValueField("");
   const [phone, setPhone] = useValueField("");
+  const [email, setEmail] = useValueField("");
   const [createAt, setCreateAt] = useValueField<Moment | null>(null);
 
   useEffect(() => {
@@ -44,6 +49,7 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
     setCreateAt.set(moment(props.user.create_at));
     setName.set(props.user.name);
     setPhone.set(props.user.phone);
+    setEmail.set(props.user.email);
   }, [props]);
 
   return (
@@ -57,7 +63,19 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
           onChange={(e) => setPhone.set(e.target.value)}
         />
         <MomentFieldView value={createAt.value} label="생성 일자" />
-        <button type="button">edit</button>
+        <TextFieldView
+          value={email}
+          label="이메일"
+          onChange={(e) => setEmail.set(e.target.value)}
+        />
+        <div className="mt-3 flex w-full justify-end">
+          <button
+            type="button"
+            className="rounded-lg bg-blue-400 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            {isNil(props.user) ? "저장" : "수정"}
+          </button>
+        </div>
       </CardSettings>
     </>
   );
