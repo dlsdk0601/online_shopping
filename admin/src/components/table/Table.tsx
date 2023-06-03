@@ -1,3 +1,4 @@
+import { UrlObject } from "url";
 import React, { ReactNode } from "react";
 import classNames from "classnames";
 import Link from "next/link";
@@ -8,7 +9,8 @@ import { Pagination } from "../../api/schema";
 type TableViewRowItem = [string, ReactNode];
 type TableViewRow = TableViewRowItem[];
 
-export function TableView(props: { rows: TableViewRow[]; links: (() => void)[] }) {
+export function TableView(props: { rows: TableViewRow[]; links: UrlObject[] }) {
+  const router = useRouter();
   return (
     <table className="w-full">
       <thead>
@@ -30,7 +32,7 @@ export function TableView(props: { rows: TableViewRow[]; links: (() => void)[] }
           <tr
             key={rowIndex}
             className="cursor-pointer border-b text-center hover:bg-blueGray-200"
-            onClick={props.links[rowIndex]}
+            onClick={() => router.push(props.links[rowIndex])}
           >
             {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
             {row.map(([_, data], dataIndex) => {
@@ -50,7 +52,7 @@ export function TableView(props: { rows: TableViewRow[]; links: (() => void)[] }
 export function PaginationTableView<T>(props: {
   pagination: Pagination<T> | null;
   mapper: (item: T) => TableViewRow;
-  links: (() => void)[];
+  links: UrlObject[];
 }) {
   if (isNil(props.pagination)) {
     return <div style={{ height: "600px" }} />;
