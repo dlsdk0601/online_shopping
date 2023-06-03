@@ -8,7 +8,6 @@ import { api } from "../api/url.g";
 import { userModel } from "../store/user";
 import { Urls } from "../url/url.g";
 import { ignorePromise } from "../ex/utils";
-import { useApiCountHandle } from "../ex/block";
 
 export interface UseUser {
   user: ShowManagerRes | null | undefined;
@@ -19,7 +18,7 @@ export function useUser(): UseUser {
   const queryClient = useQueryClient();
   const setUser = useSetRecoilState(userModel);
 
-  const { data: user, isLoading } = useQuery(queryKeys.user, () => api.auth({}), {
+  const { data: user } = useQuery(queryKeys.user, () => api.auth({}), {
     onSuccess: (received: ShowManagerRes | null) => {
       if (isNil(received)) {
         setUser(null);
@@ -33,12 +32,6 @@ export function useUser(): UseUser {
     queryClient.setQueryData(queryKeys.user, null);
     ignorePromise(() => Router.replace(Urls.auth["sign-in"].url()));
   };
-
-  if (isLoading) {
-    useApiCountHandle(true);
-  } else {
-    useApiCountHandle(false);
-  }
 
   return { user, clearUser };
 }

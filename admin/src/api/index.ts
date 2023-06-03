@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { sleep } from "sleepjs";
 import { baseConfig } from "../lib/config";
-import { useApiCountHandle } from "../ex/block";
 import { CONSTANT } from "../lib/contants";
 
 export const axiosInstance = axios.create({
@@ -33,7 +32,7 @@ axiosInstance.interceptors.response.use(
 );
 
 export class ApiBase {
-  get = async (url: string, config?: AxiosRequestConfig<any>) => {
+  get = async (url: string, config?: axios.AxiosRequestConfig<any>) => {
     return this.with(async () => {
       try {
         if (baseConfig.apiDelay) {
@@ -48,7 +47,7 @@ export class ApiBase {
     });
   };
 
-  post = async (url: string, data?: any, config?: AxiosRequestConfig<any>) => {
+  post = async (url: string, data?: any, config?: axios.AxiosRequestConfig<any>) => {
     return this.with(async () => {
       try {
         if (baseConfig.apiDelay) {
