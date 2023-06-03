@@ -1,4 +1,5 @@
 import { UrlObject } from "url";
+import { ParsedUrlQueryInput } from "querystring";
 
 export class PageUrl {
   readonly pathname: string;
@@ -8,7 +9,7 @@ export class PageUrl {
   }
 
   // TODO :: query 파라미터로 받기
-  url(): UrlObject {
-    return { pathname: this.pathname };
+  url(query?: ParsedUrlQueryInput): UrlObject {
+    return { pathname: this.pathname, query };
   }
 }
