@@ -3,24 +3,25 @@ import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import { preventDefaulted } from "../../ex/utils";
 
-const SearchBarView = <T,>(props: {
+function SearchBarView<T>(props: {
   onSubmit: () => void;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   value: string;
   onChangeType: (type: T) => void;
   options: [T | null, string][];
   searchType: T | null;
-}) => {
+}) {
   const router = useRouter();
   return (
     <div className="flex justify-center">
-      <div className="mb-3 xl:w-96">
+      <div className="mb-3 w-10/12 xl:w-96">
         <form
           className="relative mb-4 flex w-full flex-wrap items-stretch"
           onSubmit={preventDefaulted(() => props.onSubmit())}
         >
           <select
             className="rounded-l border border-solid border-neutral-300"
+            value={stringify(props.searchType)}
             onChange={(e) => {
               for (let i = 0; i < props.options.length; i++) {
                 if (isNil(props.options[i])) {
@@ -68,7 +69,7 @@ const SearchBarView = <T,>(props: {
       </div>
     </div>
   );
-};
+}
 
 function stringify(value: any): string {
   if (isNil(value)) {
@@ -78,4 +79,4 @@ function stringify(value: any): string {
   return value.toString();
 }
 
-export default SearchBarView;
+export default React.memo(SearchBarView);
