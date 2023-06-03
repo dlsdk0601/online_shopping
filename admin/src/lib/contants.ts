@@ -9,3 +9,5 @@ export const CONSTANT = {
   sessionTokenKey: "X-ACCESS-TOKEN-ADMIN",
   apiCount: "API_COUNT",
 };
+
+export const NEWPK = "new";
