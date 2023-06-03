@@ -1,5 +1,5 @@
-import "../styles/index.css";
-import "../styles/tailwind.css";
+// import "../styles/tailwind.css";
+import "../styles/global.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import dynamic from "next/dynamic";
 import type { AppProps, AppType } from "next/app";
