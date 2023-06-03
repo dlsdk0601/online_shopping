@@ -2,6 +2,7 @@ import { ParsedUrlQuery } from "querystring";
 import { BaseSyntheticEvent } from "react";
 import { isArray, isDate, isEmpty, isNil, isNull, isNumber, isString, isUndefined } from "lodash";
 import moment, { Moment } from "moment";
+import { NEWPK } from "../lib/contants";
 
 export const returnTo = (query: ParsedUrlQuery): string | undefined => {
   const returnTo = query.returnTo;
@@ -127,4 +128,25 @@ export function phoneOnlyNumber(phone: string | null) {
   }
 
   return newPhone.replaceAll("-", "");
+}
+
+export function validatePk(pk: string | string[] | undefined): {
+  isValid: boolean;
+  pk: number | null;
+} {
+  if (isNil(pk) || isArray(pk)) {
+    return { isValid: false, pk: null };
+  }
+
+  if (pk === NEWPK) {
+    return { isValid: true, pk: null };
+  }
+
+  const numberPk = Number(pk);
+
+  if (isNaN(numberPk)) {
+    return { isValid: false, pk: null };
+  }
+
+  return { isValid: true, pk: numberPk };
 }
