@@ -20,7 +20,7 @@ const SignInPage = () => {
       return;
     }
 
-    ignorePromise(() => router.replace(returnTo(router.query) ?? Urls.index));
+    ignorePromise(() => router.replace(returnTo(router.query) ?? Urls.index.url()));
   }, [token]);
 
   const onSignIn = useCallback(async () => {
@@ -32,7 +32,7 @@ const SignInPage = () => {
 
     setToken(res.token);
     sessionStorage.setItem(CONSTANT.sessionTokenKey, res.token);
-    ignorePromise(() => router.replace(Urls.index));
+    ignorePromise(() => router.replace(Urls.index.url()));
   }, [id, password]);
 
   return (

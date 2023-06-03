@@ -62,7 +62,7 @@ const LayoutSelector = (props: PropsWithChildren) => {
   }
 
   // 로그인
-  if (router.pathname.startsWith(Urls.auth["sign-in"])) {
+  if (router.pathname.startsWith(Urls.auth["sign-in"].pathname)) {
     return <DefaultLayoutView>{props.children}</DefaultLayoutView>;
   }
 
@@ -79,16 +79,7 @@ const UserApp = (props: PropsWithChildren<Record<never, any>>) => {
 
   // 로그인 전
   if (isNil(accessToken)) {
-    return (
-      <Replace
-        url={{
-          pathname: Urls.auth["sign-in"],
-          query: {
-            returnTo: router.asPath,
-          },
-        }}
-      />
-    );
+    return <Replace url={Urls.auth["sign-in"].url({ returnTo: router.asPath })} />;
   }
 
   return <LayoutView>{props.children}</LayoutView>;

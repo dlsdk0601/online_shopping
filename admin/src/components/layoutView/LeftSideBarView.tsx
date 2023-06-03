@@ -63,7 +63,7 @@ export default function LeftSideBarView() {
             <ul className="flex list-none flex-col md:min-w-full md:flex-col">
               <li className="items-center">
                 <Link
-                  href={Urls.index}
+                  href={Urls.index.url()}
                   className={classNames("block py-3 text-xs font-bold uppercase", {
                     "text-lightBlue-500 hover:text-lightBlue-600": router.pathname === "/",
                     "text-blueGray-700 hover:text-blueGray-500": router.pathname !== "/",
@@ -81,7 +81,7 @@ export default function LeftSideBarView() {
 
               <li className="items-center">
                 <Link
-                  href={Urls.account.index}
+                  href={Urls.account.index.url()}
                   className={classNames("block py-3 text-xs font-bold uppercase", {
                     "text-lightBlue-500 hover:text-lightBlue-600":
                       router.pathname.includes("/account"),
