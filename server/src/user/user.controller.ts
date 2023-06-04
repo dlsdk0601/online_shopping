@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import { ApiCreatedResponse } from "@nestjs/swagger";
+import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { UserService } from "./user.service";
 import {
   ShowUserReqDto,
@@ -12,6 +12,7 @@ import { ManagerType } from "../type/type";
 import { EditUserReqDto, EditUserResDto } from "./dto/edit-user.dto";
 
 @Controller("admin/user")
+@ApiTags("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
