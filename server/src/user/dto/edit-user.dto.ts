@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Optional } from "@nestjs/common";
 
 export class EditUserReqDto {
   @ApiProperty({ description: "pk", nullable: false, type: "number" })
@@ -7,25 +8,10 @@ export class EditUserReqDto {
   @IsNotEmpty()
   pk: number;
 
-  @ApiProperty({ description: "uuid", nullable: false, type: "string" })
-  @IsString()
-  @IsNotEmpty()
-  id: string;
-
-  @ApiProperty({ description: "email", nullable: false, type: "string" })
-  @IsNotEmpty()
+  @ApiProperty({ description: "email", nullable: true, type: "string" })
+  @Optional()
   @IsEmail()
-  email: string;
-
-  @ApiProperty({ description: "name", nullable: false, type: "string" })
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-
-  @ApiProperty({ description: "password", nullable: false, type: "string" })
-  @IsNotEmpty()
-  @IsString()
-  password: string;
+  email: string | null;
 
   @ApiProperty({ description: "phone", nullable: false, type: "string" })
   @IsNotEmpty()

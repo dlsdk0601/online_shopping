@@ -29,6 +29,11 @@ export class ShowUserResDto {
   @ApiProperty({ description: "name", nullable: false, type: "string" })
   @IsString()
   @IsNotEmpty()
+  id: string;
+
+  @ApiProperty({ description: "name", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
   @ApiProperty({ description: "phone", nullable: true, type: "string" })
@@ -44,12 +49,12 @@ export class ShowUserResDto {
   @ApiProperty({ description: "create at", nullable: false })
   @IsNotEmpty()
   @IsDate()
-  create_at: Date;
+  createAt: Date;
 
   @ApiProperty({ description: "update at", nullable: true })
   @IsOptional()
   @IsDate()
-  update_at: Date | null;
+  updateAt: Date | null;
 }
 
 export class UserListReqDto {
