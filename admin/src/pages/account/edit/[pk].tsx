@@ -1,15 +1,25 @@
-import moment, { Moment } from "moment";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import CardSettings from "../../../components/tailwindEx/CardSettings";
-import { MomentFieldView, TextFieldView } from "../../../components/field/field";
+import { ReadOnlyTextView, TextFieldView, UserTypeView } from "../../../components/field/field";
 import useValueField from "../../../hooks/useValueField";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
-import { isNotNil, validatePk } from "../../../ex/utils";
-import { ShowUserRes } from "../../../api/type.g";
+import {
+  dateFormatter,
+  editAlert,
+  ignorePromise,
+  isNotBlank,
+  isNotNil,
+  validatePk,
+} from "../../../ex/utils";
+import { EditUserReq, EditUserRes, ShowUserRes } from "../../../api/type.g";
+import EditButtonView from "../../../components/tailwindEx/EditButtonView";
+import { vEmail, vPhone } from "../../../ex/validate";
+import { UserType } from "../../../api/enum.g";
+import { Urls } from "../../../url/url.g";
 
 const UserShowPage = () => {
   const router = useRouter();
@@ -35,19 +45,47 @@ const UserShowPage = () => {
 };
 
 const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
-  const [id, setId] = useValueField("");
-  const [name, setName] = useValueField("");
+  const router = useRouter();
   const [phone, setPhone] = useValueField("");
   const [email, setEmail] = useValueField("");
-  const [createAt, setCreateAt] = useValueField<Moment | null>(null);
+  const [type, setType] = useState<UserType | null>(null);
+  const buyCount = 0;
+  const refundCount = 0;
+  const reviewCount = 0;
+
+  const { mutate } = useMutation((req: EditUserReq) => api.editUser(req), {
+    onSuccess: (res: EditUserRes) => {
+      editAlert(isNil(props.user));
+      ignorePromise(() => router.replace(Urls.account.edit["[pk]"].url({ pk: res.pk })));
+    },
+  });
+
+  const onEdit = useCallback(() => {
+    if (isNotNil(props.user)) {
+      const isValidPhone = vPhone(phone.value);
+      if (isNotBlank(isValidPhone)) {
+        return alert(isValidPhone);
+      }
+
+      const isValidEmail = vEmail(email.value);
+      if (isNotBlank(isValidEmail)) {
+        return alert(isValidEmail);
+      }
+
+      mutate({
+        pk: props.user.pk,
+        phone: phone.value,
+        email: email.value,
+      });
+    }
+  }, [phone, email]);
 
   useEffect(() => {
     if (isNil(props.user)) {
       return;
     }
 
-    setCreateAt.set(moment(props.user.create_at));
-    setName.set(props.user.name);
+    setType(props.user.type as UserType);
     setPhone.set(props.user.phone);
     setEmail.set(props.user.email);
   }, [props]);
@@ -55,27 +93,26 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
   return (
     <>
       <CardSettings>
-        <TextFieldView value={id} onChange={(e) => setId.set(e.target.value)} label="아이디" />
-        <TextFieldView value={name} label="이름" onChange={(e) => setName.set(e.target.value)} />
+        <ReadOnlyTextView value={props.user?.id ?? ""} label="아이디" />
+        <UserTypeView value={type} />
+        <ReadOnlyTextView value={props.user?.name ?? ""} label="이름" />
         <TextFieldView
           value={phone}
           label="휴대폰"
           onChange={(e) => setPhone.set(e.target.value)}
         />
-        <MomentFieldView value={createAt.value} label="생성 일자" />
         <TextFieldView
           value={email}
           label="이메일"
           onChange={(e) => setEmail.set(e.target.value)}
+          disabled={type !== UserType.LOCAL}
         />
-        <div className="mt-3 flex w-full justify-end">
-          <button
-            type="button"
-            className="rounded-lg bg-blue-400 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            {isNil(props.user) ? "저장" : "수정"}
-          </button>
-        </div>
+        <ReadOnlyTextView value={buyCount} label="상품 구매 횟수" />
+        <ReadOnlyTextView value={refundCount} label="상품 환뷸 횟수" />
+        <ReadOnlyTextView value={reviewCount} label="리뷰 횟수" />
+        <ReadOnlyTextView value={dateFormatter(props.user?.createAt)} label="생성 일자" />
+        <ReadOnlyTextView value={dateFormatter(props.user?.updateAt)} label="수정 일자" />
+        <EditButtonView isNew={isNil(props.user)} onClick={() => onEdit()} />
       </CardSettings>
     </>
   );
