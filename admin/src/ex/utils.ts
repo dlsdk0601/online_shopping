@@ -150,3 +150,7 @@ export function validatePk(pk: string | string[] | undefined): {
 
   return { isValid: true, pk: numberPk };
 }
+
+export function editAlert(isNew: boolean) {
+  return alert(isNew ? "등록 되었습니다." : "수정 되었습니다.");
+}
