@@ -74,7 +74,7 @@ export const UserTypeView = (props: { value: UserType | null }) => {
       default: // UserType.APPLE:
         return "";
     }
-  }, []);
+  }, [props.value]);
 
   return (
     <div className="relative mb-3 w-full lg:w-6/12">
@@ -88,6 +88,27 @@ export const UserTypeView = (props: { value: UserType | null }) => {
         type="text"
         className="w-full rounded border-0 bg-gray-100 px-3 py-3 text-sm text-blueGray-600 placeholder-blueGray-300 shadow transition-all duration-150 ease-linear focus:outline-none focus:ring lg:w-10/12"
         value={mapper()}
+        disabled
+      />
+    </div>
+  );
+};
+
+export const ReadOnlyTextView = (props: { value: string | number; label?: string }) => {
+  return (
+    <div className="relative mb-3 w-full lg:w-6/12">
+      {props.label && (
+        <label
+          className="mb-2 block text-xs font-bold uppercase text-blueGray-600"
+          htmlFor="grid-password"
+        >
+          {props.label}
+        </label>
+      )}
+      <input
+        type="text"
+        className="w-full rounded border-0 bg-gray-100 px-3 py-3 text-sm text-blueGray-600 placeholder-blueGray-300 shadow transition-all duration-150 ease-linear focus:outline-none focus:ring lg:w-10/12"
+        value={props.value}
         disabled
       />
     </div>
