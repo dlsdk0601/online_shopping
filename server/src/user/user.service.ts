@@ -37,19 +37,17 @@ export class UserService {
         phone: true,
         create_at: true,
         type: true,
-        googleUser: { email: true },
-        kakaoUser: { email: true },
-        naverUser: { email: true },
-        localUser: { email: true },
       },
       ...where,
     });
+
+    const count = await User.count();
 
     if (isNil(users)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
     }
 
-    return new UserListResDto(users, users.length, req.page);
+    return new UserListResDto(users, count, req.page);
   }
 
   async findLocalUserOneOr404(pk: number) {
