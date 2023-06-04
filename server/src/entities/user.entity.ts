@@ -38,6 +38,7 @@ export class User extends TimeSet {
 
     return {
       pk: this.pk,
+      id: userData instanceof GoogleUser ? "" : userData.id,
       name: this.name,
       phone: this.phone,
       type: this.type,
