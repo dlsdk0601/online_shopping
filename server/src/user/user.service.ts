@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Like, Repository } from "typeorm";
-import { camelCase, isNil } from "lodash";
+import { isNil } from "lodash";
 import { User } from "../entities/user.entity";
 import { LIMIT } from "../type/pagination.dto";
 import { UserListReqDto, UserListResDto } from "./dto/show-user.dto";
@@ -9,7 +9,7 @@ import errorMessage from "../config/errorMessage";
 import { EditUserReqDto } from "./dto/edit-user.dto";
 import { LocalUser } from "../entities/local-user.entity";
 import { isNotNil } from "../ex/ex";
-import { UserSearchType } from "../type/commonType";
+import { UserSearchType, UserType } from "../type/commonType";
 
 @Injectable()
 export class UserService {
@@ -75,21 +75,15 @@ export class UserService {
       throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
     }
 
-    const userType = camelCase(`${user.type.toLowerCase()}User`);
-
-    // TODO :: test
-    // user 에서 relations 옵션을 안줄떄 줄때 차이점 테스트 하기
-    const test = user.userData();
-    console.log("test");
-    console.log(test);
-
     return {
       pk: user.pk,
+      id: user.userData().id,
       name: user.name,
       phone: user.phone,
-      create_at: user.create_at,
       type: user.type,
-      email: user[userType].email,
+      email: user.userData().email,
+      createAt: user.create_at,
+      updateAt: user.userData().updateAt,
     };
   }
 
@@ -98,17 +92,24 @@ export class UserService {
   }
 
   async update(updateUserDto: EditUserReqDto) {
-    const localUser = await this.findLocalUserOneOr404(updateUserDto.pk);
+    const user = await User.findOne({
+      where: { pk: updateUserDto.pk },
+      relations: { localUser: true, googleUser: true, kakaoUser: true, naverUser: true },
+    });
 
-    localUser.id = updateUserDto.id;
-    localUser.email = updateUserDto.email;
-    localUser.user.name = updateUserDto.name;
-    localUser.password_hash = updateUserDto.password;
-    localUser.user.phone = updateUserDto.phone;
+    if (isNil(user)) {
+      throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
+    }
+
+    if (user.type === UserType.LOCAL && isNotNil(updateUserDto.email)) {
+      user.localUser.email = updateUserDto.email;
+    }
+
+    user.phone = updateUserDto.phone;
 
     try {
-      await LocalUser.save(localUser);
-      return localUser.pk;
+      await user.save();
+      return { pk: user.pk };
     } catch (e) {
       throw new ConflictException(errorMessage.UPDATE_FAILED);
     }
