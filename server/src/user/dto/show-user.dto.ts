@@ -36,6 +36,11 @@ export class ShowUserResDto {
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({ description: "type", nullable: false, enum: UserType })
+  @IsEnum(UserType)
+  @IsNotEmpty()
+  type: UserType;
+
   @ApiProperty({ description: "phone", nullable: true, type: "string" })
   @IsPhoneNumber()
   @IsOptional()
