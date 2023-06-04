@@ -54,17 +54,6 @@ export class PaginationDto {
   @IsNumber()
   last: number;
 
-  // @ApiProperty({
-  //   description: "아이템",
-  //   type: "array",
-  //   oneOf: [
-  //     { $ref: getSchemaPath(UserListResUserDto) },
-  //     { $ref: getSchemaPath(ManagerListResManagerDto) },
-  //   ],
-  // })
-  // @IsArray()
-  // rows: T[];
-
   constructor(count: number, page: number) {
     const last = Math.ceil(count / LIMIT);
     this.page = page;
@@ -83,14 +72,38 @@ export class PaginationDto {
 const getPagesArray = (last: number, page: number): number[] => {
   const pages: number[] = [];
 
-  if (page < 5) {
+  // 마지막 페이지가 5 보다 작을 때
+  // [1, 2, 3, 4]
+  if (last < 5) {
+    for (let i = 0; i < last; i++) {
+      pages.push(i + 1);
+    }
+
+    return pages;
+  }
+
+  // 마지막 페이지가 5보다 클때
+  // [1, 2, 3, 4, 5]
+  if (page < 3) {
     for (let i = 0; i < 5; i++) {
       pages.push(i + 1);
     }
-  } else {
+
+    return pages;
+  }
+
+  // [3, 4, 5, 6, 7] => 뒤에 더 존재
+  if (page < last - 2) {
     for (let i = 0; i < 5; i++) {
       pages.push(page - 2 + i);
     }
+
+    return pages;
+  }
+
+  // [5, 6, 7, 8, 9] 9가 마지막 페이지
+  for (let i = 0; i < 5; i++) {
+    pages.push(last - 4 + i);
   }
 
   return pages;
