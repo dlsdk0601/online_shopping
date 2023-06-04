@@ -56,7 +56,7 @@ export class ShowUserResDto {
   @IsDate()
   createAt: Date;
 
-  @ApiProperty({ description: "update at", nullable: true })
+  @ApiProperty({ description: "update at", nullable: true, type: "string" })
   @IsOptional()
   @IsDate()
   updateAt: Date | null;
