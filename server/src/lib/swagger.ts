@@ -6,7 +6,7 @@ import constant from "../config/constant";
 export const setupSwagger = (app: INestApplication) => {
   // Swagger options 설정
   const options = new DocumentBuilder()
-    .setTitle("boiler-plate")
+    .setTitle("online-shopping")
     .setDescription("Boiler-Plate API")
     .setVersion(constant().Version)
     .addBearerAuth(
