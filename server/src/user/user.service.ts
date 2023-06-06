@@ -19,16 +19,24 @@ export class UserService {
   ) {}
 
   async getUserList(req: UserListReqDto) {
-    // TODO :: 검색
-    let where = {};
-    if (isNotNil(req.search)) {
-      where = {
-        name: req.searchType === UserSearchType.NAME ? Like(`${req.search}`) : undefined,
-        phone: req.searchType === UserSearchType.PHONE ? Like(`${req.search}`) : undefined,
+    let searchOption = {};
+
+    if(isNil(req.searchType)){
+      // 전체 검색
+      searchOption = [
+        { name: Like(`%${req.search}%`) },
+        { phone: Like(`%${req.search}%`) },
+      ];
+    }else{
+      // 부분 검색
+      searchOption = {
+        name: req.searchType === UserSearchType.NAME ? Like(`%${req.search}%`) : undefined,
+        phone: req.searchType === UserSearchType.PHONE ? Like(`%${req.search}%`) : undefined,
       };
     }
 
-    const users = await User.find({
+    // 매번 검색 마다 실행하기 때문에 불변성 유지 안해도 된다.
+    const [users, count] = await User.findAndCount({
       take: LIMIT,
       skip: LIMIT * (req.page - 1),
       select: {
@@ -38,10 +46,9 @@ export class UserService {
         create_at: true,
         type: true,
       },
-      ...where,
+      where: searchOption,
     });
 
-    const count = await User.count();
 
     if (isNil(users)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
