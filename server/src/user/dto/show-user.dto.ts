@@ -76,7 +76,7 @@ export class UserListReqDto {
   @ApiProperty({ description: "search", nullable: true, type: "string" })
   @IsOptional()
   @IsString()
-  search: string | null;
+  search: string;
 }
 
 export class UserListResUserDto {
