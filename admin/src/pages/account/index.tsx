@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { isArray } from "lodash";
-import { useQuery } from "react-query";
-import { UserListResUser } from "../../api/type.g";
+import { useMutation, useQuery } from "react-query";
+import { UserListReq, UserListRes, UserListResUser } from "../../api/type.g";
 import { UserSearchType, UserType } from "../../api/enum.g";
 import { api } from "../../api/url.g";
 import SearchBarView from "../../components/table/searchBarView";
@@ -10,7 +10,6 @@ import { PaginationTableView } from "../../components/table/Table";
 import { Urls } from "../../url/url.g";
 import { d2 } from "../../ex/dateEx";
 import useIsReady from "../../hooks/useIsReady";
-import { queryKeys } from "../../lib/contants";
 import UseValueField from "../../hooks/useValueField";
 import GoogleIcon from "../../components/icons/Google";
 import LocalIcon from "../../components/icons/LocalIcon";
@@ -20,6 +19,7 @@ const UserListPage = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = UseValueField("");
   const [searchType, setSearchType] = useState<UserSearchType | null>(null);
+  const [paginationUserList, setPaginationUserList] = useState<UserListRes | null>(null);
 
   const onSearch = useCallback(() => {
     const query = {
@@ -55,6 +55,12 @@ const UserListPage = () => {
     }
   };
 
+  const { mutate } = useMutation((req: UserListReq) => api.userList(req), {
+    onSuccess: (res) => {
+      setPaginationUserList({ ...res });
+    },
+  });
+
   useIsReady(() => {
     const { page, search, searchType } = router.query;
 
@@ -65,16 +71,12 @@ const UserListPage = () => {
     setPage(Number(page ?? 1));
     setSearch.set(search ?? "");
     setSearchType(enumToLabel(searchType) ?? null);
+    mutate({
+      page: Number(page ?? 1),
+      search: search ?? "",
+      searchType: enumToLabel(searchType) ?? null,
+    });
   });
-
-  const { data: paginationUserList } = useQuery(
-    [queryKeys.userList, page],
-    () => api.userList({ page, search: search.value, searchType }),
-    {
-      keepPreviousData: true,
-      staleTime: 60 * 5,
-    },
-  );
 
   return (
     <div className="mt-4">
