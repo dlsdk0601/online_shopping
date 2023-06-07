@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
 import { ignorePromise, isBlank, isNotNil, preventDefaulted } from "../../ex/utils";
-import { vEmail, vPhone } from "../../ex/validate";
+import { vEmail, vPassword, vPhone } from "../../ex/validate";
 import AuthInputFieldView from "../../view/AuthInputFieldView";
 import { api } from "../../api/url.g";
 import { SignUpReq, SignUpRes } from "../../api/type.g";
@@ -44,6 +44,16 @@ const SignUp = () => {
       return false;
     }
 
+    if (isBlank(password.value)) {
+      setPassword.err("비밀번호는 필수 입력사항입니다.");
+      return false;
+    }
+
+    if (isNotNil(vPassword(password.value))) {
+      setPassword.err(vPassword(password.value));
+      return false;
+    }
+
     if (isBlank(name.value)) {
       setName.err("이름은 필수 입력사항입니다.");
       return false;
@@ -58,17 +68,6 @@ const SignUp = () => {
       setEmail.err(vEmail(email.value));
       return false;
     }
-
-    if (isBlank(password.value)) {
-      setPassword.err("비밀번호는 필수 입력사항입니다.");
-      return false;
-    }
-
-    // TODO :: 토이 프로젝트할때 풀 것
-    // if (isNotNil(vPassword(password))) {
-    //   setError(vPassword(password));
-    //   return false;
-    // }
 
     return true;
   }, [id, password, name, phone, email]);
@@ -88,39 +87,55 @@ const SignUp = () => {
   }, [id, password, name, phone, email]);
 
   return (
-    <div className="mx-auto mt-14 w-[400px] rounded border p-4">
-      <form onSubmit={preventDefaulted(() => onSignUp())}>
-        <AuthInputFieldView field={id} label="아이디" onChange={(e) => setId.set(e.target.value)} />
-        <AuthInputFieldView
-          field={password}
-          label="비밀번호"
-          onChange={(e) => setPassword.set(e.target.value)}
-          type="password"
-        />
-        <AuthInputFieldView
-          field={name}
-          label="이름"
-          onChange={(e) => setName.set(e.target.value)}
-          type="tel"
-        />
-        <AuthInputFieldView
-          field={phone}
-          label="휴대폰"
-          onChange={(e) => setPhone.set(e.target.value)}
-        />
-        <AuthInputFieldView
-          field={email}
-          label="이메일"
-          onChange={(e) => setEmail.set(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="mt-2 w-full rounded border p-2 transition-colors hover:bg-black hover:text-white"
-        >
-          회원가입
-        </button>
-      </form>
-    </div>
+    <>
+      <div className="page-heading" id="top">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="inner-content">
+                <h2>Sign Up</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section className="section">
+        <div className="container sign-container">
+          <form className="form-container" onSubmit={preventDefaulted(() => onSignUp())}>
+            <AuthInputFieldView
+              field={id}
+              label="아이디"
+              onChange={(e) => setId.set(e.target.value)}
+            />
+            <AuthInputFieldView
+              field={password}
+              label="비밀번호"
+              onChange={(e) => setPassword.set(e.target.value)}
+              type="password"
+            />
+            <AuthInputFieldView
+              field={name}
+              label="이름"
+              onChange={(e) => setName.set(e.target.value)}
+              type="tel"
+            />
+            <AuthInputFieldView
+              field={phone}
+              label="휴대폰"
+              onChange={(e) => setPhone.set(e.target.value)}
+            />
+            <AuthInputFieldView
+              field={email}
+              label="이메일"
+              onChange={(e) => setEmail.set(e.target.value)}
+            />
+            <button type="submit" className="sign-button">
+              Sign Up
+            </button>
+          </form>
+        </div>
+      </section>
+    </>
   );
 };
 
