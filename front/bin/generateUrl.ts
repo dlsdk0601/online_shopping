@@ -63,7 +63,7 @@ function generateSource(page: Page | Dir, parents: string[]): string[] {
     }
     case "dir":
     default: {
-      lines.push(`${page.name} : {`);
+      lines.push(`"${page.name}" : {`);
       lines.push(...generateSources(page.children, newParents));
       lines.push("},");
       break;
