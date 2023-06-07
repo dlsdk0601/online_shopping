@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { useMutation } from "react-query";
+import { isNil } from "lodash";
 import { api } from "../../api/url.g";
 import { UploadReq } from "../../api/type.g";
 import { fileToBase64 } from "../../ex/base64Ex";
@@ -17,7 +18,17 @@ const Upload = () => {
 
   const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+
+    if (isNil(files)) {
+      return;
+    }
+
     const file = files[0];
+
+    if (isNil(file)) {
+      return;
+    }
+
     const fileData = await fileToBase64(file);
     mutate({ ...fileData });
   };

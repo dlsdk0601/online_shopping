@@ -2,7 +2,7 @@ import { isEmpty, isNil } from "lodash";
 import isEmail from "validator/lib/isEmail";
 import isUrl from "validator/lib/isURL";
 
-export const vEmail = (value: string): string => {
+export const vEmail = (value: string): string | undefined => {
   // 값이 없을 경우 무시
   if (isNil(value) || isEmpty(value)) {
     return "이메일은 필수 입력사항입니다.";
@@ -13,7 +13,7 @@ export const vEmail = (value: string): string => {
   }
 };
 
-export const vPhone = (value: string): string => {
+export const vPhone = (value: string): string | undefined => {
   if (isNil(value) || isEmpty(value)) {
     return "핸드폰번호는 필수 입력사항입니다.";
   }
@@ -30,7 +30,7 @@ export const vPhone = (value: string): string => {
   }
 };
 
-export const vUrl = (value: string): string => {
+export const vUrl = (value: string): string | undefined => {
   if (isNil(value) || isEmpty(value)) {
     return "url은 필수 입력사항입니다.";
   }
@@ -40,7 +40,7 @@ export const vUrl = (value: string): string => {
   }
 };
 
-export const vPassword = (value: string): string => {
+export const vPassword = (value: string): string | undefined => {
   // 값이 없을 경우 무시
   if (isNil(value) || isEmpty(value)) {
     return "비밀번호는 필수 입력사항입니다.";

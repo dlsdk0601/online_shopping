@@ -57,8 +57,9 @@ const SnsSignInPage = () => {
       return false;
     }
 
-    if (isNotNil(vPhone(phone.value))) {
-      setPhone.err(vPhone(phone.value));
+    const phoneError = vPhone(phone.value);
+    if (isNotNil(phoneError)) {
+      setPhone.err(phoneError);
       return false;
     }
 

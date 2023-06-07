@@ -129,7 +129,7 @@ export function phoneOnlyNumber(phone: string | null) {
   return newPhone.replaceAll("-", "");
 }
 
-export const isPassword = (value): boolean => {
+export const isPassword = (value: string | null | undefined): boolean => {
   // 값이 없을 경우 무시
   if (isNil(value) || isEmpty(value)) {
     return false;

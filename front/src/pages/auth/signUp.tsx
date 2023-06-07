@@ -49,8 +49,9 @@ const SignUp = () => {
       return false;
     }
 
-    if (isNotNil(vPassword(password.value))) {
-      setPassword.err(vPassword(password.value));
+    const passwordError = vPassword(password.value);
+    if (isNotNil(passwordError)) {
+      setPassword.err(passwordError);
       return false;
     }
 
@@ -59,13 +60,15 @@ const SignUp = () => {
       return false;
     }
 
-    if (isNotNil(vPhone(phone.value))) {
-      setPhone.err(vPhone(phone.value));
+    const phoneError = vPhone(phone.value);
+    if (isNotNil(phoneError)) {
+      setPhone.err(phoneError);
       return false;
     }
 
-    if (isNotNil(vEmail(email.value))) {
-      setEmail.err(vEmail(email.value));
+    const emailError = vEmail(email.value);
+    if (isNotNil(emailError)) {
+      setEmail.err(emailError);
       return false;
     }
 

@@ -38,8 +38,9 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
       return false;
     }
 
-    if (isNotNil(vPassword(password.value))) {
-      setPassword.err(vPassword(password.value));
+    const passwordError = vPassword(password.value);
+    if (isNotNil(passwordError)) {
+      setPassword.err(passwordError);
       return false;
     }
 

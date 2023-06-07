@@ -57,7 +57,7 @@ const ContactUsPage = () => {
                     <fieldset>
                       <textarea
                         name="message"
-                        rows="6"
+                        rows={6}
                         id="message"
                         placeholder="Your message"
                         required
