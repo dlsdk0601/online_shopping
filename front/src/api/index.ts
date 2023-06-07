@@ -50,7 +50,7 @@ export class ApiBase {
     });
   };
 
-  post = async (url: string, data?: any, config?: axios.AxiosRequestConfig) => {
+  post = async (url: string, data?: any, config?: AxiosRequestConfig) => {
     return this.with(async () => {
       try {
         if (baseConfig.apiDelay) {
@@ -65,7 +65,7 @@ export class ApiBase {
     });
   };
 
-  put = async (url: string, data: any, config?: axios.AxiosRequestConfig) => {
+  put = async (url: string, data: any, config?: AxiosRequestConfig) => {
     return this.with(async () => {
       if (baseConfig.apiDelay) {
         await sleep(baseConfig.apiDelay);
@@ -76,7 +76,7 @@ export class ApiBase {
     });
   };
 
-  delete = async (url: string, config?: axios.AxiosRequestConfig) => {
+  delete = async (url: string, config?: AxiosRequestConfig) => {
     return this.with(async () => {
       if (baseConfig.apiDelay) {
         await sleep(baseConfig.apiDelay);
