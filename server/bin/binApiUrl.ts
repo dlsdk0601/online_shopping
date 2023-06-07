@@ -12,7 +12,7 @@ export interface ApiItem {
 
 type OriginType = "FRONT" | "ADMIN";
 
-const exceptApiList = ["_"];
+const exceptApiList = ["_", ":fileName"];
 
 export function getApiList(router) {
   const adminRoutes: ApiItem[] = [];
@@ -53,19 +53,22 @@ export function getApiList(router) {
     }
   });
 
-  binApiUrl(adminRoutes.filter(item => !isNil(item)), "ADMIN");
-  binApiUrl(frontRoutes.filter(item => !isNil(item)), "FRONT");
+  binApiUrl(
+    adminRoutes.filter((item) => !isNil(item)),
+    "ADMIN"
+  );
+  binApiUrl(
+    frontRoutes.filter((item) => !isNil(item)),
+    "FRONT"
+  );
 }
-
 
 function generateSources(apis: ApiItem[], type: OriginType): string[] {
   return apis.map((api) => generateSource(api, type));
 }
 
 function generateImports(apis: ApiItem[], type: OriginType): string {
-  const apiArray = uniq(apis
-    .map((api) => generateImport(api, type))
-    .flat());
+  const apiArray = uniq(apis.map((api) => generateImport(api, type)).flat());
   return apiArray.join(",");
 }
 
@@ -132,4 +135,3 @@ function binApiUrl(list: ApiItem[], type: OriginType) {
   }
   fs.writeFileSync(targetPath, tsFormatted);
 }
-
