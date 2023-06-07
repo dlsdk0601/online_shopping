@@ -38,7 +38,7 @@ const MenProductShowPage = () => {
                   incididunt ut labore.
                 </span>
                 <div className="quote">
-                  <i className="fa fa-quote-left"></i>
+                  <i className="fa fa-quote-left" />
                   <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiuski smod.
                   </p>

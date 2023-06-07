@@ -9,6 +9,7 @@ const Upload = () => {
   const [url, setUrl] = useState("");
   const { mutate } = useMutation((req: UploadReq) => api.upload(req), {
     onSuccess: (res) => {
+      // eslint-disable-next-line no-console
       console.log(res.fileSet);
       setUrl(res.fileSet.url);
     },

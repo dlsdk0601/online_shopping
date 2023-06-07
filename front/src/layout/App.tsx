@@ -53,7 +53,6 @@ export const App = ({ Component, pageProps }: AppProps) => {
 
 const LayoutSelector = (props: PropsWithChildren) => {
   const router = useRouter();
-  const accessToken = sessionStorage.getItem(CONSTANT.sessionTokenKey);
 
   // 예외 URL
   const isSpecialUrl = some(["/_"], (prefix) => router.pathname.startsWith(prefix));

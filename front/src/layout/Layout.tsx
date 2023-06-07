@@ -4,11 +4,11 @@ import { useIsMutating } from "react-query";
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
+import { isNil } from "lodash";
 import Favicon from "../../public/favicon.ico";
 import { Urls } from "../url/url.g";
-import { useRecoilValue } from "recoil";
 import { userToken } from "../store/user";
-import { isNil } from "lodash";
 
 // 로그인 유저가 보는 화면 (ex 어드민 메인화면)
 export const LayoutView = (props: PropsWithChildren) => {
@@ -155,20 +155,6 @@ const FooterView = () => {
               </li>
             </ul>
           </div>
-          {/*<div className="col-lg-3">*/}
-          {/*  <h4>Help &amp; Information</h4>*/}
-          {/*  <ul>*/}
-          {/*    <li>*/}
-          {/*      <Link href="#">Help</Link>*/}
-          {/*//     </li>*/}
-          {/*//     <li>*/}
-          {/*      <Link href="#">FAQ's</Link>*/}
-          {/*    </li>*/}
-          {/*    <li>*/}
-          {/*      <Link href="#">Tracking ID</Link>*/}
-          {/*    </li>*/}
-          {/*  </ul>*/}
-          {/*</div>*/}
           <div className="col-lg-12">
             <div className="under-footer">
               <p>

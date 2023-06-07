@@ -36,17 +36,17 @@ const MensPage = () => {
                     <ul>
                       <li>
                         <Link href={{ pathname: Urls.mens.show["[pk]"], query: { pk: 1 } }}>
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -58,19 +58,19 @@ const MensPage = () => {
                   <span>$120.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -83,17 +83,17 @@ const MensPage = () => {
                     <ul>
                       <li>
                         <Link href="single-product.html">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="single-product.html">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="single-product.html">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -105,19 +105,19 @@ const MensPage = () => {
                   <span>$90.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -130,17 +130,17 @@ const MensPage = () => {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -152,19 +152,19 @@ const MensPage = () => {
                   <span>$150.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -177,17 +177,17 @@ const MensPage = () => {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -199,19 +199,19 @@ const MensPage = () => {
                   <span>$75.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -224,17 +224,17 @@ const MensPage = () => {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -246,19 +246,19 @@ const MensPage = () => {
                   <span>$45.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -271,17 +271,17 @@ const MensPage = () => {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -293,19 +293,19 @@ const MensPage = () => {
                   <span>$130.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -318,17 +318,17 @@ const MensPage = () => {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -340,19 +340,19 @@ const MensPage = () => {
                   <span>$80.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -365,17 +365,17 @@ const MensPage = () => {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -387,19 +387,19 @@ const MensPage = () => {
                   <span>$12.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -412,17 +412,17 @@ const MensPage = () => {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -434,19 +434,19 @@ const MensPage = () => {
                   <span>$30.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>

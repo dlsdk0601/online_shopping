@@ -15,7 +15,7 @@ export function useUser(): UseUser {
   const queryClient = useQueryClient();
   const setToken = useSetRecoilState(tokenModel);
 
-  const { data: user, isLoading: isApiLoading } = useQuery(queryKeys.user, () => api.auth({}), {
+  const { data: user } = useQuery(queryKeys.user, () => api.auth({}), {
     enabled: isNotNil(sessionStorage.getItem(CONSTANT.sessionTokenKey)),
   });
 

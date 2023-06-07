@@ -31,7 +31,7 @@ const AboutPage = () => {
                   incididunt ut labore.
                 </span>
                 <div className="quote">
-                  <i className="fa fa-quote-left"></i>
+                  <i className="fa fa-quote-left" />
                   <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiuski smod kon
                     tempor incididunt ut labore.
@@ -45,22 +45,22 @@ const AboutPage = () => {
                 <ul>
                   <li>
                     <Link href="#">
-                      <i className="fa fa-facebook"></i>
+                      <i className="fa fa-facebook" />
                     </Link>
                   </li>
                   <li>
                     <Link href="#">
-                      <i className="fa fa-twitter"></i>
+                      <i className="fa fa-twitter" />
                     </Link>
                   </li>
                   <li>
                     <Link href="#">
-                      <i className="fa fa-linkedin"></i>
+                      <i className="fa fa-linkedin" />
                     </Link>
                   </li>
                   <li>
                     <Link href="#">
-                      <i className="fa fa-behance"></i>
+                      <i className="fa fa-behance" />
                     </Link>
                   </li>
                 </ul>
@@ -88,22 +88,22 @@ const AboutPage = () => {
                       <ul>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-facebook"></i>
+                            <i className="fa fa-facebook" />
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-twitter"></i>
+                            <i className="fa fa-twitter" />
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-linkedin"></i>
+                            <i className="fa fa-linkedin" />
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-behance"></i>
+                            <i className="fa fa-behance" />
                           </Link>
                         </li>
                       </ul>
@@ -125,22 +125,22 @@ const AboutPage = () => {
                       <ul>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-facebook"></i>
+                            <i className="fa fa-facebook" />
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-twitter"></i>
+                            <i className="fa fa-twitter" />
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-linkedin"></i>
+                            <i className="fa fa-linkedin" />
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-behance"></i>
+                            <i className="fa fa-behance" />
                           </Link>
                         </li>
                       </ul>
@@ -162,22 +162,22 @@ const AboutPage = () => {
                       <ul>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-facebook"></i>
+                            <i className="fa fa-facebook" />
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-twitter"></i>
+                            <i className="fa fa-twitter" />
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-linkedin"></i>
+                            <i className="fa fa-linkedin" />
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            <i className="fa fa-behance"></i>
+                            <i className="fa fa-behance" />
                           </Link>
                         </li>
                       </ul>
@@ -270,7 +270,7 @@ const AboutPage = () => {
                   <div className="col-lg-2">
                     <fieldset>
                       <button type="submit" id="form-submit" className="main-dark-button">
-                        <i className="fa fa-paper-plane"></i>
+                        <i className="fa fa-paper-plane" />
                       </button>
                     </fieldset>
                   </div>

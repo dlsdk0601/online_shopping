@@ -306,17 +306,17 @@ export default function Home() {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -328,19 +328,19 @@ export default function Home() {
                   <span>$75.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -351,17 +351,17 @@ export default function Home() {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -373,19 +373,19 @@ export default function Home() {
                   <span>$45.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -396,17 +396,17 @@ export default function Home() {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -418,19 +418,19 @@ export default function Home() {
                   <span>$130.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -441,17 +441,17 @@ export default function Home() {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -463,19 +463,19 @@ export default function Home() {
                   <span>$120.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -506,17 +506,17 @@ export default function Home() {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -528,19 +528,19 @@ export default function Home() {
                   <span>$80.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -551,17 +551,17 @@ export default function Home() {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -573,19 +573,19 @@ export default function Home() {
                   <span>$12.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -596,17 +596,17 @@ export default function Home() {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -618,19 +618,19 @@ export default function Home() {
                   <span>$30.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -641,17 +641,17 @@ export default function Home() {
                     <ul>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-eye"></i>
+                          <i className="fa fa-eye" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star" />
                         </Link>
                       </li>
                       <li>
                         <Link href="/">
-                          <i className="fa fa-shopping-cart"></i>
+                          <i className="fa fa-shopping-cart" />
                         </Link>
                       </li>
                     </ul>
@@ -663,19 +663,19 @@ export default function Home() {
                   <span>$120.00</span>
                   <ul className="stars">
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                     <li>
-                      <i className="fa fa-star"></i>
+                      <i className="fa fa-star" />
                     </li>
                   </ul>
                 </div>
@@ -716,7 +716,7 @@ export default function Home() {
                   <div className="col-lg-2">
                     <fieldset>
                       <button type="submit" id="form-submit" className="main-dark-button">
-                        <i className="fa fa-paper-plane"></i>
+                        <i className="fa fa-paper-plane" />
                       </button>
                     </fieldset>
                   </div>

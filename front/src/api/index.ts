@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { sleep } from "sleepjs";
 import { baseConfig } from "../lib/config";
 import { CONSTANT } from "../lib/contants";
@@ -35,7 +35,7 @@ axiosInstance.interceptors.response.use(
 export class ApiBase {
   private counter = 0;
 
-  get = async (url: string, config?: axios.AxiosRequestConfig) => {
+  get = async (url: string, config?: AxiosRequestConfig) => {
     return this.with(async () => {
       try {
         if (baseConfig.apiDelay) {
@@ -117,8 +117,4 @@ export class ApiBase {
   private decreaseCounter = () => {
     this.counter--;
   };
-
-  get locked(): boolean {
-    return this.counter > 0;
-  }
 }

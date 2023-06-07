@@ -13,7 +13,7 @@ const Stars = (props: { starScore: number; className?: string }) => {
     <ul className={`stars ${props.className && props.className}`}>
       {starList.map((_, index) => (
         <li key={`star-${index}`}>
-          <i className="fa fa-star"></i>
+          <i className="fa fa-star" />
         </li>
       ))}
     </ul>
