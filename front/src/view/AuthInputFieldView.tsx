@@ -15,14 +15,16 @@ const AuthInputFieldView = (props: {
         <label>{props.label}</label>
         <input
           className={classNames({
-            "border-red-400": !isBlank(props.field.error),
+            "border-danger": !isBlank(props.field.error),
           })}
           value={props.field.value}
           onChange={(e) => props.onChange(e)}
           type={props.type ?? "text"}
         />
+        {!isBlank(props.field.error) && (
+          <p className="text-danger text-right">{props.field.error}</p>
+        )}
       </div>
-      {!isBlank(props.field.error) && <p className="">{props.field.error}</p>}
     </>
   );
 };
