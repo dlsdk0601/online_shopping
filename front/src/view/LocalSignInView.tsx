@@ -1,17 +1,21 @@
 import React, { useCallback } from "react";
 import { useMutation } from "react-query";
-import { isBlank, preventDefaulted } from "../ex/utils";
-import { NaverCodeVerifyRes, SignInReq } from "../api/type.g";
+import { useRouter } from "next/router";
+import { isBlank, isNotNil, preventDefaulted } from "../ex/utils";
+import { SignInReq, SignInRes } from "../api/type.g";
 import { api } from "../api/url.g";
 import AuthInputFieldView from "./AuthInputFieldView";
 import useValueField from "../hooks/useValueField";
+import { Urls } from "../url/url.g";
+import { vPassword } from "../ex/validate";
 
 const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
+  const router = useRouter();
   const [id, setId] = useValueField("");
   const [password, setPassword] = useValueField("");
 
   const { mutate } = useMutation((req: SignInReq) => api.signIn(req), {
-    onSuccess: (res: NaverCodeVerifyRes) => {
+    onSuccess: (res: SignInRes) => {
       props.onSuccess(res.token);
     },
     onError: () => {},
@@ -34,14 +38,13 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
       return false;
     }
 
-    // TODO :: 토이 프로젝트할때 풀 것
-    // if (isNotNil(vPassword(password))) {
-    //   setError(vPassword(password));
-    //   return false;
-    // }
+    if (isNotNil(vPassword(password.value))) {
+      setPassword.err(vPassword(password.value));
+      return false;
+    }
 
     return true;
-  }, [id, password, name]);
+  }, [id, password]);
 
   const onLocalSignIn = useCallback(async () => {
     if (!isValidate()) {
@@ -62,6 +65,13 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
       />
       <button type="submit" className="sign-button">
         Sign In
+      </button>
+      <button
+        type="button"
+        className="sign-button mt-3"
+        onClick={() => router.replace(Urls.auth.signUp)}
+      >
+        Sign Up
       </button>
     </form>
   );
