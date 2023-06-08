@@ -47,4 +47,11 @@ export class User extends TimeSet {
       updateAt: this.update_at,
     };
   }
+
+  get auths() {
+    const userType = `${this.type.toLowerCase()}User`;
+    const userData: LocalUser | GoogleUser | KakaoUser | NaverUser = this[userType];
+
+    return userData.auth;
+  }
 }
