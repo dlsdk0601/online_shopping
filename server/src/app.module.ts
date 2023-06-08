@@ -7,6 +7,7 @@ import { typeOrmModuleOptions } from "./database/ormconfig";
 import { envValidation } from "./lib/envValidation";
 import { AuthModule } from "./auth/auth.module";
 import { AssetModule } from "./asset/asset.module";
+import { SubscribeModule } from './subscribe/subscribe.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AssetModule } from "./asset/asset.module";
     UserModule,
     AuthModule,
     AssetModule,
+    SubscribeModule,
   ],
 })
 export class AppModule {}
