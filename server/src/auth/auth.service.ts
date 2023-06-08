@@ -414,100 +414,39 @@ export class AuthService {
       }
     }
 
-    if (user.dataType === "FRONT") {
-      if (user.type === "LOCAL") {
-        const localUser = await this.userService.findLocalUserOneOr404(user.pk);
+    const frontUser = await User.findOne({
+      where: { pk: user.pk },
+      relations: {
+        localUser: {
+          auth: user.type === UserType.LOCAL,
+        },
+        googleUser: {
+          auth: user.type === UserType.GOOGLE,
+        },
+        kakaoUser: {
+          auth: user.type === UserType.KAKAO,
+        },
+        naverUser: {
+          auth: user.type === UserType.NAVER,
+        },
+      },
+    });
 
-        const lastAuth: LocalAuthentication | undefined = getLastAuth(localUser.auth);
+    if (isNil(frontUser)) {
+      throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
+    }
 
-        if (isNil(lastAuth)) {
-          throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
-        }
+    const lastAuth: LocalAuthentication | undefined = getLastAuth(frontUser.auths);
 
-        try {
-          await LocalAuthentication.update(lastAuth.pk, { expired_at: moment().toDate() });
-          return { result: true };
-        } catch (e) {
-          throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
-        }
-      }
+    if (isNil(lastAuth)) {
+      throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
+    }
 
-      if (user.type === UserType.GOOGLE) {
-        const googleUser = await GoogleUser.findOne({
-          where: { pk: user.pk },
-          relations: { auth: true },
-        });
-
-        if (isNil(googleUser)) {
-          throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
-        }
-
-        const lastAuth: GoogleAuthentication | undefined = getLastAuth(googleUser.auth);
-
-        if (isNil(lastAuth)) {
-          throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
-        }
-        try {
-          lastAuth.expired_at = moment().toDate();
-          await lastAuth.save();
-
-          return { result: true };
-        } catch (e) {
-          throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
-        }
-      }
-
-      if (user.type === UserType.KAKAO) {
-        const kakaoUser = await KakaoUser.findOne({
-          where: { pk: user.pk },
-          relations: { auth: true },
-        });
-
-        if (isNil(kakaoUser)) {
-          throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
-        }
-
-        const lastAuth: KakaoAuthentication | undefined = getLastAuth(kakaoUser.auth);
-
-        if (isNil(lastAuth)) {
-          throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
-        }
-
-        try {
-          lastAuth.expired_at = moment().toDate();
-          await lastAuth.save();
-
-          return { result: true };
-        } catch (e) {
-          throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
-        }
-      }
-
-      if (user.type === UserType.NAVER) {
-        const naverUser = await NaverUser.findOne({
-          where: { pk: user.pk },
-          relations: { auth: true },
-        });
-
-        if (isNil(naverUser)) {
-          throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
-        }
-
-        const lastAuth: KakaoAuthentication | undefined = getLastAuth(naverUser.auth);
-
-        if (isNil(lastAuth)) {
-          throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
-        }
-
-        try {
-          lastAuth.expired_at = moment().toDate();
-          await lastAuth.save();
-
-          return { result: true };
-        } catch (e) {
-          throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
-        }
-      }
+    try {
+      await LocalAuthentication.update(lastAuth.pk, { expired_at: moment().toDate() });
+      return { result: true };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
     }
   }
 
