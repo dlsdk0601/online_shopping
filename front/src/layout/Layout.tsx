@@ -1,14 +1,17 @@
 import React, { PropsWithChildren, useState } from "react";
 import Head from "next/head";
-import { useIsMutating } from "react-query";
+import { useIsMutating, useMutation } from "react-query";
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { isNil } from "lodash";
 import Favicon from "../../public/favicon.ico";
 import { Urls } from "../url/url.g";
-import { userToken } from "../store/user";
+import { tokenModel } from "../store/user";
+import { isNotNil } from "../ex/utils";
+import { api } from "../api/url.g";
+import { SignOutReq } from "../api/type.g";
 
 // 로그인 유저가 보는 화면 (ex 어드민 메인화면)
 export const LayoutView = (props: PropsWithChildren) => {
@@ -47,8 +50,18 @@ const headerMenuList = [
 
 export const HeaderView = () => {
   const router = useRouter();
-  const token = useRecoilValue(userToken);
+  const [token, setToken] = useRecoilState(tokenModel);
   const [isOpen, setIsOpen] = useState(false);
+
+  const { mutate: onSignOut } = useMutation((req: SignOutReq) => api.signOut(req), {
+    onSuccess: (res) => {
+      if (res.result) {
+        setToken(null);
+        router.reload();
+      }
+    },
+    onError: () => {},
+  });
 
   return (
     <header className="header-area header-sticky">
@@ -84,6 +97,14 @@ export const HeaderView = () => {
                     Account
                   </Link>
                 </li>
+                {isNotNil(token) && (
+                  <li className="scroll-to-section">
+                    {/* <Link href="/">LogOut</Link> */}
+                    <button type="button" className="sign-out" onClick={() => onSignOut({})}>
+                      LogOut
+                    </button>
+                  </li>
+                )}
               </ul>
               <button
                 type="button"
