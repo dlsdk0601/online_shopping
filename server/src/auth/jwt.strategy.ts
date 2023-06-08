@@ -20,8 +20,6 @@ import {
 import Authentication from "../entities/manager-authentication.entity";
 import { getLastAuth } from "../ex/ex";
 import { GoogleUser } from "../entities/google-user.entity";
-import { KakaoUser } from "../entities/kakao-user.entity";
-import { NaverUser } from "../entities/naver-user.entity";
 import { User } from "../entities/user.entity";
 
 @Injectable()
@@ -41,6 +39,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload) {
     const type: DataType = payload.type;
     const pk: number = payload.pk;
+
     if (type === "ADMIN") {
       return this.getManagerInfo(pk);
     }
@@ -141,20 +140,23 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async userAuthUpdate(pk: number, type: UserType) {
-    let user: LocalUser | GoogleUser | KakaoUser | NaverUser | null = null;
-
-    if (type === UserType.LOCAL) {
-      user = await LocalUser.findOne({ where: { pk }, relations: { auth: true } });
-    }
-    if (type === UserType.GOOGLE) {
-      user = await GoogleUser.findOne({ where: { pk }, relations: { auth: true } });
-    }
-    if (type === UserType.KAKAO) {
-      user = await KakaoUser.findOne({ where: { pk }, relations: { auth: true } });
-    }
-    if (type === UserType.NAVER) {
-      user = await NaverUser.findOne({ where: { pk }, relations: { auth: true } });
-    }
+    const user = await User.findOne({
+      where: { pk },
+      relations: {
+        localUser: {
+          auth: type === UserType.LOCAL,
+        },
+        googleUser: {
+          auth: type === UserType.GOOGLE,
+        },
+        kakaoUser: {
+          auth: type === UserType.KAKAO,
+        },
+        naverUser: {
+          auth: type === UserType.NAVER,
+        },
+      },
+    });
 
     if (isNil(user)) {
       throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
@@ -165,7 +167,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       | GoogleAuthentication
       | NaverAuthentication
       | KakaoAuthentication
-      | undefined = getLastAuth(user.auth);
+      | undefined = getLastAuth(user.auths);
 
     if (isNil(lastAuth)) {
       throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
