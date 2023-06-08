@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Slider from "react-slick";
 import { Urls } from "../url/url.g";
+import SubscribeView from "../view/SubscribeView";
 
 const settings = {
   dots: false,
@@ -684,92 +685,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div className="subscribe">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-8">
-              <div className="section-heading">
-                <h2>By Subscribing To Our Newsletter You Can Get 30% Off</h2>
-                <span>
-                  Details to details is what makes Hexashop different from the other themes.
-                </span>
-              </div>
-              <form id="subscribe" action="" method="get">
-                <div className="row">
-                  <div className="col-lg-5">
-                    <fieldset>
-                      <input name="name" type="text" id="name" placeholder="Your Name" required />
-                    </fieldset>
-                  </div>
-                  <div className="col-lg-5">
-                    <fieldset>
-                      <input
-                        name="email"
-                        type="text"
-                        id="email"
-                        pattern="[^ @]*@[^ @]*"
-                        placeholder="Your Email Address"
-                        required
-                      />
-                    </fieldset>
-                  </div>
-                  <div className="col-lg-2">
-                    <fieldset>
-                      <button type="submit" id="form-submit" className="main-dark-button">
-                        <i className="fa fa-paper-plane" />
-                      </button>
-                    </fieldset>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div className="col-lg-4">
-              <div className="row">
-                <div className="col-6">
-                  <ul>
-                    <li>
-                      Store Location:
-                      <br />
-                      <span>Sunny Isles Beach, FL 33160, United States</span>
-                    </li>
-                    <li>
-                      Phone:
-                      <br />
-                      <span>010-6567-5303</span>
-                    </li>
-                    <li>
-                      Office Location:
-                      <br />
-                      <span>Silim</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="col-6">
-                  <ul>
-                    <li>
-                      Work Hours:
-                      <br />
-                      <span>07:30 AM - 9:30 PM Daily</span>
-                    </li>
-                    <li>
-                      Email:
-                      <br />
-                      <span>inajung7008@gmail.com</span>
-                    </li>
-                    <li>
-                      Social Media:
-                      <br />
-                      <span>
-                        <Link href="#">Facebook</Link>, <a href="#">Instagram</a>
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SubscribeView />
     </>
   );
 }
