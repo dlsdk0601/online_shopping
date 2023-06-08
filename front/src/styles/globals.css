@@ -374,3 +374,34 @@ footer .under-footer a:hover {
 }
 
 
+.sign-out {
+    background: none;
+    border: none;
+    display: block;
+    color: #2a2a2a;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease 0s;
+    height: 40px;
+    line-height: 40px;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 767px) {
+    .sign-out {
+        height: 50px !important;
+        line-height: 50px !important;
+        padding: 0px !important;
+        border: none !important;
+        background: #f7f7f7 !important;
+        color: #191a20 !important;
+        width: 100%;
+    }
+}
+
+@media (max-width: 992px) {
+    .sign-out {
+        font-size: 14px;
+        letter-spacing: 0;
+    }
+}
