@@ -26,6 +26,7 @@ const ErrorMessage = {
   FILE_NOT_FOUND: "해당 파일이 조회되지 않습니다.",
   SNS_SIGN_IN_FAILED: "SNS 로그인에 실패하였습니다.",
   SIGN_IN_FAILED: "로그인에 실패하였습니다.",
+  SUBSCRIBE_ADD_FAILED: "구독 서비스 등록에 실패하였습니다.",
 } as const;
 
 export default ErrorMessage;
