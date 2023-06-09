@@ -58,7 +58,7 @@ export const removePrefix = (str: string, prefix: string) => {
 };
 
 export const removeSuffix = (str: string, suffix: string) => {
-  if (str.endsWith(suffix)) {
+  if (str.endsWith(suffix) && str.length > suffix.length) {
     return str.substring(0, str.length - suffix.length);
   }
 
