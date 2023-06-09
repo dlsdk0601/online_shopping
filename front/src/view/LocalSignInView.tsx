@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useMutation } from "react-query";
 import { useRouter } from "next/router";
-import { isBlank, isNotNil, preventDefaulted } from "../ex/utils";
+import { preventDefaulted } from "../ex/utils";
 import { SignInReq, SignInRes } from "../api/type.g";
 import { api } from "../api/url.g";
 import AuthInputFieldView from "./AuthInputFieldView";
@@ -12,7 +12,7 @@ import { vPassword } from "../ex/validate";
 const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
   const router = useRouter();
   const [id, setId] = useValueField("", "아이디");
-  const [password, setPassword] = useValueField("", "비밀번호");
+  const [password, setPassword] = useValueField("", "비밀번호", vPassword);
 
   const { mutate } = useMutation((req: SignInReq) => api.signIn(req), {
     onSuccess: (res: SignInRes) => {
@@ -21,28 +21,8 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
     onError: () => {},
   });
 
-  const isValidate = useCallback((): boolean => {
-    if (isBlank(id.value.toLocaleLowerCase())) {
-      setId.err();
-      return false;
-    }
-
-    if (isBlank(password.value)) {
-      setPassword.err();
-      return false;
-    }
-
-    const passwordError = vPassword(password.value);
-    if (isNotNil(passwordError)) {
-      setPassword.err(passwordError);
-      return false;
-    }
-
-    return true;
-  }, [id, password]);
-
   const onLocalSignIn = useCallback(async () => {
-    if (!isValidate()) {
+    if (setId.validate() || setPassword.validate()) {
       return;
     }
 

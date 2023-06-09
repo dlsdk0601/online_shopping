@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useMutation } from "react-query";
 import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
-import { ignorePromise, isBlank, isNotNil, preventDefaulted } from "../../ex/utils";
+import { ignorePromise, preventDefaulted } from "../../ex/utils";
 import { vEmail, vPassword, vPhone } from "../../ex/validate";
 import AuthInputFieldView from "../../view/AuthInputFieldView";
 import { api } from "../../api/url.g";
@@ -24,50 +24,20 @@ const SignUp = () => {
   });
 
   const [id, setId] = useValueField("", "아이디");
-  const [password, setPassword] = useValueField("", "비밀번호");
+  const [password, setPassword] = useValueField("", "비밀번호", vPassword);
   const [name, setName] = useValueField("", "이름");
-  const [phone, setPhone] = useValueField("", "휴대폰");
-  const [email, setEmail] = useValueField("", "이메일");
-
-  const isValidate = useCallback((): boolean => {
-    if (isBlank(id.value.toLocaleLowerCase())) {
-      setId.err();
-      return false;
-    }
-
-    if (isBlank(password.value)) {
-      setPassword.err();
-      return false;
-    }
-
-    const passwordError = vPassword(password.value);
-    if (isNotNil(passwordError)) {
-      setPassword.err(passwordError);
-      return false;
-    }
-
-    if (isBlank(name.value)) {
-      setName.err();
-      return false;
-    }
-
-    const phoneError = vPhone(phone.value);
-    if (isNotNil(phoneError)) {
-      setPhone.err(phoneError);
-      return false;
-    }
-
-    const emailError = vEmail(email.value);
-    if (isNotNil(emailError)) {
-      setEmail.err(emailError);
-      return false;
-    }
-
-    return true;
-  }, [id, password, name, phone, email]);
+  const [phone, setPhone] = useValueField("", "휴대폰", vPhone);
+  const [email, setEmail] = useValueField("", "이메일", vEmail);
 
   const onSignUp = useCallback(async () => {
-    if (!isValidate()) {
+    if (
+      setId.validate() ||
+      setPassword.validate() ||
+      setName.validate() ||
+      setPhone.validate() ||
+      setPassword.validate() ||
+      setEmail.validate()
+    ) {
       return;
     }
 

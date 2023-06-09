@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import { isArray, isNil } from "lodash";
 import { useSetRecoilState } from "recoil";
 import { useMutation } from "react-query";
-import { ignorePromise, isBlank, isNotNil, preventDefaulted } from "../../ex/utils";
+import { ignorePromise, preventDefaulted } from "../../ex/utils";
 import { api } from "../../api/url.g";
 import { UserType } from "../../api/enum.g";
 import { tokenModel } from "../../store/user";
 import { Urls } from "../../url/url.g";
 import useIsReady from "../../hooks/useIsReady";
-import { vPhone } from "../../ex/validate";
+import { vEmail, vPhone } from "../../ex/validate";
 import { SnsSignUpReq, SnsSignUpRes } from "../../api/type.g";
 import AuthInputFieldView from "../../view/AuthInputFieldView";
 import useValueField from "../../hooks/useValueField";
@@ -18,9 +18,9 @@ import { userTypeLabelToEnum } from "../../api/enum";
 const SnsSignInPage = () => {
   const router = useRouter();
   const setToken = useSetRecoilState(tokenModel);
-  const [email, setEmail] = useValueField("", "이메일");
+  const [email, setEmail] = useValueField("", "이메일", vEmail);
   const [name, setName] = useValueField("", "이름");
-  const [phone, setPhone] = useValueField("", "휴대폰");
+  const [phone, setPhone] = useValueField("", "휴대폰", vPhone);
   const [type, setType] = useValueField<UserType | null>(null, "가입유형");
 
   const { mutate } = useMutation((req: SnsSignUpReq) => api.snsSignUp(req), {
@@ -34,7 +34,8 @@ const SnsSignInPage = () => {
     const { type, email: queryEmail } = router.query;
 
     if (isNil(queryEmail) || isNil(type)) {
-      return;
+      // 값이 없다면 페이지 탈출 시킨다.
+      return router.replace(Urls.auth.signIn);
     }
 
     if (isArray(queryEmail) || isArray(type)) {
@@ -45,28 +46,14 @@ const SnsSignInPage = () => {
     setType.set(userTypeLabelToEnum(type));
   });
 
-  const isValid = useCallback((): boolean => {
-    if (isBlank(name.value)) {
-      setName.err("이름은 필수 입력사항입니다.");
-      return false;
-    }
-
-    const phoneError = vPhone(phone.value);
-    if (isNotNil(phoneError)) {
-      setPhone.err(phoneError);
-      return false;
-    }
-
-    return true;
-  }, [name, phone]);
-
   const onSnsSignUp = useCallback(async () => {
-    if (!isValid) {
-      return;
-    }
-
+    // useEffect 에서 처리 했지만, ts 추적 때문에 유효성을 걸어둔다.
     if (isNil(type.value)) {
       return router.replace(Urls.auth.signIn);
+    }
+
+    if (setEmail.validate() || setName.validate() || setPhone.validate()) {
+      return;
     }
 
     mutate({
