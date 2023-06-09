@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { isArray } from "lodash";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { UserListReq, UserListRes, UserListResUser } from "../../api/type.g";
 import { UserSearchType, UserType } from "../../api/enum.g";
 import { api } from "../../api/url.g";
@@ -17,13 +17,13 @@ import LocalIcon from "../../components/icons/LocalIcon";
 const UserListPage = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
-  const [search, setSearch] = UseValueField("");
+  const [search, setSearch] = UseValueField("", "검색어");
   const [searchType, setSearchType] = useState<UserSearchType | null>(null);
   const [paginationUserList, setPaginationUserList] = useState<UserListRes | null>(null);
 
   const onSearch = useCallback(() => {
     const query = {
-      page,
+      page: 1,
       search: search.value,
       searchType,
     };
