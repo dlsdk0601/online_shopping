@@ -3,8 +3,9 @@ import { ValueField } from "../ex/field";
 
 const useValueField = <T>(
   init: T,
-): [ValueField<T>, { set: (payload: T) => void; err: (error: string) => void }] => {
-  const [state, setState] = useState<ValueField<T>>({ value: init, error: "" });
+  name: string,
+): [ValueField<T>, { set: (payload: T) => void; err: (error?: string) => void }] => {
+  const [state, setState] = useState<ValueField<T>>({ value: init, error: "", name });
 
   const onChangeState = (payload: T) => {
     setState({ ...state, value: payload });
