@@ -16,7 +16,7 @@ export class Subscribe extends TimeSet {
   @Column({ type: "int", nullable: false, comment: "유저 외래키" })
   user_pk: number;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
   user: User;
 }
