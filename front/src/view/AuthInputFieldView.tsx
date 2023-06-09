@@ -8,6 +8,7 @@ const AuthInputFieldView = (props: {
   label: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   type?: string;
+  disabled?: boolean;
 }) => {
   return (
     <>
@@ -20,6 +21,7 @@ const AuthInputFieldView = (props: {
           value={props.field.value}
           onChange={(e) => props.onChange(e)}
           type={props.type ?? "text"}
+          disabled={props.disabled}
         />
         {!isBlank(props.field.error) && (
           <p className="text-danger text-right">{props.field.error}</p>
