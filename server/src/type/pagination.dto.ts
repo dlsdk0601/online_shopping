@@ -1,7 +1,7 @@
 import { IsArray, IsBoolean, IsNotEmpty, IsNumber } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
-export const LIMIT = 20;
+export const LIMIT = 10;
 
 export class PaginationDto {
   @ApiProperty({ description: "현재 페이지", nullable: false, type: "number" })
