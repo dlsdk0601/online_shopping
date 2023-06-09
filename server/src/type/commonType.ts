@@ -8,6 +8,10 @@ export enum UserType {
   GOOGLE = "GOOGLE",
   APPLE = "APPLE",
   KAKAO = "KAKAO",
-  NAVER = "NAVER"
+  NAVER = "NAVER",
 }
 
+export enum SubscribeSearchType {
+  EMAIL = "EMAIL",
+  NAME = "NAME",
+}
