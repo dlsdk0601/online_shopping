@@ -65,14 +65,16 @@ export default function LeftSideBarView() {
                 <Link
                   href={Urls.index.url()}
                   className={classNames("block py-3 text-xs font-bold uppercase", {
-                    "text-lightBlue-500 hover:text-lightBlue-600": router.pathname === "/",
-                    "text-blueGray-700 hover:text-blueGray-500": router.pathname !== "/",
+                    "text-lightBlue-500 hover:text-lightBlue-600":
+                      router.pathname === Urls.index.pathname,
+                    "text-blueGray-700 hover:text-blueGray-500":
+                      router.pathname !== Urls.index.pathname,
                   })}
                 >
                   <i
                     className={classNames("fas fa-tv mr-2 text-sm", {
-                      "opacity-75": router.pathname === "/",
-                      "text-blueGray-300": router.pathname !== "/",
+                      "opacity-75": router.pathname === Urls.index.pathname,
+                      "text-blueGray-300": router.pathname !== Urls.index.pathname,
                     })}
                   />{" "}
                   Dashboard
@@ -83,16 +85,18 @@ export default function LeftSideBarView() {
                 <Link
                   href={Urls.account.index.url()}
                   className={classNames("block py-3 text-xs font-bold uppercase", {
-                    "text-lightBlue-500 hover:text-lightBlue-600":
-                      router.pathname.includes("/account"),
-                    "text-blueGray-700 hover:text-blueGray-500":
-                      !router.pathname.includes("/account"),
+                    "text-lightBlue-500 hover:text-lightBlue-600": router.pathname.includes(
+                      Urls.account.index.pathname,
+                    ),
+                    "text-blueGray-700 hover:text-blueGray-500": !router.pathname.includes(
+                      Urls.account.index.pathname,
+                    ),
                   })}
                 >
                   <i
                     className={classNames("fas fa-tools mr-2 text-sm", {
-                      "opacity-75": router.pathname.includes("/account"),
-                      "text-blueGray-300": !router.pathname.includes("/account"),
+                      "opacity-75": router.pathname.includes(Urls.account.index.pathname),
+                      "text-blueGray-300": !router.pathname.includes(Urls.account.index.pathname),
                     })}
                   />{" "}
                   Users
