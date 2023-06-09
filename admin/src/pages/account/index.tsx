@@ -13,6 +13,8 @@ import useIsReady from "../../hooks/useIsReady";
 import UseValueField from "../../hooks/useValueField";
 import GoogleIcon from "../../components/icons/Google";
 import LocalIcon from "../../components/icons/LocalIcon";
+import { UserSearchTypeEnumToLabel } from "../../api/enum";
+import { ignorePromise } from "../../ex/utils";
 
 const UserListPage = () => {
   const router = useRouter();
@@ -28,22 +30,8 @@ const UserListPage = () => {
       searchType,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const ignore = router.push({ pathname: router.pathname, query });
+    ignorePromise(() => router.push({ pathname: router.pathname, query }));
   }, [page, search, searchType]);
-
-  const enumToLabel = useCallback(
-    (type: string | undefined): UserSearchType | undefined => {
-      switch (type) {
-        case "NAME":
-          return UserSearchType.NAME;
-        case "PHONE":
-          return UserSearchType.PHONE;
-        default:
-      }
-    },
-    [searchType],
-  );
 
   const typeToIcon = (type: UserType) => {
     switch (type) {
@@ -70,11 +58,11 @@ const UserListPage = () => {
 
     setPage(Number(page ?? 1));
     setSearch.set(search ?? "");
-    setSearchType(enumToLabel(searchType) ?? null);
+    setSearchType(UserSearchTypeEnumToLabel(searchType) ?? null);
     mutate({
       page: Number(page ?? 1),
       search: search ?? "",
-      searchType: enumToLabel(searchType) ?? null,
+      searchType: UserSearchTypeEnumToLabel(searchType) ?? null,
     });
   });
 
