@@ -18,6 +18,10 @@ import { userTypeLabelToEnum } from "../../api/enum";
 const SnsSignInPage = () => {
   const router = useRouter();
   const setToken = useSetRecoilState(tokenModel);
+  const [email, setEmail] = useValueField("", "이메일");
+  const [name, setName] = useValueField("", "이름");
+  const [phone, setPhone] = useValueField("", "휴대폰");
+  const [type, setType] = useValueField<UserType | null>(null, "가입유형");
 
   const { mutate } = useMutation((req: SnsSignUpReq) => api.snsSignUp(req), {
     onSuccess: (res: SnsSignUpRes) => {
@@ -25,11 +29,6 @@ const SnsSignInPage = () => {
       ignorePromise(() => router.replace(Urls.index));
     },
   });
-
-  const [email, setEmail] = useValueField("");
-  const [name, setName] = useValueField("");
-  const [phone, setPhone] = useValueField("");
-  const [type, setType] = useValueField<UserType | null>(null);
 
   useIsReady(() => {
     const { type, email: queryEmail } = router.query;
@@ -46,13 +45,7 @@ const SnsSignInPage = () => {
     setType.set(userTypeLabelToEnum(type));
   });
 
-  const errorInit = useCallback(() => {
-    setName.err("");
-    setPhone.err("");
-  }, [name, phone, email]);
-
   const isValid = useCallback((): boolean => {
-    errorInit();
     if (isBlank(name.value)) {
       setName.err("이름은 필수 입력사항입니다.");
       return false;

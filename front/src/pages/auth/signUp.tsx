@@ -23,29 +23,20 @@ const SignUp = () => {
     onError: () => {}, // 설정 하지 않으면 에러 페이지로 보낸다.
   });
 
-  const [id, setId] = useValueField("");
-  const [password, setPassword] = useValueField("");
-  const [name, setName] = useValueField("");
-  const [phone, setPhone] = useValueField("");
-  const [email, setEmail] = useValueField("");
-
-  const errorInit = useCallback(() => {
-    setId.err("");
-    setPassword.err("");
-    setName.err("");
-    setPhone.err("");
-    setEmail.err("");
-  }, [id, password, name, phone, email]);
+  const [id, setId] = useValueField("", "아이디");
+  const [password, setPassword] = useValueField("", "비밀번호");
+  const [name, setName] = useValueField("", "이름");
+  const [phone, setPhone] = useValueField("", "휴대폰");
+  const [email, setEmail] = useValueField("", "이메일");
 
   const isValidate = useCallback((): boolean => {
-    errorInit();
     if (isBlank(id.value.toLocaleLowerCase())) {
-      setId.err("아이디 필수 입력사항입니다.");
+      setId.err();
       return false;
     }
 
     if (isBlank(password.value)) {
-      setPassword.err("비밀번호는 필수 입력사항입니다.");
+      setPassword.err();
       return false;
     }
 
@@ -56,7 +47,7 @@ const SignUp = () => {
     }
 
     if (isBlank(name.value)) {
-      setName.err("이름은 필수 입력사항입니다.");
+      setName.err();
       return false;
     }
 
@@ -105,33 +96,19 @@ const SignUp = () => {
       <section className="section">
         <div className="container sign-container">
           <form className="form-container" onSubmit={preventDefaulted(() => onSignUp())}>
-            <AuthInputFieldView
-              field={id}
-              label="아이디"
-              onChange={(e) => setId.set(e.target.value)}
-            />
+            <AuthInputFieldView field={id} onChange={(e) => setId.set(e.target.value)} />
             <AuthInputFieldView
               field={password}
-              label="비밀번호"
               onChange={(e) => setPassword.set(e.target.value)}
               type="password"
             />
             <AuthInputFieldView
               field={name}
-              label="이름"
               onChange={(e) => setName.set(e.target.value)}
               type="tel"
             />
-            <AuthInputFieldView
-              field={phone}
-              label="휴대폰"
-              onChange={(e) => setPhone.set(e.target.value)}
-            />
-            <AuthInputFieldView
-              field={email}
-              label="이메일"
-              onChange={(e) => setEmail.set(e.target.value)}
-            />
+            <AuthInputFieldView field={phone} onChange={(e) => setPhone.set(e.target.value)} />
+            <AuthInputFieldView field={email} onChange={(e) => setEmail.set(e.target.value)} />
             <button type="submit" className="sign-button">
               Sign Up
             </button>

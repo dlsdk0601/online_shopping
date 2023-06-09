@@ -11,8 +11,8 @@ import { vPassword } from "../ex/validate";
 
 const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
   const router = useRouter();
-  const [id, setId] = useValueField("");
-  const [password, setPassword] = useValueField("");
+  const [id, setId] = useValueField("", "아이디");
+  const [password, setPassword] = useValueField("", "비밀번호");
 
   const { mutate } = useMutation((req: SignInReq) => api.signIn(req), {
     onSuccess: (res: SignInRes) => {
@@ -21,20 +21,14 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
     onError: () => {},
   });
 
-  const errorInit = useCallback(() => {
-    setId.err("");
-    setPassword.err("");
-  }, [id, password]);
-
   const isValidate = useCallback((): boolean => {
-    errorInit();
     if (isBlank(id.value.toLocaleLowerCase())) {
-      setId.err("아이디는 필수 입력사항입니다.");
+      setId.err();
       return false;
     }
 
     if (isBlank(password.value)) {
-      setPassword.err("비밀번호는 필수 입력사항입니다.");
+      setPassword.err();
       return false;
     }
 
@@ -57,10 +51,9 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
 
   return (
     <form className="form-container" onSubmit={preventDefaulted(() => onLocalSignIn())}>
-      <AuthInputFieldView field={id} label="ID" onChange={(e) => setId.set(e.target.value)} />
+      <AuthInputFieldView field={id} onChange={(e) => setId.set(e.target.value)} />
       <AuthInputFieldView
         field={password}
-        label="PASSWORD"
         onChange={(e) => setPassword.set(e.target.value)}
         type="password"
       />
