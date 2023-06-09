@@ -13,6 +13,7 @@ import {
   LocalAuthentication,
   NaverAuthentication,
 } from "../../entities/user-authentication.entity";
+import { Subscribe } from "../../entities/subscribe.entity";
 
 export default class TypeOrmSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
@@ -22,7 +23,14 @@ export default class TypeOrmSeeder implements Seeder {
     return Promise.all([
       this.onAddManager(faker, dataSource),
       this.onAddUser(faker, dataSource),
+      this.onAddSubscribe(faker, dataSource),
     ]).then(() => console.log("success"));
+  }
+
+  async onAddSubscribe(faker: Faker, dataSource: DataSource) {
+    const subscribe = dataSource.getRepository(Subscribe);
+    const oldSubscribes = await subscribe.find();
+    await subscribe.remove([...oldSubscribes]);
   }
 
   async onAddManager(faker: Faker, dataSource: DataSource) {
