@@ -5,15 +5,16 @@ import { ValueField } from "../ex/field";
 
 const AuthInputFieldView = (props: {
   field: ValueField<string>;
-  label: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
   type?: string;
   disabled?: boolean;
 }) => {
   return (
     <>
       <div className="input-field">
-        <label>{props.label}</label>
+        <label>{props.field.name}</label>
         <input
           className={classNames({
             "border-danger": !isBlank(props.field.error),
@@ -22,6 +23,8 @@ const AuthInputFieldView = (props: {
           onChange={(e) => props.onChange(e)}
           type={props.type ?? "text"}
           disabled={props.disabled}
+          onFocus={props.onFocus}
+          onBlur={props.onBlur}
         />
         {!isBlank(props.field.error) && (
           <p className="text-danger text-right">{props.field.error}</p>
