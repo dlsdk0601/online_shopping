@@ -13,6 +13,7 @@ import { vPhone } from "../../ex/validate";
 import { SnsSignUpReq, SnsSignUpRes } from "../../api/type.g";
 import AuthInputFieldView from "../../view/AuthInputFieldView";
 import useValueField from "../../hooks/useValueField";
+import { userTypeLabelToEnum } from "../../api/enum";
 
 const SnsSignInPage = () => {
   const router = useRouter();
@@ -42,7 +43,7 @@ const SnsSignInPage = () => {
     }
 
     setEmail.set(queryEmail);
-    setType.set(labelToEnum(type));
+    setType.set(userTypeLabelToEnum(type));
   });
 
   const errorInit = useCallback(() => {
@@ -66,7 +67,7 @@ const SnsSignInPage = () => {
     return true;
   }, [name, phone]);
 
-  const onSave = useCallback(async () => {
+  const onSnsSignUp = useCallback(async () => {
     if (!isValid) {
       return;
     }
@@ -83,49 +84,45 @@ const SnsSignInPage = () => {
     });
   }, [email, name, phone]);
 
-  const labelToEnum = (str: string): UserType => {
-    switch (str) {
-      case "GOOGLE":
-        return UserType.GOOGLE;
-      case "LOCAL":
-        return UserType.LOCAL;
-      case "APPLE":
-        return UserType.APPLE;
-      case "KAKAO":
-        return UserType.KAKAO;
-      case "NAVER":
-      default:
-        return UserType.NAVER;
-    }
-  };
-
   return (
-    <div className="mx-auto mt-14 w-[400px] rounded border p-4">
-      <form onSubmit={preventDefaulted(() => onSave())}>
-        <AuthInputFieldView
-          field={email}
-          label="이메일"
-          onChange={(e) => setEmail.set(e.target.value)}
-        />
-        <AuthInputFieldView
-          field={name}
-          label="이름"
-          onChange={(e) => setName.set(e.target.value)}
-          type="tel"
-        />
-        <AuthInputFieldView
-          field={phone}
-          label="휴대폰"
-          onChange={(e) => setPhone.set(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="mt-2 w-full rounded border p-2 transition-colors hover:bg-black hover:text-white"
-        >
-          회원가입
-        </button>
-      </form>
-    </div>
+    <>
+      <div className="page-heading" id="top">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="inner-content">
+                <h2>Sign Up</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section className="section">
+        <div className="container sign-container">
+          <form className="form-container" onSubmit={preventDefaulted(() => onSnsSignUp())}>
+            <AuthInputFieldView
+              field={email}
+              label="이메일"
+              onChange={(e) => setEmail.set(e.target.value)}
+            />
+            <AuthInputFieldView
+              field={name}
+              label="이름"
+              onChange={(e) => setName.set(e.target.value)}
+              type="tel"
+            />
+            <AuthInputFieldView
+              field={phone}
+              label="휴대폰"
+              onChange={(e) => setPhone.set(e.target.value)}
+            />
+            <button type="submit" className="sign-button">
+              Sign Up
+            </button>
+          </form>
+        </div>
+      </section>
+    </>
   );
 };
 
