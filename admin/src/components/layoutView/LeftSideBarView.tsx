@@ -102,6 +102,27 @@ export default function LeftSideBarView() {
                   Users
                 </Link>
               </li>
+              <li className="items-center">
+                <Link
+                  href={Urls.subscribe.index.url()}
+                  className={classNames("block py-3 text-xs font-bold uppercase", {
+                    "text-lightBlue-500 hover:text-lightBlue-600": router.pathname.includes(
+                      Urls.subscribe.index.pathname,
+                    ),
+                    "text-blueGray-700 hover:text-blueGray-500": !router.pathname.includes(
+                      Urls.subscribe.index.pathname,
+                    ),
+                  })}
+                >
+                  <i
+                    className={classNames("fas fa-tools mr-2 text-sm", {
+                      "opacity-75": router.pathname.includes(Urls.subscribe.index.pathname),
+                      "text-blueGray-300": !router.pathname.includes(Urls.subscribe.index.pathname),
+                    })}
+                  />{" "}
+                  Subscribe
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
