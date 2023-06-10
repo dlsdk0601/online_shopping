@@ -94,11 +94,12 @@ export class ApiBase {
 
   errorHandle(err: unknown) {
     if (axios.isAxiosError(err)) {
-      const message = err.response?.data.error ?? err.message;
+      const message = err.response?.data.message ?? err.message;
       if (message !== "비로그인 유저 입니다.") {
         alert(message);
       }
-      throw new Error(message);
+      // OPT :: 에러를 던지면 에러 페이지로 가는데, 이건 상황마다 에러 페이지로 갈지 알럿만 띄울지 결정 후 주석 풀기
+      // throw new Error(message);
     }
   }
 }
