@@ -46,8 +46,8 @@ const UserShowPage = () => {
 
 const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
   const router = useRouter();
-  const [phone, setPhone] = useValueField("");
-  const [email, setEmail] = useValueField("");
+  const [phone, setPhone] = useValueField("", "휴대폰");
+  const [email, setEmail] = useValueField("", "이메일");
   const [type, setType] = useState<UserType | null>(null);
   const buyCount = 0;
   const refundCount = 0;
@@ -86,7 +86,7 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
     }
 
     setType(props.user.type as UserType);
-    setPhone.set(props.user.phone);
+    setPhone.set(props.user.phone ?? "");
     setEmail.set(props.user.email);
   }, [props]);
 
