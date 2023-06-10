@@ -54,7 +54,6 @@ const UserDropdown = () => {
         >
           My Account
         </button>
-        {/* TODO :: 정인아 - 로그아웃 버튼 */}
         <button
           type="button"
           className="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-blueGray-700"
