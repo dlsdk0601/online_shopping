@@ -9,7 +9,6 @@ export const ATOM_KEY = {
   TOKEN: "TOKEN",
   USER: "USER",
   TOKEN_MODEL: "TOKEN_MODEL",
-  API_IS_LOADING: "API_IS_LOADING",
 };
 
 export const CONSTANT = {
