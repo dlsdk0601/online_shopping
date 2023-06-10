@@ -10,4 +10,10 @@ export const CONSTANT = {
   apiCount: "API_COUNT",
 };
 
+export const ATOM_KEY = {
+  TOKEN: "TOKEN",
+  USER: "USER",
+  TOKEN_MODEL: "TOKEN_MODEL",
+};
+
 export const NEWPK = "new";
