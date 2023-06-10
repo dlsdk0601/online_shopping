@@ -36,6 +36,7 @@ export const DefaultLayoutView = (props: PropsWithChildren<Record<never, any>>) 
         <link rel="shortcut icon" type="image/x-icon" href={Favicon.src} />
       </Head>
       {props.children}
+      <BlockView />
     </>
   );
 };
