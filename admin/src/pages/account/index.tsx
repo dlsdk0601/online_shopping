@@ -82,6 +82,7 @@ const UserListPage = () => {
           ]}
         />
         <PaginationTableView<UserListResUser>
+          title="User List"
           pagination={paginationUserList ?? null}
           links={(paginationUserList?.rows ?? []).map((item) =>
             Urls.account.edit["[pk]"].url({ pk: item.pk }),
