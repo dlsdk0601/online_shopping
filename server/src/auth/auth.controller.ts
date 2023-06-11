@@ -17,6 +17,7 @@ import { NaverCodeVerifyReqDto, NaverCodeVerifyResDto } from "./dto/naver-auth.d
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  // TODO :: 로그인 찢자. 보안이 너무 뚫린다.
   @UseGuards(AuthGuard("local"))
   @Post("/sign-in")
   @ApiCreatedResponse({ type: SignInResDto, description: "local 로그인" })
