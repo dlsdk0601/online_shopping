@@ -12,7 +12,7 @@ import {
 import { SubscribeSearchType } from "../../type/commonType";
 import { PaginationDto } from "../../type/pagination.dto";
 
-export class SubScribeListReqDto {
+export class SubscribeListReqDto {
   @ApiProperty({ description: "page number", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()
