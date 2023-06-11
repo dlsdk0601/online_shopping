@@ -4,6 +4,8 @@ import { AddSubscribeReqDto } from "./dto/add-subscribe.dto";
 import { Subscribe } from "../entities/subscribe.entity";
 import errorMessage from "../config/errorMessage";
 import { DeleteSubscribeReqDto } from "./dto/delete-subscribe.dto";
+import { SubScribeListReqDto, SubscribeListResDto } from "./dto/show-subscribe.dto";
+import { LIMIT } from "../type/pagination.dto";
 
 @Injectable()
 export class SubscribeService {
@@ -44,5 +46,24 @@ export class SubscribeService {
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
+  }
+
+  async list(body: SubScribeListReqDto) {
+    const [subscribes, count] = await Subscribe.findAndCount({
+      take: LIMIT,
+      skip: LIMIT * (body.page - 1),
+      select: {
+        pk: true,
+        name: true,
+        email: true,
+        create_at: true,
+      },
+    });
+
+    if (isNil(subscribes)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    return new SubscribeListResDto(subscribes, count, body.page);
   }
 }

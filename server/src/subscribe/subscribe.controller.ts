@@ -7,6 +7,7 @@ import { GetUser } from "../decorator/user.decorator";
 import { GlobalUser, ManagerType } from "../type/type";
 import { DeleteSubscribeReqDto, DeleteSubscribeResDto } from "./dto/delete-subscribe.dto";
 import { Roles } from "../decorator/roles.decorator";
+import { SubScribeListReqDto, SubscribeListResDto } from "./dto/show-subscribe.dto";
 
 @Controller()
 @ApiTags("subscribe")
@@ -26,5 +27,11 @@ export class SubscribeController {
   @ApiCreatedResponse({ type: DeleteSubscribeResDto })
   deleteSubscribe(@Body() body: DeleteSubscribeReqDto) {
     return this.subscribeService.delete(body);
+  }
+
+  @Post("/admin/subscribe-list")
+  @ApiCreatedResponse({ type: SubscribeListResDto })
+  subscribeList(@Body() body: SubScribeListReqDto) {
+    return this.subscribeService.list(body);
   }
 }
