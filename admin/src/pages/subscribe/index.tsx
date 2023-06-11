@@ -11,7 +11,6 @@ import { SubscribeSearchType } from "../../api/enum.g";
 import { SubscribeSearchTypeEnumToLabel } from "../../api/enum";
 import SearchBarView from "../../components/table/searchBarView";
 import { PaginationTableView } from "../../components/table/Table";
-import { Urls } from "../../url/url.g";
 import { d2 } from "../../ex/dateEx";
 
 const SubscribeListPage = () => {
@@ -75,9 +74,6 @@ const SubscribeListPage = () => {
         <PaginationTableView<SubscribeListResSubscribe>
           title="Subscribe List"
           pagination={subscribeList ?? null}
-          links={(subscribeList?.rows ?? []).map((item) =>
-            Urls.account.edit["[pk]"].url({ pk: item.pk }),
-          )}
           mapper={(value) => [
             ["이름", value.name],
             ["이메일", value.email],
