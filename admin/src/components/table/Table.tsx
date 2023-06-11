@@ -9,7 +9,7 @@ import { Pagination } from "../../api/schema";
 type TableViewRowItem = [string, ReactNode];
 type TableViewRow = TableViewRowItem[];
 
-export function TableView(props: { rows: TableViewRow[]; links: UrlObject[] }) {
+export function TableView(props: { rows: TableViewRow[]; links?: UrlObject[] }) {
   const router = useRouter();
   return (
     <table className="w-full">
@@ -32,7 +32,15 @@ export function TableView(props: { rows: TableViewRow[]; links: UrlObject[] }) {
           <tr
             key={rowIndex}
             className="cursor-pointer border-b text-center hover:bg-blueGray-200"
-            onClick={() => router.push(props.links[rowIndex])}
+            onClick={() => {
+              if (isNil(props.links) || isNil(props.links[rowIndex])) {
+                return;
+              }
+              // ignorePromise 로 처리하고 싶으나 scope 영역 때문에 분기 처리가 또 일어나야 해서
+              // const ignore 로 처리한다.
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const ignore = router.push(props.links[rowIndex]);
+            }}
           >
             {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
             {row.map(([_, data], dataIndex) => {
@@ -53,7 +61,7 @@ export function PaginationTableView<T>(props: {
   title: string;
   pagination: Pagination<T> | null;
   mapper: (item: T) => TableViewRow;
-  links: UrlObject[];
+  links?: UrlObject[];
 }) {
   if (isNil(props.pagination)) {
     return <div style={{ height: "600px" }} />;
