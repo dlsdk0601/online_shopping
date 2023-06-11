@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 import { isArray, isNil } from "lodash";
 import UseValueField from "../../hooks/useValueField";
 import { ignorePromise } from "../../ex/utils";
-import { SubScribeListReq, SubscribeListRes, SubscribeListResSubscribe } from "../../api/type.g";
+import { SubscribeListReq, SubscribeListRes, SubscribeListResSubscribe } from "../../api/type.g";
 import { api } from "../../api/url.g";
 import useIsReady from "../../hooks/useIsReady";
 import { SubscribeSearchType } from "../../api/enum.g";
@@ -21,7 +21,7 @@ const SubscribeListPage = () => {
   const [searchType, setSearchType] = useState<SubscribeSearchType | null>(null);
   const [subscribeList, setSubscribeList] = useState<SubscribeListRes | null>(null);
 
-  const { mutate } = useMutation((req: SubScribeListReq) => api.subscribeList(req), {
+  const { mutate } = useMutation((req: SubscribeListReq) => api.subscribeList(req), {
     onSuccess: (res) => {
       if (isNil(res)) {
         return;
@@ -35,10 +35,6 @@ const SubscribeListPage = () => {
     const { page, search, searchType } = router.query;
 
     if (isArray(page) || isArray(search) || isArray(searchType)) {
-      return;
-    }
-
-    if (isNil(page) || isNil(search) || isNil(searchType)) {
       return;
     }
 
@@ -77,7 +73,7 @@ const SubscribeListPage = () => {
           ]}
         />
         <PaginationTableView<SubscribeListResSubscribe>
-          title="User List"
+          title="Subscribe List"
           pagination={subscribeList ?? null}
           links={(subscribeList?.rows ?? []).map((item) =>
             Urls.account.edit["[pk]"].url({ pk: item.pk }),
