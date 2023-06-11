@@ -50,6 +50,7 @@ export function TableView(props: { rows: TableViewRow[]; links: UrlObject[] }) {
 }
 
 export function PaginationTableView<T>(props: {
+  title: string;
   pagination: Pagination<T> | null;
   mapper: (item: T) => TableViewRow;
   links: UrlObject[];
@@ -60,11 +61,17 @@ export function PaginationTableView<T>(props: {
 
   if (props.pagination.total === 0) {
     return (
-      <div className="relative mb-6 flex min-h-screen-75 w-full flex-col bg-white shadow-lg">
-        <h3 className="px-4 text-lg font-semibold text-blueGray-700">title</h3>
-        <h5 className="my-2 px-4 font-semibold text-blueGray-700">
-          Total : {props.pagination.total}
-        </h5>
+      <div className="relative mb-6 flex min-h-screen-75 w-full flex-col overflow-hidden rounded bg-white shadow-lg">
+        <div className="mb-0 rounded-t border-0 px-4 py-3">
+          <div className="flex flex-wrap items-center">
+            <div className="w-full max-w-full px-4">
+              <h3 className="text-lg font-semibold text-blueGray-700">{props.title}</h3>
+            </div>
+          </div>
+          <h5 className="my-2 px-4 font-semibold text-blueGray-700">
+            Total : {props.pagination.total}
+          </h5>
+        </div>
         <div className="w-full">
           <p className="mt-5 text-center text-blueGray-700">조회된 데이터가 없습니다.</p>
         </div>
@@ -78,7 +85,7 @@ export function PaginationTableView<T>(props: {
         <div className="mb-0 rounded-t border-0 px-4 py-3">
           <div className="flex flex-wrap items-center">
             <div className="w-full max-w-full px-4">
-              <h3 className="text-lg font-semibold text-blueGray-700">title</h3>
+              <h3 className="text-lg font-semibold text-blueGray-700">{props.title}</h3>
             </div>
           </div>
           <h5 className="my-2 px-4 font-semibold text-blueGray-700">
