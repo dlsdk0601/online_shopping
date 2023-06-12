@@ -1,13 +1,53 @@
-import React, { useState } from "react";
+import { UrlObject } from "url";
+import React, { memo, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import classNames from "classnames";
+import { isNil } from "lodash";
 import { Urls } from "../../url/url.g";
+
+interface MenuItem {
+  name: string;
+  url?: UrlObject;
+  pathname: string;
+  icon?: string;
+  children?: MenuItem[];
+}
+
+const menu: MenuItem[] = [
+  {
+    name: "dashboard",
+    url: Urls.index.url(),
+    pathname: Urls.index.pathname,
+    icon: "fa-chart-line",
+  },
+  {
+    name: "users",
+    url: Urls.account.index.url(),
+    pathname: Urls.account.index.pathname,
+    icon: "fa-users",
+  },
+  {
+    name: "subscribe",
+    pathname: Urls.subscribe.index.pathname,
+    icon: "fa-paper-plane",
+    children: [
+      {
+        name: "subscriber",
+        url: Urls.subscribe.index.url(),
+        pathname: Urls.subscribe.index.pathname,
+      },
+      {
+        name: "send email",
+        url: Urls.subscribe["send-email"].url(),
+        pathname: Urls.subscribe["send-email"].pathname,
+      },
+    ],
+  },
+];
 
 export default function LeftSideBarView() {
   const [isShow, setIsShow] = useState(false);
-
-  const router = useRouter();
 
   return (
     <aside
@@ -62,101 +102,118 @@ export default function LeftSideBarView() {
           <hr className="my-4 md:min-w-full" />
 
           <ul className="flex list-none flex-col md:min-w-full md:flex-col">
-            <li className="items-center">
-              <Link
-                href={Urls.index.url()}
-                className={classNames("block py-3 text-xs font-bold uppercase", {
-                  "text-lightBlue-500 hover:text-lightBlue-600":
-                    router.pathname === Urls.index.pathname,
-                  "text-blueGray-700 hover:text-blueGray-500":
-                    router.pathname !== Urls.index.pathname,
-                })}
-              >
-                <i
-                  className={classNames("fas fa-chart-line mr-2 text-sm", {
-                    "opacity-75": router.pathname === Urls.index.pathname,
-                    "text-blueGray-300": router.pathname !== Urls.index.pathname,
-                  })}
-                />{" "}
-                Dashboard
-              </Link>
-            </li>
+            {menu.map((item, index) => {
+              if (isNil(item.children)) {
+                return <MenuItemOneDepthView key={`left-side-bar-menu-${index}`} item={item} />;
+              }
 
-            <li className="items-center">
-              <Link
-                href={Urls.account.index.url()}
-                className={classNames("block py-3 text-xs font-bold uppercase", {
-                  "text-lightBlue-500 hover:text-lightBlue-600": router.pathname.includes(
-                    Urls.account.index.pathname,
-                  ),
-                  "text-blueGray-700 hover:text-blueGray-500": !router.pathname.includes(
-                    Urls.account.index.pathname,
-                  ),
-                })}
-              >
-                <i
-                  className={classNames("fas fa-users mr-2 text-sm", {
-                    "opacity-75": router.pathname.includes(Urls.account.index.pathname),
-                    "text-blueGray-300": !router.pathname.includes(Urls.account.index.pathname),
-                  })}
-                />{" "}
-                Users
-              </Link>
-            </li>
-            <li className="items-center">
-              <button
-                type="button"
-                aria-controls="dropdown-example"
-                data-collapse-toggle="dropdown-example"
-                className={classNames(
-                  "group block w-full py-3 text-left text-xs font-bold uppercase",
-                  {
-                    "text-lightBlue-500 hover:text-lightBlue-600": router.pathname.includes(
-                      Urls.subscribe.index.pathname,
-                    ),
-                    "text-blueGray-700 hover:text-blueGray-500": !router.pathname.includes(
-                      Urls.subscribe.index.pathname,
-                    ),
-                  },
-                )}
-              >
-                <i
-                  className={classNames("fas fa-paper-plane mr-2 text-sm", {
-                    "opacity-75": router.pathname.includes(Urls.subscribe.index.pathname),
-                    "text-blueGray-300": !router.pathname.includes(Urls.subscribe.index.pathname),
-                  })}
-                />{" "}
-                Subscribe
-              </button>
-              <ul id="dropdown-example" className="space-y-2 px-2">
-                <li className="items-center">
-                  <Link
-                    href={Urls.subscribe.index.url()}
-                    className={classNames("block py-3 text-xs font-bold uppercase", {
-                      "text-lightBlue-500 hover:text-lightBlue-600": router.pathname.includes(
-                        Urls.subscribe.index.pathname,
-                      ),
-                      "text-blueGray-700 hover:text-blueGray-500": !router.pathname.includes(
-                        Urls.subscribe.index.pathname,
-                      ),
-                    })}
-                  >
-                    <i
-                      className={classNames("fas fa-paper-plane mr-2 text-sm", {
-                        "opacity-75": router.pathname.includes(Urls.subscribe.index.pathname),
-                        "text-blueGray-300": !router.pathname.includes(
-                          Urls.subscribe.index.pathname,
-                        ),
-                      })}
-                    />{" "}
-                    subscriber
-                  </Link>
-                </li>
-              </ul>
-            </li>
+              return <MenuItemTwoDepthView key={`left-side-bar-menu-${index}`} item={item} />;
+            })}
           </ul>
         </div>
       </div>
     </aside>
   );
 }
+
+const MenuItemOneDepthView = memo((props: { item: MenuItem }) => {
+  const router = useRouter();
+  const isIndex = props.item.pathname === "/";
+  return (
+    <li className="items-center">
+      <Link
+        href={props.item.url ?? props.item.pathname}
+        className={classNames("block py-3 text-xs font-bold uppercase", {
+          "text-lightBlue-500 hover:text-lightBlue-600": isIndex
+            ? router.pathname === props.item.pathname
+            : router.pathname.includes(props.item.pathname),
+          "text-blueGray-700 hover:text-blueGray-500": isIndex
+            ? router.pathname !== props.item.pathname
+            : !router.pathname.includes(props.item.pathname),
+        })}
+      >
+        <i
+          className={classNames(`fas ${props.item.icon} mr-2 text-sm`, {
+            "opacity-75": router.pathname.includes(props.item.pathname),
+            "text-blueGray-300": !router.pathname.includes(props.item.pathname),
+          })}
+        />{" "}
+        {props.item.name}
+      </Link>
+    </li>
+  );
+});
+
+const MenuItemTwoDepthView = memo((props: { item: MenuItem }) => {
+  const router = useRouter();
+  const [isDrop, setIsDrop] = useState(false);
+
+  useEffect(() => {
+    if (!router.pathname.includes(props.item.pathname)) {
+      setIsDrop(false);
+    }
+  }, [router]);
+
+  return (
+    <li className="items-center">
+      <button
+        type="button"
+        className={classNames("group block w-full py-3 text-left text-xs font-bold uppercase", {
+          "text-lightBlue-500 hover:text-lightBlue-600": router.pathname.includes(
+            props.item.pathname,
+          ),
+          "text-blueGray-700 hover:text-blueGray-500": !router.pathname.includes(
+            props.item.pathname,
+          ),
+        })}
+        onClick={() => {
+          if (router.pathname.includes(props.item.pathname)) {
+            return;
+          }
+          setIsDrop(!isDrop);
+        }}
+      >
+        <i
+          className={classNames(`fas ${props.item.icon} mr-2 text-sm`, {
+            "opacity-75": router.pathname.includes(props.item.pathname),
+            "text-blueGray-300": !router.pathname.includes(props.item.pathname),
+          })}
+        />{" "}
+        Subscribe
+        <i
+          className={classNames(
+            "fas fa-caret-down ml-20 text-lg transition-all duration-300 ease-in-out",
+            { "rotate-90": isDrop },
+          )}
+        />
+      </button>
+      <ul
+        // style 로 작성한 이유는 tailwindcss 가 리렌더링 될때 해당 class 를 만들어내지 못한다.
+        style={{ height: isDrop ? `${(props.item.children ?? []).length * 44}px` : "0px" }}
+        className="space-y-2 overflow-hidden px-2 transition-all duration-300 ease-in-out"
+      >
+        {(props.item.children ?? []).map((child, index) => {
+          return (
+            <li key={`menu-item-${index}`} className="items-center">
+              <Link
+                href={child.url ?? child.pathname}
+                className={classNames("block py-3 text-xs font-bold uppercase", {
+                  "text-lightBlue-500 hover:text-lightBlue-600": router.pathname === child.pathname,
+                  "text-blueGray-700 hover:text-blueGray-500": router.pathname !== child.pathname,
+                })}
+              >
+                <i
+                  className={classNames("fas fa-paper-plane mr-2 text-sm", {
+                    "opacity-75": router.pathname === child.pathname,
+                    "text-blueGray-300": router.pathname !== child.pathname,
+                  })}
+                />{" "}
+                {child.name}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </li>
+  );
+});
