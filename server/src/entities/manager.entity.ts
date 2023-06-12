@@ -1,4 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import moment from "moment";
 import TimeSet from "./timeSet.entity";
 import Authentication from "./manager-authentication.entity";
 
@@ -35,4 +36,11 @@ export default class Manager extends TimeSet {
 
   @OneToMany(() => Authentication, (authentication) => authentication.manager)
   authentications: Authentication[];
+
+  // TODO :: 안쓸꺼면 지우기
+  validAuth() {
+    return this.authentications.find((authentication) =>
+      moment(authentication.expired_at).isAfter(new Date())
+    );
+  }
 }
