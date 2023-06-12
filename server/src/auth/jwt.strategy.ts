@@ -55,10 +55,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const manager = await this.managerService.findOneOrNull(pk);
 
     if (isNil(manager)) {
-      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+      throw new NotFoundException(errorMessage.INTERNAL_FAILED);
     }
 
-    const lastAuth: Authentication = getLastAuth(manager.authentications);
+    const lastAuth: Authentication | undefined = getLastAuth(manager.authentications);
 
     if (isNil(lastAuth)) {
       throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
