@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { isNil } from "lodash";
@@ -50,16 +55,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const manager = await this.managerService.findOneOrNull(pk);
 
     if (isNil(manager)) {
-      return {
-        pk: null,
-        type: null,
-        name: null,
-        dataType: null,
-      };
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    const lastAuth: Authentication = getLastAuth(manager.authentications);
+
+    if (isNil(lastAuth)) {
+      throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
     }
 
     try {
-      await Authentication.update(pk, { expired_at: moment().add("7", "d").toISOString() });
+      await Authentication.update(lastAuth.pk, {
+        expired_at: moment().add("7", "d").toISOString(),
+      });
 
       return {
         pk: manager.pk,
