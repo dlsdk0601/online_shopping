@@ -9,7 +9,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { ignorePromise } from "../ex/utils";
 import { DefaultLayoutView, LayoutView } from "./Layout";
 import { Urls } from "../url/url.g";
-import { userToken } from "../store/user";
+import { tokenModel } from "../store/user";
 import { CONSTANT } from "../lib/contants";
 
 export const App = ({ Component, pageProps }: AppProps) => {
@@ -44,7 +44,7 @@ export const App = ({ Component, pageProps }: AppProps) => {
 const LayoutSelector = (props: PropsWithChildren) => {
   const router = useRouter();
   const accessToken = sessionStorage.getItem(CONSTANT.sessionTokenKey);
-  const setToken = useSetRecoilState(userToken);
+  const setToken = useSetRecoilState(tokenModel);
 
   useEffect(() => {
     if (isNil(accessToken)) {
