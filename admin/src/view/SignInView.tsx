@@ -23,8 +23,9 @@ const SignInView = () => {
       if (isNil(res)) {
         return;
       }
+
       setToken(res.token);
-      ignorePromise(() => router.replace(Urls.index.url()));
+      ignorePromise(() => router.replace(returnTo(router.query) ?? Urls.index.url()));
     },
   });
 
