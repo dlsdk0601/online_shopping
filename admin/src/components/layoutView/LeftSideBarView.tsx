@@ -16,29 +16,29 @@ interface MenuItem {
 
 const menu: MenuItem[] = [
   {
-    name: "dashboard",
+    name: "대시보드",
     url: Urls.index.url(),
     pathname: Urls.index.pathname,
     icon: "fa-chart-line",
   },
   {
-    name: "users",
+    name: "사용자",
     url: Urls.account.index.url(),
     pathname: Urls.account.index.pathname,
     icon: "fa-users",
   },
   {
-    name: "subscribe",
+    name: "구독",
     pathname: Urls.subscribe.index.pathname,
     icon: "fa-paper-plane",
     children: [
       {
-        name: "subscriber",
+        name: "구독자",
         url: Urls.subscribe.index.url(),
         pathname: Urls.subscribe.index.pathname,
       },
       {
-        name: "send email",
+        name: "구독 메일",
         url: Urls.subscribe["send-email"].url(),
         pathname: Urls.subscribe["send-email"].pathname,
       },
@@ -123,7 +123,7 @@ const MenuItemOneDepthView = memo((props: { item: MenuItem }) => {
     <li className="items-center">
       <Link
         href={props.item.url ?? props.item.pathname}
-        className={classNames("block py-3 text-xs font-bold uppercase", {
+        className={classNames("block py-3 text-base font-bold uppercase", {
           "text-lightBlue-500 hover:text-lightBlue-600": isIndex
             ? router.pathname === props.item.pathname
             : router.pathname.includes(props.item.pathname),
@@ -158,7 +158,7 @@ const MenuItemTwoDepthView = memo((props: { item: MenuItem }) => {
     <li className="items-center">
       <button
         type="button"
-        className={classNames("group block w-full py-3 text-left text-xs font-bold uppercase", {
+        className={classNames("group block w-full py-3 text-left text-base font-bold uppercase", {
           "text-lightBlue-500 hover:text-lightBlue-600": router.pathname.includes(
             props.item.pathname,
           ),
@@ -174,12 +174,12 @@ const MenuItemTwoDepthView = memo((props: { item: MenuItem }) => {
         }}
       >
         <i
-          className={classNames(`fas ${props.item.icon} mr-2 text-sm`, {
+          className={classNames(`fas ${props.item.icon} mr-2 text-base`, {
             "opacity-75": router.pathname.includes(props.item.pathname),
             "text-blueGray-300": !router.pathname.includes(props.item.pathname),
           })}
         />{" "}
-        Subscribe
+        {props.item.name}
         <i
           className={classNames(
             "fas fa-caret-down ml-20 text-lg transition-all duration-300 ease-in-out",
@@ -197,13 +197,14 @@ const MenuItemTwoDepthView = memo((props: { item: MenuItem }) => {
             <li key={`menu-item-${index}`} className="items-center">
               <Link
                 href={child.url ?? child.pathname}
-                className={classNames("block py-3 text-xs font-bold uppercase", {
+                className={classNames("block py-3 text-base font-bold uppercase", {
                   "text-lightBlue-500 hover:text-lightBlue-600": router.pathname === child.pathname,
                   "text-blueGray-700 hover:text-blueGray-500": router.pathname !== child.pathname,
+                  "pl-10": isNil(child.icon),
                 })}
               >
                 <i
-                  className={classNames("fas fa-paper-plane mr-2 text-sm", {
+                  className={classNames(`fas ${child.icon} mr-2 text-sm`, {
                     "opacity-75": router.pathname === child.pathname,
                     "text-blueGray-300": router.pathname !== child.pathname,
                   })}
