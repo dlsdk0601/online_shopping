@@ -120,7 +120,7 @@ export function SelectBoxView<T>(props: {
         </label>
       )}
       <select
-        className={props.className}
+        className={`${props.className} lg:w-/12 w-full`}
         value={stringify(props.value)}
         onChange={(event) => {
           // eslint-disable-next-line no-restricted-syntax
