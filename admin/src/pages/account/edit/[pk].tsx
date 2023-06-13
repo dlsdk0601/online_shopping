@@ -92,19 +92,15 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
 
   return (
     <>
-      <CardSettings>
+      <CardSettings title="유저 정보">
         <ReadOnlyTextView value={props.user?.id ?? ""} label="아이디" />
         <UserTypeView value={type} />
         <ReadOnlyTextView value={props.user?.name ?? ""} label="이름" />
-        <TextFieldView
-          value={phone}
-          label="휴대폰"
-          onChange={(e) => setPhone.set(e.target.value)}
-        />
+        <TextFieldView value={phone} label={phone.name} onChange={(value) => setPhone.set(value)} />
         <TextFieldView
           value={email}
-          label="이메일"
-          onChange={(e) => setEmail.set(e.target.value)}
+          label={email.name}
+          onChange={(value) => setEmail.set(value)}
           disabled={type !== UserType.LOCAL}
         />
         <ReadOnlyTextView value={buyCount} label="상품 구매 횟수" />
