@@ -113,14 +113,14 @@ export function SelectBoxView<T>(props: {
   className?: string;
 }) {
   return (
-    <div className="relative mb-3 w-full lg:w-6/12">
+    <div className="relative mb-3 w-full rounded lg:w-6/12">
       {props.label && (
         <label className="mb-2 block text-xs font-bold uppercase text-blueGray-600">
           {props.label}
         </label>
       )}
       <select
-        className={`${props.className} lg:w-/12 w-full`}
+        className={`${props.className} lg:w-/12 w-full rounded border-0`}
         value={stringify(props.value)}
         onChange={(event) => {
           // eslint-disable-next-line no-restricted-syntax
