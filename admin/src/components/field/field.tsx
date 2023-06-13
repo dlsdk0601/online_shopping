@@ -1,23 +1,21 @@
-import React, { ChangeEvent, useCallback } from "react";
+import React, { useCallback } from "react";
 import { Moment } from "moment";
 import classNames from "classnames";
+import { isNil } from "lodash";
 import { dateFormatter } from "../../ex/utils";
 import { ValueField } from "../../ex/field";
 import { UserType } from "../../api/enum.g";
 
 export const TextFieldView = (props: {
   value: ValueField<string>;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (value: string) => void;
   label?: string;
   disabled?: boolean;
 }) => {
   return (
     <div className="relative mb-3 w-full lg:w-6/12">
       {props.label && (
-        <label
-          className="mb-2 block text-xs font-bold uppercase text-blueGray-600"
-          htmlFor="grid-password"
-        >
+        <label className="mb-2 block text-xs font-bold uppercase text-blueGray-600">
           {props.label}
         </label>
       )}
@@ -31,7 +29,7 @@ export const TextFieldView = (props: {
           },
         )}
         value={props.value.value}
-        onChange={props.onChange}
+        onChange={(e) => props.onChange(e.target.value)}
         disabled={props.disabled}
       />
     </div>
@@ -43,10 +41,7 @@ export const MomentFieldView = (props: { value: Moment | null; label?: string })
   return (
     <div className="relative mb-3 w-full lg:w-6/12">
       {props.label && (
-        <label
-          className="mb-2 block text-xs font-bold uppercase text-blueGray-600"
-          htmlFor="grid-password"
-        >
+        <label className="mb-2 block text-xs font-bold uppercase text-blueGray-600">
           {props.label}
         </label>
       )}
@@ -78,10 +73,7 @@ export const UserTypeView = (props: { value: UserType | null }) => {
 
   return (
     <div className="relative mb-3 w-full lg:w-6/12">
-      <label
-        className="mb-2 block text-xs font-bold uppercase text-blueGray-600"
-        htmlFor="grid-password"
-      >
+      <label className="mb-2 block text-xs font-bold uppercase text-blueGray-600">
         사용자 유형
       </label>
       <input
@@ -98,10 +90,7 @@ export const ReadOnlyTextView = (props: { value: string | number; label?: string
   return (
     <div className="relative mb-3 w-full lg:w-6/12">
       {props.label && (
-        <label
-          className="mb-2 block text-xs font-bold uppercase text-blueGray-600"
-          htmlFor="grid-password"
-        >
+        <label className="mb-2 block text-xs font-bold uppercase text-blueGray-600">
           {props.label}
         </label>
       )}
@@ -114,3 +103,52 @@ export const ReadOnlyTextView = (props: { value: string | number; label?: string
     </div>
   );
 };
+
+export function SelectBoxView<T>(props: {
+  label?: string;
+  value: T;
+  options: [T, string][];
+  onChange: (value: T) => void;
+  readonly?: boolean;
+  className?: string;
+}) {
+  return (
+    <div className="relative mb-3 w-full lg:w-6/12">
+      {props.label && (
+        <label className="mb-2 block text-xs font-bold uppercase text-blueGray-600">
+          {props.label}
+        </label>
+      )}
+      <select
+        className={props.className}
+        value={stringify(props.value)}
+        onChange={(event) => {
+          // eslint-disable-next-line no-restricted-syntax
+          for (const [value, _] of props.options) {
+            if (stringify(value) === event.target.value) {
+              props.onChange(value);
+              return;
+            }
+          }
+        }}
+        disabled={props.readonly ?? false}
+      >
+        {props.options.map(([value, label], index) => {
+          return (
+            <option key={index} value={stringify(value)}>
+              {label}
+            </option>
+          );
+        })}
+      </select>
+    </div>
+  );
+}
+
+function stringify(value: any): string {
+  if (isNil(value)) {
+    return "";
+  }
+
+  return value.toString();
+}
