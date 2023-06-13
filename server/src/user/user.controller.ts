@@ -10,6 +10,7 @@ import {
 import { Roles } from "../decorator/roles.decorator";
 import { ManagerType } from "../type/type";
 import { EditUserReqDto, EditUserResDto } from "./dto/edit-user.dto";
+import { SelectUserReqDto, SelectUserResDto } from "./dto/select-user.dto";
 
 @Controller("admin/user")
 @ApiTags("user")
@@ -35,6 +36,12 @@ export class UserController {
   @ApiCreatedResponse({ type: EditUserResDto })
   async editOne(@Body() body: EditUserReqDto) {
     return this.userService.update(body);
+  }
+
+  @Post("select-user")
+  @ApiCreatedResponse({ type: SelectUserResDto })
+  async selectUser(@Body() body: SelectUserReqDto) {
+    return this.userService.selectUser();
   }
 
   // 회원 가입 탈퇴

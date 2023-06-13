@@ -21,13 +21,10 @@ export class UserService {
   async getUserList(req: UserListReqDto) {
     let searchOption = {};
 
-    if(isNil(req.searchType)){
+    if (isNil(req.searchType)) {
       // 전체 검색
-      searchOption = [
-        { name: Like(`%${req.search}%`) },
-        { phone: Like(`%${req.search}%`) },
-      ];
-    }else{
+      searchOption = [{ name: Like(`%${req.search}%`) }, { phone: Like(`%${req.search}%`) }];
+    } else {
       // 부분 검색
       searchOption = {
         name: req.searchType === UserSearchType.NAME ? Like(`%${req.search}%`) : undefined,
@@ -48,7 +45,6 @@ export class UserService {
       },
       where: searchOption,
     });
-
 
     if (isNil(users)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
@@ -133,5 +129,11 @@ export class UserService {
 
   async findById(id: string) {
     return LocalUser.findOneBy({ id });
+  }
+
+  async selectUser() {
+    const users = await User.find();
+
+    return { list: users.map((user) => [user.pk, user.name]) };
   }
 }
