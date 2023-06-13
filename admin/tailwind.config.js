@@ -2,7 +2,7 @@ const plugin = require("tailwindcss/plugin");
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,ts,jsx,tsx}", "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js"],
   theme: {
     colors: {
       ...colors,
@@ -83,7 +83,7 @@ module.exports = {
   plugins: [
     require("@tailwindcss/forms"),
     // eslint-disable-next-line func-names
-    plugin(function ({ addComponents, theme }) {
+    plugin(function({ addComponents, theme }) {
       const screens = theme("screens", {});
       addComponents([
         {
@@ -127,4 +127,4 @@ module.exports = {
       ]);
     }),
   ],
-}
+};
