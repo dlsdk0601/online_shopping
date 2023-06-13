@@ -72,7 +72,7 @@ const SubscribeListPage = () => {
           ]}
         />
         <PaginationTableView<SubscribeListResSubscribe>
-          title="Subscribe List"
+          title="구독자 리스트"
           pagination={subscribeList ?? null}
           mapper={(value) => [
             ["이름", value.name],
