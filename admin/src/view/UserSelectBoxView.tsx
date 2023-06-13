@@ -1,17 +1,25 @@
 import { isNil } from "lodash";
+import { useEffect, useState } from "react";
 import useValueField from "../hooks/useValueField";
 import { SelectBoxView } from "../components/field/field";
+import { api } from "../api/url.g";
 
 const UserSelectBoxView = (props: {
   userList: [number | null, string][];
   onChange: (value: null | [number | null, string]) => void;
 }) => {
   const [selectBox, setSelectBox] = useValueField<number | null>(null, "유저");
-  const options: [number | null, string][] = [
-    [null, "전체"],
-    [1, "2"],
-    [2, "1"],
-  ];
+  const [options, setOptions] = useState<[number | null, string][]>([]);
+
+  useEffect(() => {
+    api.selectUser({}).then((res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      setOptions([[null, "전체"], ...res.list]);
+    });
+  }, []);
 
   return (
     <SelectBoxView<number | null>
