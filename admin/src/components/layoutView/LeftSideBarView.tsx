@@ -151,7 +151,9 @@ const MenuItemTwoDepthView = memo((props: { item: MenuItem }) => {
   useEffect(() => {
     if (!router.pathname.includes(props.item.pathname)) {
       setIsDrop(false);
+      return;
     }
+    setIsDrop(true);
   }, [router]);
 
   return (
@@ -197,7 +199,7 @@ const MenuItemTwoDepthView = memo((props: { item: MenuItem }) => {
             <li key={`menu-item-${index}`} className="items-center">
               <Link
                 href={child.url ?? child.pathname}
-                className={classNames("block py-3 text-base font-bold uppercase", {
+                className={classNames("block py-3 text-sm font-bold uppercase", {
                   "text-lightBlue-500 hover:text-lightBlue-600": router.pathname === child.pathname,
                   "text-blueGray-700 hover:text-blueGray-500": router.pathname !== child.pathname,
                   "pl-10": isNil(child.icon),
