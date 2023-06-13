@@ -2,7 +2,7 @@ import { memo } from "react";
 
 const UserBadgeView = (props: { label: string; onClickRemove?: () => void }) => {
   return (
-    <span className="mr-2 inline-flex items-center rounded bg-green-100 px-2 py-1 text-sm font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
+    <span className="mr-2 mb-2 inline-flex items-center rounded bg-green-100 px-2 py-1 text-sm font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
       {props.label}
       {props.onClickRemove && (
         <button
