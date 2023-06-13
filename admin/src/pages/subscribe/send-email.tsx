@@ -5,8 +5,8 @@ import CardFormView from "../../components/tailwindEx/CardFormView";
 import EditorEx from "../../view/EditorEx";
 import useValueField from "../../hooks/useValueField";
 import { TextFieldView } from "../../components/field/field";
-import DatePicker from "../../view/DatePicker";
-import UserBadge from "../../view/UserBadge";
+import DatePickerView from "../../view/DatePickerView";
+import UserBadge from "../../view/UserBadgeView";
 import UserSelectBoxView from "../../view/UserSelectBoxView";
 
 const SendEmailPage = () => {
@@ -19,7 +19,7 @@ const SendEmailPage = () => {
     <div className="w-full px-4">
       <CardFormView title="구독 이메일">
         <TextFieldView value={title} label={title.name} onChange={(value) => setTitle.set(value)} />
-        <DatePicker
+        <DatePickerView
           label={sendDate.name}
           filed={sendDate}
           onChange={(value) => setSendDate.set(value)}

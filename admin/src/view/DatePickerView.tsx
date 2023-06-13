@@ -1,10 +1,9 @@
-import React from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 import moment, { Moment } from "moment";
 import { isNil } from "lodash";
 import { ValueField } from "../ex/field";
 
-const DatePicker = (props: {
+const DatePickerView = (props: {
   label?: string;
   filed: ValueField<Moment | null>;
   onChange: (value: Moment) => void;
@@ -40,4 +39,4 @@ const DatePicker = (props: {
   );
 };
 
-export default DatePicker;
+export default DatePickerView;
