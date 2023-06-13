@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
-import CardSettings from "../../../components/tailwindEx/CardSettings";
+import CardFormView from "../../../components/tailwindEx/CardFormView";
 import { ReadOnlyTextView, TextFieldView, UserTypeView } from "../../../components/field/field";
 import useValueField from "../../../hooks/useValueField";
 import { queryKeys } from "../../../lib/contants";
@@ -92,7 +92,7 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
 
   return (
     <>
-      <CardSettings title="유저 정보">
+      <CardFormView title="유저 정보">
         <ReadOnlyTextView value={props.user?.id ?? ""} label="아이디" />
         <UserTypeView value={type} />
         <ReadOnlyTextView value={props.user?.name ?? ""} label="이름" />
@@ -109,7 +109,7 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
         <ReadOnlyTextView value={dateFormatter(props.user?.createAt)} label="생성 일자" />
         <ReadOnlyTextView value={dateFormatter(props.user?.updateAt)} label="수정 일자" />
         <EditButtonView isNew={isNil(props.user)} onClick={() => onEdit()} />
-      </CardSettings>
+      </CardFormView>
     </>
   );
 });

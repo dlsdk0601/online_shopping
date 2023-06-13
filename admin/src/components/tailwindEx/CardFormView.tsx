@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 
-export default function CardSettings(props: PropsWithChildren<{ title: string }>) {
+export default function CardFormView(props: PropsWithChildren<{ title: string }>) {
   return (
     <>
       <div className="relative mb-6 flex min-h-screen-75 w-full min-w-0 flex-col break-words rounded-lg border-0 bg-blueGray-100 shadow-lg">
