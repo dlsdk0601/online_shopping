@@ -1,13 +1,15 @@
 import { Moment } from "moment";
-import { useState } from "react";
+import React, { useState } from "react";
 import { isNil } from "lodash";
+import classNames from "classnames";
 import CardFormView from "../../components/tailwindEx/CardFormView";
 import EditorEx from "../../view/EditorEx";
 import useValueField from "../../hooks/useValueField";
 import { TextFieldView } from "../../components/field/field";
 import DatePickerView from "../../view/DatePickerView";
-import UserBadge from "../../view/UserBadgeView";
+import UserBadgeView from "../../view/UserBadgeView";
 import UserSelectBoxView from "../../view/UserSelectBoxView";
+import EditButtonView from "../../components/tailwindEx/EditButtonView";
 
 const SendEmailPage = () => {
   const [title, setTitle] = useValueField("", "제목");
@@ -41,9 +43,13 @@ const SendEmailPage = () => {
             });
           }}
         />
-        <div className="w-full">
+        <div
+          className={classNames("w-full rounded p-2", {
+            "bg-white": userList.length > 0,
+          })}
+        >
           {userList.map(([pk, label]) => (
-            <UserBadge
+            <UserBadgeView
               key={`user-list-${pk}`}
               label={label}
               onClickRemove={() => {
@@ -53,6 +59,7 @@ const SendEmailPage = () => {
             />
           ))}
         </div>
+        <EditButtonView isNew onClick={() => {}} />
       </CardFormView>
     </div>
   );
