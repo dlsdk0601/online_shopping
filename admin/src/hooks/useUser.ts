@@ -19,7 +19,7 @@ export function useUser(): UseUser {
   const router = useRouter();
   const setToken = useSetRecoilState(tokenModel);
 
-  const { data: user } = useQuery(queryKeys.user, () => api.auth({}), {
+  const { data: user } = useQuery(queryKeys.manager, () => api.auth({}), {
     onSuccess: (res: ShowManagerRes | null) => {
       if (isNil(res)) {
         clearUser(router.asPath);
@@ -28,7 +28,7 @@ export function useUser(): UseUser {
   });
 
   const clearUser = (returnTo?: string) => {
-    queryClient.setQueryData(queryKeys.user, null); // cache 삭제
+    queryClient.setQueryData(queryKeys.manager, null); // cache 삭제
     setToken(null); // 전역 변수 토큰 삭제
     const returnQuery = returnTo ? { returnTo } : {};
 
