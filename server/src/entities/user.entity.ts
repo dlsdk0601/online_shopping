@@ -5,6 +5,24 @@ import { LocalUser } from "./local-user.entity";
 import { GoogleUser } from "./google-user.entity";
 import { KakaoUser } from "./kakao-user.entity";
 import { NaverUser } from "./naver-user.entity";
+import {
+  GoogleAuthentication,
+  KakaoAuthentication,
+  LocalAuthentication,
+  NaverAuthentication,
+} from "./user-authentication.entity";
+
+export type FrontUserAuth =
+  | LocalAuthentication
+  | KakaoAuthentication
+  | GoogleAuthentication
+  | NaverAuthentication;
+
+export type FrontUserAuths =
+  | LocalAuthentication[]
+  | KakaoAuthentication[]
+  | GoogleAuthentication[]
+  | NaverAuthentication[];
 
 @Entity("user")
 export class User extends TimeSet {
