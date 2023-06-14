@@ -23,6 +23,14 @@ export interface GlobalUser {
   dataType: DataType | null;
 }
 
+export interface GlobalManager {
+  pk: number;
+  type: ManagerType;
+  name: string;
+  id: string;
+  email: string;
+}
+
 export type ImageType = {
   id?: number;
   type: string;
