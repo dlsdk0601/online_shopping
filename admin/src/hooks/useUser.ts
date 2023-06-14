@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "react-query";
 import { isNil } from "lodash";
 import { useSetRecoilState } from "recoil";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { ShowManagerRes } from "../api/type.g";
 import { queryKeys } from "../lib/contants";
 import { api } from "../api/url.g";
@@ -28,12 +28,12 @@ export function useUser(): UseUser {
   });
 
   const clearUser = (returnTo?: string) => {
-    queryClient.setQueryData(queryKeys.user, null);
-    setToken(null);
+    queryClient.setQueryData(queryKeys.user, null); // cache 삭제
+    setToken(null); // 전역 변수 토큰 삭제
     const returnQuery = returnTo ? { returnTo } : {};
 
     // 어드민에서는 로그인 페이지로 보낸다.
-    ignorePromise(() => Router.replace(Urls.auth["sign-in"].url(returnQuery)));
+    ignorePromise(() => router.replace(Urls.auth["sign-in"].url(returnQuery)));
   };
 
   return { user, clearUser };
