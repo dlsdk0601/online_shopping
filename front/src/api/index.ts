@@ -106,7 +106,7 @@ export class ApiBase {
       if (message !== errorMessageG.NOT_TOKEN_USER) {
         alert(message);
       }
-      throw new Error(message);
+      // throw new Error(message);
     }
   }
 
