@@ -40,6 +40,7 @@ export const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
+// 레이아웃 선태가 단계
 const LayoutSelector = (props: PropsWithChildren) => {
   const router = useRouter();
 
@@ -58,6 +59,7 @@ const LayoutSelector = (props: PropsWithChildren) => {
   return <UserApp>{props.children}</UserApp>;
 };
 
+// 로그인 판단 단계
 const UserApp = (props: PropsWithChildren<Record<never, any>>) => {
   const router = useRouter();
   const token = sessionStorage.getItem(CONSTANT.sessionTokenKey) ?? null;
