@@ -26,16 +26,6 @@ export function getApiList(router) {
       return;
     }
 
-    // 로그인은 어드민에도 추가해준다
-    if (layer.route.path.includes("sign-in") || layer.route.path.includes("auth")) {
-      adminRoutes.push({
-        route: {
-          path: layer.route?.path,
-          method: layer.route?.stack[0].method,
-        },
-      });
-    }
-
     if (layer.route.path.includes("admin")) {
       adminRoutes.push({
         route: {
