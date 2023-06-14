@@ -1,5 +1,5 @@
 export const queryKeys = {
-  user: "user",
+  manager: "manager",
   token: "token",
   showUser: "show-user",
   userList: "userList",
