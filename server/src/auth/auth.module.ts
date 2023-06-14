@@ -22,6 +22,8 @@ import { GoogleUser } from "../entities/google-user.entity";
 import { KakaoUser } from "../entities/kakao-user.entity";
 import { NaverUser } from "../entities/naver-user.entity";
 import { LocalUser } from "../entities/local-user.entity";
+import { AdminLocalStrategy } from "./admin-local.strategy";
+import { AdminJwtStrategy } from "./admin-jwt.strategy";
 
 @Module({
   imports: [
@@ -52,6 +54,6 @@ import { LocalUser } from "../entities/local-user.entity";
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, AdminLocalStrategy, AdminJwtStrategy],
 })
 export class AuthModule {}
