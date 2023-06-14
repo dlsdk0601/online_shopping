@@ -1,14 +1,6 @@
 import { Request } from "express";
 import { UserType } from "./commonType";
 
-export type DataType = "ADMIN" | "FRONT";
-
-export interface GoogleUser {
-  email: string;
-  firstName: string;
-  lastName: string;
-}
-
 export type CustomRequest = Request;
 
 export enum ManagerType {
@@ -17,10 +9,10 @@ export enum ManagerType {
 }
 
 export interface GlobalUser {
-  pk: number | null;
-  type: ManagerType | UserType;
-  name: string | null;
-  dataType: DataType | null;
+  pk: number;
+  type: UserType;
+  name: string;
+  phone: string | null;
 }
 
 export interface GlobalManager {
