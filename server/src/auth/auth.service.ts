@@ -20,7 +20,7 @@ import { SignInReqDto } from "./dto/sign-in.dto";
 import { compare, getHash } from "../ex/bcryptEx";
 import errorMessage from "../config/errorMessage";
 import { UserType } from "../type/commonType";
-import { CustomRequest, DataType, GlobalUser } from "../type/type";
+import { CustomRequest, DataType, GlobalManager, GlobalUser } from "../type/type";
 import {
   GoogleAuthentication,
   KakaoAuthentication,
@@ -347,6 +347,28 @@ export class AuthService {
     }
   }
 
+  async adminSignIn(pk: number, req: CustomRequest) {
+    const token = this.jwtService.sign({ pk });
+
+    const manager = await this.managerService.findOneOr404(pk);
+    const auth = new Authentication();
+    auth.manager = manager;
+
+    try {
+      auth.token = token;
+      auth.ip = req.ip;
+      auth.device = getDeviceInfo(req);
+      auth.expired_at = moment().add("7", "d").toDate();
+      console.log("auth");
+      console.log(auth.expired_at);
+      await auth.save();
+
+      return { token };
+    } catch (e) {
+      throw new UnauthorizedException(errorMessage.SIGN_IN_FAILED);
+    }
+  }
+
   async signUp(body: SignUpReqDto, req: CustomRequest) {
     const isExist = await LocalUser.findOne({
       where: { id: body.id },
@@ -444,6 +466,22 @@ export class AuthService {
 
     try {
       await LocalAuthentication.update(lastAuth.pk, { expired_at: moment().toDate() });
+      return { result: true };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
+    }
+  }
+
+  async managerSignOut(manager: GlobalManager) {
+    const auths = await Authentication.find({ where: { manager } });
+    const auth: Authentication | undefined = getLastAuth(auths);
+
+    if (isNil(auth)) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+    try {
+      await Authentication.update(auth.pk, { expired_at: moment().toDate() });
+
       return { result: true };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
