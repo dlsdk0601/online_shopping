@@ -1,10 +1,10 @@
 import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
-import { ApiCreatedResponse, ApiExtraModels, ApiOkResponse, ApiTags, refs } from "@nestjs/swagger";
+import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "./auth.service";
 import { SignInReqDto, SignInResDto } from "./dto/sign-in.dto";
 import { GetUser } from "../decorator/user.decorator";
-import { CustomRequest, DataType, GlobalManager, GlobalUser } from "../type/type";
+import { CustomRequest, GlobalManager, GlobalUser } from "../type/type";
 import { SignUpReqDto, SignUpResDto, SnsSignUpReqDto, SnsSignUpResDto } from "./dto/sign-up.dto";
 import { AuthManagerResDto, AuthReqDto, AuthUserResDto } from "./dto/auth.dto";
 import { GoogleTokenVerifyReqDto, GoogleTokenVerifyResDto } from "./dto/google-auth.dto";
@@ -20,15 +20,14 @@ export class AuthController {
   @UseGuards(AuthGuard("local"))
   @Post("/sign-in")
   @ApiCreatedResponse({ type: SignInResDto, description: "local 로그인" })
-  signIn(@GetUser() user, @Body() body: SignInReqDto, @Req() req: CustomRequest) {
+  signIn(@GetUser() user: GlobalUser, @Body() body: SignInReqDto, @Req() req: CustomRequest) {
     const pk: number = user.pk;
-    const type: DataType = user.dataType;
-    return this.authService.signIn(pk, type, req);
+    return this.authService.signIn(pk, req);
   }
 
   @UseGuards(AuthGuard("admin-local"))
   @Post("admin/sign-in")
-  @ApiCreatedResponse({ type: SignInResDto, description: "local 로그인" })
+  @ApiCreatedResponse({ type: SignInResDto, description: "admin 로그인" })
   adminSignIn(
     @GetUser() user: GlobalManager,
     @Req() req: CustomRequest,
@@ -45,12 +44,8 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard("jwt"))
-  @Post()
-  @ApiExtraModels(AuthManagerResDto, AuthUserResDto)
-  @ApiOkResponse({
-    schema: { oneOf: refs(AuthManagerResDto, AuthUserResDto) },
-    description: "유저 정보 조회",
-  })
+  @Post("auth")
+  @ApiCreatedResponse({ type: AuthUserResDto })
   getUserDataInfo(@Body() body: AuthReqDto, @GetUser() user: GlobalUser) {
     return user;
   }

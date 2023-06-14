@@ -16,11 +16,10 @@ import axios from "axios";
 import { GoogleUser } from "src/entities/google-user.entity";
 import { ManagerService } from "../manager/manager.service";
 import { UserService } from "../user/user.service";
-import { SignInReqDto } from "./dto/sign-in.dto";
-import { compare, getHash } from "../ex/bcryptEx";
+import { getHash } from "../ex/bcryptEx";
 import errorMessage from "../config/errorMessage";
 import { UserType } from "../type/commonType";
-import { CustomRequest, DataType, GlobalManager, GlobalUser } from "../type/type";
+import { CustomRequest, GlobalManager, GlobalUser } from "../type/type";
 import {
   GoogleAuthentication,
   KakaoAuthentication,
@@ -34,7 +33,7 @@ import { SignUpReqDto, SnsSignUpReqDto } from "./dto/sign-up.dto";
 import { KakaoUser } from "../entities/kakao-user.entity";
 import { NaverUser } from "../entities/naver-user.entity";
 import { LocalUser } from "../entities/local-user.entity";
-import { User } from "../entities/user.entity";
+import { FrontUserAuth, User } from "../entities/user.entity";
 
 @Injectable()
 export class AuthService {
@@ -50,26 +49,6 @@ export class AuthService {
     this.configService.get("GOOGLE_SECRET"),
     this.configService.get("GOOGLE_CLIENT_REDIRECT_URL")
   );
-
-  async validateManagerOrUser(dto: SignInReqDto) {
-    const manager = await this.managerService.findById(dto.id);
-    const user = await this.userService.findById(dto.id);
-    const data = manager ?? user;
-
-    if (isNil(data)) {
-      return null;
-    }
-
-    const dataType = isNil(manager) ? "FRONT" : "ADMIN";
-
-    const isValid = await compare(dto.password, data.password_hash);
-
-    if (!isValid) {
-      return null;
-    }
-
-    return { ...data, dataType };
-  }
 
   async validateGoogleUser(payload: TokenPayload) {
     const { email, sub, given_name, family_name, name } = payload;
@@ -316,30 +295,19 @@ export class AuthService {
     return user;
   }
 
-  async signIn(pk: number, type: DataType, req: CustomRequest) {
-    const token = this.jwtService.sign({ pk, type });
+  async signIn(pk: number, req: CustomRequest) {
+    const token = this.jwtService.sign({ pk });
 
-    let newAuth: Authentication | LocalAuthentication | null = null;
-    if (type === "ADMIN") {
-      const manager = await this.managerService.findOneOr404(pk);
-      newAuth = new Authentication();
-      newAuth.manager = manager;
-    } else {
-      const user = await this.userService.findLocalUserOneOr404(pk);
-      newAuth = new LocalAuthentication();
-      newAuth.local_user = user;
-    }
-
-    if (isNil(newAuth)) {
-      throw new UnauthorizedException(errorMessage.SIGN_IN_FAILED);
-    }
+    const user = await this.userService.findLocalUserOneOr404(pk);
+    const localAuth = new LocalAuthentication();
+    localAuth.local_user = user;
+    localAuth.token = token;
+    localAuth.ip = req.ip;
+    localAuth.device = getDeviceInfo(req);
+    localAuth.expired_at = moment().add("7", "d").toDate();
 
     try {
-      newAuth.token = token;
-      newAuth.ip = req.ip;
-      newAuth.device = getDeviceInfo(req);
-      newAuth.expired_at = moment().add("7", "d").toDate();
-      await newAuth.save();
+      await localAuth.save();
 
       return { token };
     } catch (e) {
@@ -353,14 +321,12 @@ export class AuthService {
     const manager = await this.managerService.findOneOr404(pk);
     const auth = new Authentication();
     auth.manager = manager;
+    auth.token = token;
+    auth.ip = req.ip;
+    auth.device = getDeviceInfo(req);
+    auth.expired_at = moment().add("7", "d").toDate();
 
     try {
-      auth.token = token;
-      auth.ip = req.ip;
-      auth.device = getDeviceInfo(req);
-      auth.expired_at = moment().add("7", "d").toDate();
-      console.log("auth");
-      console.log(auth.expired_at);
       await auth.save();
 
       return { token };
@@ -411,45 +377,20 @@ export class AuthService {
   }
 
   async signOut(user: GlobalUser) {
-    if (isNil(user.pk)) {
-      throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
-    }
-
-    if (user.dataType === "ADMIN") {
-      const manager = await this.managerService.findOneOr404(user.pk);
-
-      if (isNil(manager)) {
-        throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
-      }
-
-      const validAuth: Authentication | undefined = getLastAuth(manager.authentications);
-
-      if (isNil(validAuth)) {
-        throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
-      }
-      try {
-        await Authentication.update(validAuth.pk, { expired_at: moment().toDate() });
-
-        return { result: true };
-      } catch (e) {
-        throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
-      }
-    }
-
     const frontUser = await User.findOne({
       where: { pk: user.pk },
       relations: {
         localUser: {
-          auth: user.type === UserType.LOCAL,
+          auth: true,
         },
         googleUser: {
-          auth: user.type === UserType.GOOGLE,
+          auth: true,
         },
         kakaoUser: {
-          auth: user.type === UserType.KAKAO,
+          auth: true,
         },
         naverUser: {
-          auth: user.type === UserType.NAVER,
+          auth: true,
         },
       },
     });
@@ -458,14 +399,15 @@ export class AuthService {
       throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
     }
 
-    const lastAuth: LocalAuthentication | undefined = getLastAuth(frontUser.auths);
+    const lastAuth: FrontUserAuth | undefined = getLastAuth(frontUser.auths);
 
     if (isNil(lastAuth)) {
-      throw new UnauthorizedException(errorMessage.ACCESS_TOKEN_EXPIRED);
+      throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
     }
 
     try {
-      await LocalAuthentication.update(lastAuth.pk, { expired_at: moment().toDate() });
+      lastAuth.expired_at = moment().toDate();
+      await lastAuth.save();
       return { result: true };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
