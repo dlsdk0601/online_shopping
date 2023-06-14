@@ -2,16 +2,15 @@ import { UrlObject } from "url";
 import React, { PropsWithChildren, useEffect } from "react";
 import { AppProps } from "next/app";
 import Router, { useRouter } from "next/router";
-import { isNil, some } from "lodash";
+import { some } from "lodash";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot, useSetRecoilState } from "recoil";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Head from "next/head";
 import { ignorePromise } from "../ex/utils";
 import { DefaultLayoutView, LayoutView } from "./Layout";
-import { userToken } from "../store/user";
+import { tokenModel } from "../store/user";
 import { CONSTANT } from "../lib/contants";
-import { useUser } from "../hooks/useUser";
 
 export const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient({
@@ -20,10 +19,9 @@ export const App = ({ Component, pageProps }: AppProps) => {
         onError: () => Router.replace("/_error"),
         staleTime: 600000, // 10min
         cacheTime: 900000, // 15min, 데이터 유효 시간이 캐싱 저장 시간보다 길다는건 말이 안됨. 데이터 유효 시간을 기준으로 데이터를 다시 불러올텐데, 유효 시간이 더 길면 데이터가 없는 상태가 됨
-        refetchOnMount: false, // 데이터가 stale 상태일 경우 마운트 될때마다 refetch를 실행하는 옵션,
-        refetchOnWindowFocus: false, // 데이터가 stale 상태일 경우, 윈도우 포커싱될때마다 refetch하는 옵션
-        refetchOnReconnect: false, // 데이터가 stale 상태일 경우, 재 연결이 될때 refetch하는 옵션
-        // TODO :: 사실 위와 같은 option은 좋지 않다. 유저가 제대로 된 데이터를 접하지 못할 수도 있기 떄문에
+        // refetchOnMount: false, // 데이터가 stale 상태일 경우 마운트 될때마다 refetch를 실행하는 옵션,
+        // refetchOnWindowFocus: false, // 데이터가 stale 상태일 경우, 윈도우 포커싱될때마다 refetch하는 옵션
+        // refetchOnReconnect: false, // 데이터가 stale 상태일 경우, 재 연결이 될때 refetch하는 옵션
       },
       mutations: {
         onError: () => Router.replace("/_error"),
@@ -75,17 +73,10 @@ const LayoutSelector = (props: PropsWithChildren) => {
 };
 
 const UserApp = (props: PropsWithChildren<Record<never, any>>) => {
-  const setToken = useSetRecoilState(userToken);
-  const accessToken = sessionStorage.getItem(CONSTANT.sessionTokenKey);
-
-  // 유저 정보 조회
-  useUser();
+  const accessToken = sessionStorage.getItem(CONSTANT.sessionTokenKey) ?? null;
+  const setToken = useSetRecoilState(tokenModel);
 
   useEffect(() => {
-    if (isNil(accessToken)) {
-      return;
-    }
-
     setToken(accessToken);
   }, []);
 
