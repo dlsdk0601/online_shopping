@@ -11,6 +11,7 @@ import { ignorePromise } from "../ex/utils";
 import { DefaultLayoutView, LayoutView } from "./Layout";
 import { tokenModel } from "../store/user";
 import { CONSTANT } from "../lib/contants";
+import { useUser } from "../hooks/useUser";
 
 export const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient({
@@ -75,6 +76,7 @@ const LayoutSelector = (props: PropsWithChildren) => {
 const UserApp = (props: PropsWithChildren<Record<never, any>>) => {
   const accessToken = sessionStorage.getItem(CONSTANT.sessionTokenKey) ?? null;
   const setToken = useSetRecoilState(tokenModel);
+  const { user } = useUser();
 
   useEffect(() => {
     setToken(accessToken);
