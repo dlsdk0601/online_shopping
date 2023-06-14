@@ -5,6 +5,7 @@ import { api } from "../api/url.g";
 import { Urls } from "../url/url.g";
 import { useUser } from "../hooks/useUser";
 import { SignOutReq, SignOutRes } from "../api/type.g";
+import { ignorePromise } from "../ex/utils";
 
 const SignOutButtonView = (props: { label?: string; className?: string }) => {
   const router = useRouter();
@@ -17,8 +18,7 @@ const SignOutButtonView = (props: { label?: string; className?: string }) => {
       }
 
       clearUser();
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const ignore = router.push(Urls.index);
+      ignorePromise(() => router.push(Urls.index));
     },
   });
 
