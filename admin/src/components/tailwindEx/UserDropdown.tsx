@@ -1,12 +1,29 @@
 import { useRef } from "react";
 import classNames from "classnames";
+import { useMutation } from "react-query";
+import { isNil } from "lodash";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useUser } from "../../hooks/useUser";
+import { api } from "../../api/url.g";
+import { SignOutReq } from "../../api/type.g";
 
 const UserDropdown = () => {
   const boxRef = useRef(null);
   const { isOpen, setIsOpen } = useClickOutside(boxRef);
   const { clearUser } = useUser();
+
+  const { mutate } = useMutation((req: SignOutReq) => api.signOut(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      if (res.result) {
+        clearUser();
+      }
+    },
+  });
+
   return (
     <>
       <a
@@ -57,7 +74,7 @@ const UserDropdown = () => {
         <button
           type="button"
           className="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-blueGray-700"
-          onClick={() => clearUser()}
+          onClick={() => mutate({})}
         >
           sign-out
         </button>
