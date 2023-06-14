@@ -18,7 +18,6 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
     onSuccess: (res: SignInRes) => {
       props.onSuccess(res.token);
     },
-    onError: () => {},
   });
 
   const onLocalSignIn = useCallback(async () => {
@@ -31,6 +30,7 @@ const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
 
   return (
     <form className="form-container" onSubmit={preventDefaulted(() => onLocalSignIn())}>
+      <div onClick={() => mutate({ id: "test", password: "1234" })}>test</div>
       <AuthInputFieldView field={id} onChange={(e) => setId.set(e.target.value)} />
       <AuthInputFieldView
         field={password}
