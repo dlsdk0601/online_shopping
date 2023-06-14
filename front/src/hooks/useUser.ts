@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from "react-query";
 import { useSetRecoilState } from "recoil";
+import { isNil } from "lodash";
 import { AuthUserRes } from "../api/type.g";
 import { CONSTANT, queryKeys } from "../lib/contants";
 import { api } from "../api/url.g";
@@ -17,6 +18,11 @@ export function useUser(): UseUser {
 
   const { data: user } = useQuery(queryKeys.user, () => api.auth({}), {
     enabled: isNotNil(sessionStorage.getItem(CONSTANT.sessionTokenKey)),
+    onSuccess: (res: AuthUserRes | null) => {
+      if (isNil(res)) {
+        clearUser();
+      }
+    },
   });
 
   const clearUser = () => {
