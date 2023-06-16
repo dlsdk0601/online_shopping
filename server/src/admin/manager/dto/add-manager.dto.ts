@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsNotEmpty, IsNumber } from "class-validator";
-import { ManagerType } from "../../entities/manager.entity";
+import { ManagerType } from "../../../entities/manager.entity";
 
 export class AddManagerReqDto {
   @ApiProperty({ description: "uuid" })

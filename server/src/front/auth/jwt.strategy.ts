@@ -8,10 +8,10 @@ import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { isNil } from "lodash";
 import moment from "moment";
-import constant from "../config/constant";
-import errorMessage from "../config/errorMessage";
-import { getLastAuth } from "../ex/ex";
-import { FrontUserAuth, User } from "../entities/user.entity";
+import constant from "../../config/constant";
+import errorMessage from "../../config/errorMessage";
+import { getLastAuth } from "../../ex/ex";
+import { FrontUserAuth, User } from "../../entities/user.entity";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

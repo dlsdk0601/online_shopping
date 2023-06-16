@@ -7,8 +7,8 @@ import {
 import { faker } from "@faker-js/faker";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ManagerService } from "./manager.service";
-import Manager, { ManagerType } from "../entities/manager.entity";
-import { getHash } from "../ex/bcryptEx";
+import Manager, { ManagerType } from "../../entities/manager.entity";
+import { getHash } from "../../ex/bcryptEx";
 
 describe("ManagerService", () => {
   let service: ManagerService;

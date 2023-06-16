@@ -14,31 +14,28 @@ import { TokenPayload } from "google-auth-library/build/src/auth/loginticket";
 import moment from "moment";
 import axios from "axios";
 import { GoogleUser } from "src/entities/google-user.entity";
-import { ManagerService } from "../manager/manager.service";
-import { UserService } from "../user/user.service";
-import { getHash } from "../ex/bcryptEx";
-import errorMessage from "../config/errorMessage";
-import { UserType } from "../type/commonType";
-import { CustomRequest, GlobalManager, GlobalUser } from "../type/type";
+import { UserService } from "../../user/user.service";
+import { getHash } from "../../ex/bcryptEx";
+import errorMessage from "../../config/errorMessage";
+import { UserType } from "../../type/commonType";
+import { CustomRequest, GlobalUser } from "../../type/type";
 import {
   GoogleAuthentication,
   KakaoAuthentication,
   LocalAuthentication,
   NaverAuthentication,
-} from "../entities/user-authentication.entity";
-import { getDeviceInfo, getLastAuth } from "../ex/ex";
+} from "../../entities/user-authentication.entity";
+import { getDeviceInfo, getLastAuth } from "../../ex/ex";
 import { NaverCodeVerifyReqDto } from "./dto/naver-auth.dto";
-import Authentication from "../entities/manager-authentication.entity";
 import { SignUpReqDto, SnsSignUpReqDto } from "./dto/sign-up.dto";
-import { KakaoUser } from "../entities/kakao-user.entity";
-import { NaverUser } from "../entities/naver-user.entity";
-import { LocalUser } from "../entities/local-user.entity";
-import { FrontUserAuth, User } from "../entities/user.entity";
+import { KakaoUser } from "../../entities/kakao-user.entity";
+import { NaverUser } from "../../entities/naver-user.entity";
+import { LocalUser } from "../../entities/local-user.entity";
+import { FrontUserAuth, User } from "../../entities/user.entity";
 
 @Injectable()
 export class AuthService {
   constructor(
-    private managerService: ManagerService,
     private userService: UserService,
     private jwtService: JwtService,
     private readonly configService: ConfigService
@@ -315,26 +312,6 @@ export class AuthService {
     }
   }
 
-  async adminSignIn(pk: number, req: CustomRequest) {
-    const token = this.jwtService.sign({ pk });
-
-    const manager = await this.managerService.findOneOr404(pk);
-    const auth = new Authentication();
-    auth.manager = manager;
-    auth.token = token;
-    auth.ip = req.ip;
-    auth.device = getDeviceInfo(req);
-    auth.expired_at = moment().add("7", "d").toDate();
-
-    try {
-      await auth.save();
-
-      return { token };
-    } catch (e) {
-      throw new UnauthorizedException(errorMessage.SIGN_IN_FAILED);
-    }
-  }
-
   async signUp(body: SignUpReqDto, req: CustomRequest) {
     const isExist = await LocalUser.findOne({
       where: { id: body.id },
@@ -408,22 +385,6 @@ export class AuthService {
     try {
       lastAuth.expired_at = moment().toDate();
       await lastAuth.save();
-      return { result: true };
-    } catch (e) {
-      throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);
-    }
-  }
-
-  async managerSignOut(manager: GlobalManager) {
-    const auths = await Authentication.find({ where: { manager } });
-    const auth: Authentication | undefined = getLastAuth(auths);
-
-    if (isNil(auth)) {
-      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
-    }
-    try {
-      await Authentication.update(auth.pk, { expired_at: moment().toDate() });
-
       return { result: true };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.FAIL_SIGN_OUT);

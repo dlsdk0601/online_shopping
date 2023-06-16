@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { UserType } from "../../type/commonType";
+import { UserType } from "../../../type/commonType";
 
 export class SignUpReqDto {
   @ApiProperty({ description: "아이디", nullable: false, type: "string" })

@@ -9,12 +9,12 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { isNil } from "lodash";
 import moment from "moment";
 import { AuthService } from "./auth.service";
-import { UserService } from "../user/user.service";
-import { ManagerService } from "../manager/manager.service";
-import constant from "../config/constant";
-import errorMessage from "../config/errorMessage";
-import Authentication from "../entities/manager-authentication.entity";
-import { getLastAuth } from "../ex/ex";
+import { UserService } from "../../user/user.service";
+import { ManagerService } from "../../admin/manager/manager.service";
+import constant from "../../config/constant";
+import errorMessage from "../../config/errorMessage";
+import Authentication from "../../entities/manager-authentication.entity";
+import { getLastAuth } from "../../ex/ex";
 
 @Injectable()
 export class AdminJwtStrategy extends PassportStrategy(Strategy, "admin-jwt") {

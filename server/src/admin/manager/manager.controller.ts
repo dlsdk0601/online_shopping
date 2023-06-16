@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { ManagerService } from "./manager.service";
-import { Roles } from "../decorator/roles.decorator";
-import { ManagerType } from "../type/type";
+import { Roles } from "../../decorator/roles.decorator";
+import { ManagerType } from "../../type/type";
 import {
   ManagerListReqDto,
   ManagerListResDto,

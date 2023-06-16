@@ -8,13 +8,13 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { isNil } from "lodash";
-import Manager from "../entities/manager.entity";
+import Manager from "../../entities/manager.entity";
 import { AddManagerReqDto } from "./dto/add-manager.dto";
-import { LIMIT } from "../type/pagination.dto";
+import { LIMIT } from "../../type/pagination.dto";
 import { ManagerListResDto } from "./dto/show-manager.dto";
-import errorMessage from "../config/errorMessage";
+import errorMessage from "../../config/errorMessage";
 import { EditManagerReqDto } from "./dto/edit-manager.dto";
-import { getHash } from "../ex/bcryptEx";
+import { getHash } from "../../ex/bcryptEx";
 
 @Injectable()
 export class ManagerService {
@@ -37,7 +37,6 @@ export class ManagerService {
       password_hash: body.password,
     });
 
-    console.log(manager.pk); // 이거 찍힐까?
     try {
       await this.manager.save(manager);
 

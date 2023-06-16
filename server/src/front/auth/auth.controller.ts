@@ -3,10 +3,10 @@ import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "./auth.service";
 import { SignInReqDto, SignInResDto } from "./dto/sign-in.dto";
-import { GetUser } from "../decorator/user.decorator";
-import { CustomRequest, GlobalManager, GlobalUser } from "../type/type";
+import { GetUser } from "../../decorator/user.decorator";
+import { CustomRequest, GlobalUser } from "../../type/type";
 import { SignUpReqDto, SignUpResDto, SnsSignUpReqDto, SnsSignUpResDto } from "./dto/sign-up.dto";
-import { AuthManagerResDto, AuthReqDto, AuthUserResDto } from "./dto/auth.dto";
+import { AuthReqDto, AuthUserResDto } from "./dto/auth.dto";
 import { GoogleTokenVerifyReqDto, GoogleTokenVerifyResDto } from "./dto/google-auth.dto";
 import { SignOutReqDto, SignOutResDto } from "./dto/sign-out.dto";
 import { KakaoCodeVerifyReqDto, KakaoCodeVerifyResDto } from "./dto/kakao-auth.dto";
@@ -25,18 +25,6 @@ export class AuthController {
     return this.authService.signIn(pk, req);
   }
 
-  @UseGuards(AuthGuard("admin-local"))
-  @Post("admin/sign-in")
-  @ApiCreatedResponse({ type: SignInResDto, description: "admin 로그인" })
-  adminSignIn(
-    @GetUser() user: GlobalManager,
-    @Req() req: CustomRequest,
-    @Body() body: SignInReqDto
-  ) {
-    const pk: number = user.pk;
-    return this.authService.adminSignIn(pk, req);
-  }
-
   @Post("/sns-sign-up")
   @ApiCreatedResponse({ type: SnsSignUpResDto, description: "sns 회원가입" })
   async snsSignUp(@Body() body: SnsSignUpReqDto, @Req() req: CustomRequest) {
@@ -47,13 +35,6 @@ export class AuthController {
   @Post("auth")
   @ApiCreatedResponse({ type: AuthUserResDto })
   getUserDataInfo(@Body() body: AuthReqDto, @GetUser() user: GlobalUser) {
-    return user;
-  }
-
-  @UseGuards(AuthGuard("admin-jwt"))
-  @Post("admin/auth")
-  @ApiCreatedResponse({ type: AuthManagerResDto })
-  managerInfo(@Body() body: AuthReqDto, @GetUser() user: GlobalManager) {
     return user;
   }
 
@@ -68,13 +49,6 @@ export class AuthController {
   @ApiCreatedResponse({ type: SignOutResDto, description: "로그아웃" })
   signOut(@Body() body: SignOutReqDto, @GetUser() user: GlobalUser) {
     return this.authService.signOut(user);
-  }
-
-  @UseGuards(AuthGuard("admin-jwt"))
-  @Post("admin/sign-out")
-  @ApiCreatedResponse({ type: SignOutResDto, description: "로그아웃" })
-  managerSignOut(@Body() body: SignOutReqDto, @GetUser() manager: GlobalManager) {
-    return this.authService.managerSignOut(manager);
   }
 
   @Post("/kakao-code-verify")

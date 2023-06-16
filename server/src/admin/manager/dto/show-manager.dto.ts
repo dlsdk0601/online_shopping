@@ -1,7 +1,7 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
 import { IsArray, IsDate, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
-import { PaginationDto } from "../../type/pagination.dto";
-import { ManagerType } from "../../entities/manager.entity";
+import { PaginationDto } from "../../../type/pagination.dto";
+import { ManagerType } from "../../../entities/manager.entity";
 
 export class ShowManagerReqDto {
   @ApiProperty({ description: "pk" })

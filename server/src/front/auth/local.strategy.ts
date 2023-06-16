@@ -3,9 +3,9 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-local";
 import { isNil } from "lodash";
 import { AuthService } from "./auth.service";
-import errorMessage from "../config/errorMessage";
-import { User } from "../entities/user.entity";
-import { compare } from "../ex/bcryptEx";
+import errorMessage from "../../config/errorMessage";
+import { User } from "../../entities/user.entity";
+import { compare } from "../../ex/bcryptEx";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
