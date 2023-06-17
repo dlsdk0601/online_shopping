@@ -14,7 +14,7 @@ import { TokenPayload } from "google-auth-library/build/src/auth/loginticket";
 import moment from "moment";
 import axios from "axios";
 import { GoogleUser } from "src/entities/google-user.entity";
-import { UserService } from "../../user/user.service";
+import { UserService } from "../../admin/user/user.service";
 import { getHash } from "../../ex/bcryptEx";
 import errorMessage from "../../config/errorMessage";
 import { UserType } from "../../type/commonType";

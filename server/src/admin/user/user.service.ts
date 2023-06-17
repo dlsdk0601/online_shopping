@@ -2,14 +2,14 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { InjectRepository } from "@nestjs/typeorm";
 import { Like, Repository } from "typeorm";
 import { isNil } from "lodash";
-import { User } from "../entities/user.entity";
-import { LIMIT } from "../type/pagination.dto";
+import { User } from "../../entities/user.entity";
+import { LIMIT } from "../../type/pagination.dto";
 import { UserListReqDto, UserListResDto } from "./dto/show-user.dto";
-import errorMessage from "../config/errorMessage";
+import errorMessage from "../../config/errorMessage";
 import { EditUserReqDto } from "./dto/edit-user.dto";
-import { LocalUser } from "../entities/local-user.entity";
-import { isNotNil } from "../ex/ex";
-import { UserSearchType, UserType } from "../type/commonType";
+import { LocalUser } from "../../entities/local-user.entity";
+import { isNotNil } from "../../ex/ex";
+import { UserSearchType, UserType } from "../../type/commonType";
 
 @Injectable()
 export class UserService {

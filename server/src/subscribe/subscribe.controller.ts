@@ -1,35 +1,25 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
-import { AuthGuard } from "@nestjs/passport";
 import { SubscribeService } from "./subscribe.service";
-import { AddSubscribeReqDto, AddSubscribeResDto } from "./dto/add-subscribe.dto";
-import { GetUser } from "../decorator/user.decorator";
-import { GlobalUser, ManagerType } from "../type/type";
+import { ManagerType } from "../type/type";
 import { DeleteSubscribeReqDto, DeleteSubscribeResDto } from "./dto/delete-subscribe.dto";
 import { Roles } from "../decorator/roles.decorator";
 import { SubscribeListReqDto, SubscribeListResDto } from "./dto/show-subscribe.dto";
 
-@Controller()
-@ApiTags("subscribe")
+@Controller("admin")
+@ApiTags("admin-subscribe")
 export class SubscribeController {
   constructor(private readonly subscribeService: SubscribeService) {}
 
-  @Post("/add-subscribe")
-  @ApiCreatedResponse({ type: AddSubscribeResDto })
-  @UseGuards(AuthGuard("jwt"))
-  addSubscribe(@Body() body: AddSubscribeReqDto, @GetUser() user: GlobalUser) {
-    return this.subscribeService.create(body, user.pk);
-  }
-
   // TODO :: role 이 안먹힘 확인해서 수정하기
-  @Post("/admin/delete-subscribe")
+  @Post("delete-subscribe")
   @Roles(ManagerType.MANAGER)
   @ApiCreatedResponse({ type: DeleteSubscribeResDto })
   deleteSubscribe(@Body() body: DeleteSubscribeReqDto) {
     return this.subscribeService.delete(body);
   }
 
-  @Post("/admin/subscribe-list")
+  @Post("/subscribe-list")
   @ApiCreatedResponse({ type: SubscribeListResDto })
   subscribeList(@Body() body: SubscribeListReqDto) {
     return this.subscribeService.list(body);

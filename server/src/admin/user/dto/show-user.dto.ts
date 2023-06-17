@@ -10,8 +10,8 @@ import {
   IsPhoneNumber,
   IsString,
 } from "class-validator";
-import { UserSearchType, UserType } from "../../type/commonType";
-import { PaginationDto } from "../../type/pagination.dto";
+import { UserSearchType, UserType } from "../../../type/commonType";
+import { PaginationDto } from "../../../type/pagination.dto";
 
 export class ShowUserReqDto {
   @ApiProperty({ description: "pk", nullable: false, type: "number" })

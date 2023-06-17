@@ -7,8 +7,8 @@ import {
   UserListReqDto,
   UserListResDto,
 } from "./dto/show-user.dto";
-import { Roles } from "../decorator/roles.decorator";
-import { ManagerType } from "../type/type";
+import { Roles } from "../../decorator/roles.decorator";
+import { ManagerType } from "../../type/type";
 import { EditUserReqDto, EditUserResDto } from "./dto/edit-user.dto";
 import { SelectUserReqDto, SelectUserResDto } from "./dto/select-user.dto";
 

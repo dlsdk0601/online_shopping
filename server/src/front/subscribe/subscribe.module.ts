@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { SubscribeService } from "./subscribe.service";
+import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
 import { SubscribeController } from "./subscribe.controller";
-import { Subscribe, SubscribeHistory } from "../entities/subscribe.entity";
+import { SubscribeService } from "./subscribe.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Subscribe, SubscribeHistory])],
   controllers: [SubscribeController],
   providers: [SubscribeService],
 })
-export class AdminSubscribeModule {}
+export class SubscribeModule {}
