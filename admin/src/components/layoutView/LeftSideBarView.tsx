@@ -33,7 +33,7 @@ const menu: MenuItem[] = [
     icon: "fa-paper-plane",
     children: [
       {
-        name: "구독자",
+        name: "신청자",
         url: Urls.subscribe.index.url(),
         pathname: Urls.subscribe.index.pathname,
       },
