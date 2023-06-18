@@ -16,26 +16,22 @@ import {
   validatePk,
 } from "../../../ex/utils";
 import { EditUserReq, EditUserRes, ShowUserRes } from "../../../api/type.g";
-import EditButtonView from "../../../components/tailwindEx/EditButtonView";
 import { vEmail, vPhone } from "../../../ex/validate";
 import { UserType } from "../../../api/enum.g";
 import { Urls } from "../../../url/url.g";
+import { EditButtonView } from "../../../components/tailwindEx/EditButtonView";
 
 const UserShowPage = () => {
   const router = useRouter();
-  const pkObject = validatePk(router.query.pk);
+  const pk = validatePk(router.query.pk);
 
-  if (isNil(pkObject.pk)) {
+  if (isNil(pk)) {
     return <></>;
   }
 
-  const { data: user } = useQuery(
-    [queryKeys.showUser, pkObject],
-    () => api.showUser({ pk: pkObject.pk as Number }),
-    {
-      enabled: router.isReady && isNotNil(pkObject.pk),
-    },
-  );
+  const { data: user } = useQuery([queryKeys.showUser, pk], () => api.showUser({ pk }), {
+    enabled: router.isReady && isNotNil(pk),
+  });
 
   return (
     <div className="w-full px-4">
