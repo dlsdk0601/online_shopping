@@ -122,3 +122,37 @@ export class SubscribeHistoryListResDto extends PaginationDto {
     this.rows = data;
   }
 }
+
+export class ShowSubscribeHistoryReqDto {
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
+  @IsNumber()
+  pk: number;
+}
+
+export class ShowSubscribeHistoryResDto {
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
+  @IsNumber()
+  pk: number;
+
+  @ApiProperty({ description: "제목", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @ApiProperty({ description: " 본문", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
+  body: string;
+
+  @ApiProperty({ description: "발송 시간", nullable: false, type: "string" })
+  @IsDate()
+  @IsNotEmpty()
+  sendAt: Date;
+
+  @ApiProperty({ description: "발송 여부", nullable: false, type: "boolean" })
+  @IsBoolean()
+  @IsNotEmpty()
+  isSend: boolean;
+}
