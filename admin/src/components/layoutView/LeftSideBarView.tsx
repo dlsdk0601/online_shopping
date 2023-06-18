@@ -38,9 +38,9 @@ const menu: MenuItem[] = [
         pathname: Urls.subscribe.index.pathname,
       },
       {
-        name: "구독 메일",
-        url: Urls.subscribe["send-email"].url(),
-        pathname: Urls.subscribe["send-email"].pathname,
+        name: "구독 메일 리스트",
+        url: Urls.subscribe.history.index.url(),
+        pathname: Urls.subscribe.history.index.pathname,
       },
     ],
   },
