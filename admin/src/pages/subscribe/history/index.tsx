@@ -17,6 +17,8 @@ import { Urls } from "../../../url/url.g";
 import { api } from "../../../api/url.g";
 import useIsReady from "../../../hooks/useIsReady";
 import { subscribeHistorySearchTypeEnumToLabel } from "../../../api/enum";
+import { CreateButtonView } from "../../../components/tailwindEx/EditButtonView";
+import { NEWPK } from "../../../lib/contants";
 
 const SubscribeHistoryListPage = () => {
   const router = useRouter();
@@ -80,6 +82,9 @@ const SubscribeHistoryListPage = () => {
             ["발송 일자", d2(value.send_time)],
             ["발송 여부", value.is_send ? "완료" : "미발송"],
           ]}
+        />
+        <CreateButtonView
+          onClick={() => router.push(Urls.subscribe.history.edit["[pk]"].url({ pk: NEWPK }))}
         />
       </div>
     </div>
