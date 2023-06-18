@@ -15,3 +15,8 @@ export enum SubscribeSearchType {
   EMAIL = "EMAIL",
   NAME = "NAME",
 }
+
+export enum SubscribeHistorySearchType {
+  ISSEND = "ISSEND",
+  TITLE = "TITLE",
+}
