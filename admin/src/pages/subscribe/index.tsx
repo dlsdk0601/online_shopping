@@ -8,7 +8,7 @@ import { SubscribeListReq, SubscribeListRes, SubscribeListResSubscribe } from ".
 import { api } from "../../api/url.g";
 import useIsReady from "../../hooks/useIsReady";
 import { SubscribeSearchType } from "../../api/enum.g";
-import { SubscribeSearchTypeEnumToLabel } from "../../api/enum";
+import { subscribeSearchTypeEnumToLabel } from "../../api/enum";
 import SearchBarView from "../../components/table/searchBarView";
 import { PaginationTableView } from "../../components/table/Table";
 import { d2 } from "../../ex/dateEx";
@@ -39,7 +39,7 @@ const SubscribeListPage = () => {
 
     const parsedPage = Number(page ?? 1);
     const parsedSearch = search ?? "";
-    const parsedSearchType = SubscribeSearchTypeEnumToLabel(searchType) ?? null;
+    const parsedSearchType = subscribeSearchTypeEnumToLabel(searchType) ?? null;
     setPage(parsedPage);
     setSearch.set(parsedSearch);
     setSearchType(parsedSearchType);

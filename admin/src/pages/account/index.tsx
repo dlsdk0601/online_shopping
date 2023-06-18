@@ -13,7 +13,7 @@ import useIsReady from "../../hooks/useIsReady";
 import UseValueField from "../../hooks/useValueField";
 import GoogleIcon from "../../components/icons/Google";
 import LocalIcon from "../../components/icons/LocalIcon";
-import { UserSearchTypeEnumToLabel } from "../../api/enum";
+import { userSearchTypeEnumToLabel } from "../../api/enum";
 import { ignorePromise } from "../../ex/utils";
 
 const UserListPage = () => {
@@ -58,11 +58,11 @@ const UserListPage = () => {
 
     setPage(Number(page ?? 1));
     setSearch.set(search ?? "");
-    setSearchType(UserSearchTypeEnumToLabel(searchType) ?? null);
+    setSearchType(userSearchTypeEnumToLabel(searchType) ?? null);
     mutate({
       page: Number(page ?? 1),
       search: search ?? "",
-      searchType: UserSearchTypeEnumToLabel(searchType) ?? null,
+      searchType: userSearchTypeEnumToLabel(searchType) ?? null,
     });
   });
 
