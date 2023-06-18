@@ -1,6 +1,6 @@
-import { SubscribeSearchType, UserSearchType } from "./enum.g";
+import { SubscribeHistorySearchType, SubscribeSearchType, UserSearchType } from "./enum.g";
 
-export const UserSearchTypeEnumToLabel = (type: string | undefined): UserSearchType | undefined => {
+export const userSearchTypeEnumToLabel = (type: string | undefined): UserSearchType | undefined => {
   switch (type) {
     case "NAME":
       return UserSearchType.NAME;
@@ -10,7 +10,7 @@ export const UserSearchTypeEnumToLabel = (type: string | undefined): UserSearchT
   }
 };
 
-export const SubscribeSearchTypeEnumToLabel = (
+export const subscribeSearchTypeEnumToLabel = (
   type: string | undefined,
 ): SubscribeSearchType | undefined => {
   switch (type) {
@@ -18,6 +18,18 @@ export const SubscribeSearchTypeEnumToLabel = (
       return SubscribeSearchType.NAME;
     case "EMAIL":
       return SubscribeSearchType.EMAIL;
+    default:
+  }
+};
+
+export const subscribeHistorySearchTypeEnumToLabel = (
+  type: string | undefined,
+): SubscribeHistorySearchType | undefined => {
+  switch (type) {
+    case "TITLE":
+      return SubscribeHistorySearchType.TITLE;
+    case "ISSEND":
+      return SubscribeHistorySearchType.ISSEND;
     default:
   }
 };
