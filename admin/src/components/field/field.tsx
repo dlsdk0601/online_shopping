@@ -109,7 +109,7 @@ export function SelectBoxView<T>(props: {
   value: T;
   options: [T, string][];
   onChange: (value: T) => void;
-  readonly?: boolean;
+  disabled?: boolean;
   className?: string;
 }) {
   return (
@@ -131,7 +131,7 @@ export function SelectBoxView<T>(props: {
             }
           }
         }}
-        disabled={props.readonly ?? false}
+        disabled={props.disabled ?? false}
       >
         {props.options.map(([value, label], index) => {
           return (
