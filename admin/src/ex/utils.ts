@@ -130,25 +130,22 @@ export function phoneOnlyNumber(phone: string | null) {
   return newPhone.replaceAll("-", "");
 }
 
-export function validatePk(pk: string | string[] | undefined): {
-  isValid: boolean;
-  pk: number | null;
-} {
+export function validatePk(pk: string | string[] | undefined): number | null {
   if (isNil(pk) || isArray(pk)) {
-    return { isValid: false, pk: null };
+    return null;
   }
 
   if (pk === NEWPK) {
-    return { isValid: true, pk: null };
+    return null;
   }
 
   const numberPk = Number(pk);
 
   if (isNaN(numberPk)) {
-    return { isValid: false, pk: null };
+    return null;
   }
 
-  return { isValid: true, pk: numberPk };
+  return numberPk;
 }
 
 export function editAlert(isNew: boolean) {
