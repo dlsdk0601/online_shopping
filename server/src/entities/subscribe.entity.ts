@@ -31,4 +31,10 @@ export class SubscribeHistory extends TimeSet {
 
   @Column({ type: "text", nullable: false, comment: "메일 본문" })
   body: string;
+
+  @Column({ type: "date", nullable: false, comment: "발송 시간" })
+  send_time: Date;
+
+  @Column({ type: "boolean", nullable: false, comment: "발송 완료 여부", default: false })
+  is_send: boolean;
 }
