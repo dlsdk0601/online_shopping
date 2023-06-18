@@ -1,10 +1,15 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
-import { Subscribe } from "../entities/subscribe.entity";
-import errorMessage from "../config/errorMessage";
+import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
+import errorMessage from "../../config/errorMessage";
 import { DeleteSubscribeReqDto } from "./dto/delete-subscribe.dto";
-import { SubscribeListReqDto, SubscribeListResDto } from "./dto/show-subscribe.dto";
-import { LIMIT } from "../type/pagination.dto";
+import {
+  SubscribeHistoryListReqDto,
+  SubscribeHistoryListResDto,
+  SubscribeListReqDto,
+  SubscribeListResDto,
+} from "./dto/show-subscribe.dto";
+import { LIMIT } from "../../type/pagination.dto";
 
 @Injectable()
 export class SubscribeService {
@@ -46,5 +51,25 @@ export class SubscribeService {
     }
 
     return new SubscribeListResDto(subscribes, count, body.page);
+  }
+
+  async historyList(body: SubscribeHistoryListReqDto) {
+    // TODO :: 검색
+    const [histories, count] = await SubscribeHistory.findAndCount({
+      take: LIMIT,
+      skip: LIMIT * (body.page - 1),
+      select: {
+        pk: true,
+        title: true,
+        send_time: true,
+        is_send: true,
+      },
+    });
+
+    if (isNil(histories)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    return new SubscribeHistoryListResDto(histories, count, body.page);
   }
 }
