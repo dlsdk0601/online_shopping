@@ -1,8 +1,9 @@
 export const queryKeys = {
   manager: "manager",
   token: "token",
-  showUser: "show-user",
+  showUser: "edit-user",
   userList: "userList",
+  subscribe: "subscribe",
 };
 
 export const CONSTANT = {
