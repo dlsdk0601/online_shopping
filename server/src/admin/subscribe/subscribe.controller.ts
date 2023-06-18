@@ -5,6 +5,8 @@ import { ManagerType } from "../../type/type";
 import { DeleteSubscribeReqDto, DeleteSubscribeResDto } from "./dto/delete-subscribe.dto";
 import { Roles } from "../../decorator/roles.decorator";
 import {
+  ShowSubscribeHistoryReqDto,
+  ShowSubscribeHistoryResDto,
   SubscribeHistoryListReqDto,
   SubscribeHistoryListResDto,
   SubscribeListReqDto,
@@ -34,5 +36,11 @@ export class SubscribeController {
   @ApiCreatedResponse({ type: SubscribeHistoryListResDto })
   subscribeHistoryList(@Body() body: SubscribeHistoryListReqDto) {
     return this.subscribeService.historyList(body);
+  }
+
+  @Post("/show-subscribe-history")
+  @ApiCreatedResponse({ type: ShowSubscribeHistoryResDto })
+  subscribeHistoryShow(@Body() body: ShowSubscribeHistoryReqDto) {
+    return this.subscribeService.historyShow(body);
   }
 }

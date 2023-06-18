@@ -4,6 +4,7 @@ import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
 import errorMessage from "../../config/errorMessage";
 import { DeleteSubscribeReqDto } from "./dto/delete-subscribe.dto";
 import {
+  ShowSubscribeHistoryReqDto,
   SubscribeHistoryListReqDto,
   SubscribeHistoryListResDto,
   SubscribeListReqDto,
@@ -71,5 +72,23 @@ export class SubscribeService {
     }
 
     return new SubscribeHistoryListResDto(histories, count, body.page);
+  }
+
+  async historyShow(body: ShowSubscribeHistoryReqDto) {
+    const history = await SubscribeHistory.findOne({ where: { pk: body.pk } });
+
+    if (isNil(history)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    return {
+      pk: history.pk,
+      title: history.title,
+      body: history.body,
+      isSend: history.is_send,
+      sendAt: history.send_time,
+      createAt: history.create_at,
+      updateAt: history.update_at,
+    };
   }
 }
