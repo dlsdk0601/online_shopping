@@ -1,10 +1,15 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { SubscribeService } from "./subscribe.service";
-import { ManagerType } from "../type/type";
+import { ManagerType } from "../../type/type";
 import { DeleteSubscribeReqDto, DeleteSubscribeResDto } from "./dto/delete-subscribe.dto";
-import { Roles } from "../decorator/roles.decorator";
-import { SubscribeListReqDto, SubscribeListResDto } from "./dto/show-subscribe.dto";
+import { Roles } from "../../decorator/roles.decorator";
+import {
+  SubscribeHistoryListReqDto,
+  SubscribeHistoryListResDto,
+  SubscribeListReqDto,
+  SubscribeListResDto,
+} from "./dto/show-subscribe.dto";
 
 @Controller("admin")
 @ApiTags("admin-subscribe")
@@ -23,5 +28,11 @@ export class SubscribeController {
   @ApiCreatedResponse({ type: SubscribeListResDto })
   subscribeList(@Body() body: SubscribeListReqDto) {
     return this.subscribeService.list(body);
+  }
+
+  @Post("/subscribe-history-list")
+  @ApiCreatedResponse({ type: SubscribeHistoryListResDto })
+  subscribeHistoryList(@Body() body: SubscribeHistoryListReqDto) {
+    return this.subscribeService.historyList(body);
   }
 }
