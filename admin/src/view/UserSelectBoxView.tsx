@@ -7,6 +7,7 @@ import { api } from "../api/url.g";
 const UserSelectBoxView = (props: {
   userList: [number | null, string][];
   onChange: (value: null | [number | null, string]) => void;
+  disabled?: boolean;
 }) => {
   const [selectBox, setSelectBox] = useValueField<number | null>(null, "유저");
   const [options, setOptions] = useState<[number | null, string][]>([]);
@@ -41,6 +42,7 @@ const UserSelectBoxView = (props: {
         props.onChange(option);
       }}
       options={options}
+      disabled={props.disabled}
     />
   );
 };
