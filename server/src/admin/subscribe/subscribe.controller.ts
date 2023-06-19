@@ -13,6 +13,10 @@ import {
   SubscribeListResDto,
 } from "./dto/show-subscribe.dto";
 import { SelectSubscribeReqDto, SelectSubscribeResDto } from "./dto/select-subscribe.dto";
+import {
+  AddSubscribeHistoryReqDto,
+  AddSubscribeHistoryResDto,
+} from "./dto/add-subscribe-history.dto";
 
 @Controller("admin")
 @ApiTags("admin-subscribe")
@@ -48,5 +52,11 @@ export class SubscribeController {
   @ApiCreatedResponse({ type: SelectSubscribeResDto })
   async selectSubscribe(@Body() body: SelectSubscribeReqDto) {
     return this.subscribeService.selectSubscribes();
+  }
+
+  @Post("add-subscribe-history")
+  @ApiCreatedResponse({ type: AddSubscribeHistoryResDto })
+  async addSubscribeHistory(@Body() body: AddSubscribeHistoryReqDto) {
+    return this.subscribeService.addSubscribeHistory(body);
   }
 }

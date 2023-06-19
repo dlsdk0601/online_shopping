@@ -13,6 +13,8 @@ import {
 } from "./dto/show-subscribe.dto";
 import { LIMIT } from "../../type/pagination.dto";
 import { SubscribeSearchType } from "../../type/commonType";
+import { AddSubscribeHistoryReqDto } from "./dto/add-subscribe-history.dto";
+import { isNotNil } from "../../ex/ex";
 
 @Injectable()
 export class SubscribeService {
@@ -110,5 +112,39 @@ export class SubscribeService {
     const subscribes = await Subscribe.find();
 
     return { list: subscribes.map((item) => [item.user_pk, item.name]) };
+  }
+
+  async addSubscribeHistory(body: AddSubscribeHistoryReqDto) {
+    let subscribeHistory: SubscribeHistory | null = new SubscribeHistory();
+
+    if (isNotNil(body.pk)) {
+      subscribeHistory = await SubscribeHistory.findOne({
+        where: {
+          pk: body.pk,
+          is_send: false,
+        },
+      });
+    }
+
+    if (isNil(subscribeHistory)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    try {
+      subscribeHistory.title = body.title;
+      subscribeHistory.body = body.body;
+      subscribeHistory.send_time = body.sendDate;
+      subscribeHistory.is_send = false;
+      await subscribeHistory.save();
+
+      // TODO :: 세컨더리 테이블 넣기
+      // await SubscribeHistoryUser.insert(
+      //   body.users.map((userPk) => ({ user_pk: userPk, history_pk: subscribeHistory.pk }))
+      // );
+
+      return { pk: subscribeHistory.pk };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
   }
 }
