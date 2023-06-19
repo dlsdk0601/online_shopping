@@ -5,6 +5,7 @@ import Link from "next/link";
 import { isNil } from "lodash";
 import Router, { useRouter } from "next/router";
 import { Pagination } from "../../api/schema";
+import { isNotNil } from "../../ex/utils";
 
 type TableViewRowItem = [string, ReactNode];
 type TableViewRow = TableViewRowItem[];
@@ -31,7 +32,9 @@ export function TableView(props: { rows: TableViewRow[]; links?: UrlObject[] }) 
         {props.rows.map((row, rowIndex) => (
           <tr
             key={rowIndex}
-            className="cursor-pointer border-b text-center hover:bg-blueGray-200"
+            className={classNames("border-b text-center hover:bg-blueGray-200", {
+              "cursor-pointer": isNotNil(props.links),
+            })}
             onClick={() => {
               if (isNil(props.links) || isNil(props.links[rowIndex])) {
                 return;
