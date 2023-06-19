@@ -23,7 +23,6 @@ export default class TypeOrmSeeder implements Seeder {
     return Promise.all([
       this.onAddManager(faker, dataSource),
       this.onAddUser(faker, dataSource),
-      this.onAddSubscribe(faker, dataSource),
     ]).then(() => console.log("success"));
   }
 
@@ -107,11 +106,18 @@ export default class TypeOrmSeeder implements Seeder {
 
     for (let i = 0; i < 120; i++) {
       const user = new User();
+      const subscribe = new Subscribe();
+
       user.name = faker.name.fullName();
       user.phone = this.makeFakerPhone(faker);
       user.type = UserType.LOCAL;
       // eslint-disable-next-line no-await-in-loop
       const savedUser = await userRepository.save(user);
+      subscribe.user = savedUser;
+      subscribe.email = faker.internet.email();
+      subscribe.name = faker.name.fullName();
+      // eslint-disable-next-line no-await-in-loop
+      await subscribe.save();
 
       // eslint-disable-next-line no-await-in-loop
       const password_hash = await getHash(this.randomPassword(faker));
