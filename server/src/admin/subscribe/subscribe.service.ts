@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
+import { Like } from "typeorm";
 import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
 import errorMessage from "../../config/errorMessage";
 import { DeleteSubscribeReqDto } from "./dto/delete-subscribe.dto";
@@ -11,6 +12,7 @@ import {
   SubscribeListResDto,
 } from "./dto/show-subscribe.dto";
 import { LIMIT } from "../../type/pagination.dto";
+import { SubscribeSearchType } from "../../type/commonType";
 
 @Injectable()
 export class SubscribeService {
@@ -36,6 +38,17 @@ export class SubscribeService {
   }
 
   async list(body: SubscribeListReqDto) {
+    let searchOption = {};
+
+    if (isNil(body.searchType)) {
+      searchOption = [{ name: Like(`%${body.search}%`) }, { email: Like(`%${body.search}%`) }];
+    } else {
+      searchOption = {
+        name: body.searchType === SubscribeSearchType.NAME ? Like(`%${body.search}%`) : undefined,
+        email: body.searchType === SubscribeSearchType.EMAIL ? Like(`%${body.search}%`) : undefined,
+      };
+    }
+
     const [subscribes, count] = await Subscribe.findAndCount({
       take: LIMIT,
       skip: LIMIT * (body.page - 1),
@@ -45,6 +58,7 @@ export class SubscribeService {
         email: true,
         create_at: true,
       },
+      where: searchOption,
     });
 
     if (isNil(subscribes)) {
