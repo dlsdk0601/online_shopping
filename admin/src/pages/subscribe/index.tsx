@@ -12,6 +12,7 @@ import { subscribeSearchTypeEnumToLabel } from "../../api/enum";
 import SearchBarView from "../../components/table/searchBarView";
 import { PaginationTableView } from "../../components/table/Table";
 import { d2 } from "../../ex/dateEx";
+import { Urls } from "../../url/url.g";
 
 const SubscribeListPage = () => {
   const router = useRouter();
@@ -53,8 +54,8 @@ const SubscribeListPage = () => {
       searchType,
     };
 
-    ignorePromise(() => router.push({ pathname: router.pathname, query }));
-  }, [page, search]);
+    ignorePromise(() => router.push(Urls.subscribe.index.url(query)));
+  }, [page, search, searchType]);
 
   return (
     <div className="mt-4">
