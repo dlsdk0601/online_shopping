@@ -53,11 +53,11 @@ export class SubscribeHistoryUser extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: "pk" })
   pk: number;
 
-  @ManyToOne(() => SubscribeHistory, { onDelete: "CASCADE" })
+  @OneToOne(() => SubscribeHistory, { onDelete: "CASCADE" })
   @JoinColumn({ name: "history_pk", referencedColumnName: "pk" })
   histories: SubscribeHistory[];
 
-  @OneToOne(() => User, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
-  user: User;
+  user: User[];
 }
