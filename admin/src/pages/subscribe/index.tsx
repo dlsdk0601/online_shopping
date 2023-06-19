@@ -4,7 +4,12 @@ import { useMutation } from "react-query";
 import { isArray, isNil } from "lodash";
 import UseValueField from "../../hooks/useValueField";
 import { ignorePromise } from "../../ex/utils";
-import { SubscribeListReq, SubscribeListRes, SubscribeListResSubscribe } from "../../api/type.g";
+import {
+  DeleteSubscribeReq,
+  SubscribeListReq,
+  SubscribeListRes,
+  SubscribeListResSubscribe,
+} from "../../api/type.g";
 import { api } from "../../api/url.g";
 import useIsReady from "../../hooks/useIsReady";
 import { SubscribeSearchType } from "../../api/enum.g";
@@ -21,7 +26,7 @@ const SubscribeListPage = () => {
   const [searchType, setSearchType] = useState<SubscribeSearchType | null>(null);
   const [subscribeList, setSubscribeList] = useState<SubscribeListRes | null>(null);
 
-  const { mutate } = useMutation((req: SubscribeListReq) => api.subscribeList(req), {
+  const { mutate: onEditApi } = useMutation((req: SubscribeListReq) => api.subscribeList(req), {
     onSuccess: (res) => {
       if (isNil(res)) {
         return;
@@ -30,6 +35,15 @@ const SubscribeListPage = () => {
       setSubscribeList({ ...res });
     },
   });
+
+  const { mutate: onDeleteApi } = useMutation(
+    (req: DeleteSubscribeReq) => api.deleteSubscribe(req),
+    {
+      onSuccess: () => {
+        router.reload();
+      },
+    },
+  );
 
   useIsReady(() => {
     const { page, search, searchType } = router.query;
@@ -44,7 +58,7 @@ const SubscribeListPage = () => {
     setPage(parsedPage);
     setSearch.set(parsedSearch);
     setSearchType(parsedSearchType);
-    mutate({ page: parsedPage, search: parsedSearch, searchType: parsedSearchType });
+    onEditApi({ page: parsedPage, search: parsedSearch, searchType: parsedSearchType });
   });
 
   const onSearch = useCallback(() => {
@@ -56,6 +70,14 @@ const SubscribeListPage = () => {
 
     ignorePromise(() => router.push(Urls.subscribe.index.url(query)));
   }, [page, search, searchType]);
+
+  const onDelete = useCallback(async (pk: number) => {
+    if (!confirm("삭제 하시겠습니까?")) {
+      return;
+    }
+
+    onDeleteApi({ pk });
+  }, []);
 
   return (
     <div className="mt-4">
@@ -79,6 +101,16 @@ const SubscribeListPage = () => {
             ["이름", value.name],
             ["이메일", value.email],
             ["신청 일자", d2(value.create_at)],
+            [
+              "삭제",
+              <button
+                type="button"
+                className="rounded-lg border border-red-700 px-2.5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white"
+                onClick={() => onDelete(value.pk)}
+              >
+                삭제
+              </button>,
+            ],
           ]}
         />
       </div>
