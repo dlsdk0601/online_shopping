@@ -12,13 +12,13 @@ import {
   SubscribeListReqDto,
   SubscribeListResDto,
 } from "./dto/show-subscribe.dto";
+import { SelectSubscribeReqDto, SelectSubscribeResDto } from "./dto/select-subscribe.dto";
 
 @Controller("admin")
 @ApiTags("admin-subscribe")
 export class SubscribeController {
   constructor(private readonly subscribeService: SubscribeService) {}
 
-  // TODO :: role 이 안먹힘 확인해서 수정하기
   @Post("delete-subscribe")
   @Roles(ManagerType.MANAGER)
   @ApiCreatedResponse({ type: DeleteSubscribeResDto })
@@ -42,5 +42,11 @@ export class SubscribeController {
   @ApiCreatedResponse({ type: ShowSubscribeHistoryResDto })
   subscribeHistoryShow(@Body() body: ShowSubscribeHistoryReqDto) {
     return this.subscribeService.historyShow(body);
+  }
+
+  @Post("select-subscribe")
+  @ApiCreatedResponse({ type: SelectSubscribeResDto })
+  async selectSubscribe(@Body() body: SelectSubscribeReqDto) {
+    return this.subscribeService.selectSubscribes();
   }
 }

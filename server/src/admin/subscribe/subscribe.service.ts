@@ -105,4 +105,10 @@ export class SubscribeService {
       updateAt: history.update_at,
     };
   }
+
+  async selectSubscribes() {
+    const subscribes = await Subscribe.find();
+
+    return { list: subscribes.map((item) => [item.user_pk, item.name]) };
+  }
 }
