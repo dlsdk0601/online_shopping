@@ -127,10 +127,6 @@ export class UserService {
     }
   }
 
-  async findById(id: string) {
-    return LocalUser.findOneBy({ id });
-  }
-
   async selectUser() {
     const users = await User.find();
 
