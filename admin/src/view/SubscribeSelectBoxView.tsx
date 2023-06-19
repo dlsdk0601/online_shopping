@@ -4,7 +4,7 @@ import useValueField from "../hooks/useValueField";
 import { SelectBoxView } from "../components/field/field";
 import { api } from "../api/url.g";
 
-const UserSelectBoxView = (props: {
+const SubscribeSelectBoxView = (props: {
   userList: [number | null, string][];
   onChange: (value: null | [number | null, string]) => void;
   disabled?: boolean;
@@ -13,7 +13,7 @@ const UserSelectBoxView = (props: {
   const [options, setOptions] = useState<[number | null, string][]>([]);
 
   useEffect(() => {
-    api.selectUser({}).then((res) => {
+    api.selectSubscribe({}).then((res) => {
       if (isNil(res)) {
         return;
       }
@@ -47,4 +47,4 @@ const UserSelectBoxView = (props: {
   );
 };
 
-export default UserSelectBoxView;
+export default SubscribeSelectBoxView;
