@@ -10,7 +10,7 @@ import useValueField from "../../../../hooks/useValueField";
 import { TextFieldView } from "../../../../components/field/field";
 import DatePickerView from "../../../../view/DatePickerView";
 import UserBadgeView from "../../../../view/UserBadgeView";
-import UserSelectBoxView from "../../../../view/UserSelectBoxView";
+import SubscribeSelectBoxView from "../../../../view/SubscribeSelectBoxView";
 import { isNotNil, validatePk } from "../../../../ex/utils";
 import { queryKeys } from "../../../../lib/contants";
 import { api } from "../../../../api/url.g";
@@ -70,7 +70,7 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
         disabled={isSend.value}
       />
       <EditorEx value={body.value} onChange={(value) => setBody.set(value)} />
-      <UserSelectBoxView
+      <SubscribeSelectBoxView
         userList={userList}
         onChange={(value) => {
           // 전체 선택
