@@ -1,7 +1,12 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from "@nestjs/common";
 import { isNil } from "lodash";
 import { Like } from "typeorm";
-import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
+import { Subscribe, SubscribeHistory, SubscribeHistoryUser } from "../../entities/subscribe.entity";
 import errorMessage from "../../config/errorMessage";
 import { DeleteSubscribeReqDto } from "./dto/delete-subscribe.dto";
 import {
@@ -15,6 +20,7 @@ import { LIMIT } from "../../type/pagination.dto";
 import { SubscribeSearchType } from "../../type/commonType";
 import { AddSubscribeHistoryReqDto } from "./dto/add-subscribe-history.dto";
 import { isNotNil } from "../../ex/ex";
+import { User } from "../../entities/user.entity";
 
 @Injectable()
 export class SubscribeService {
@@ -130,17 +136,33 @@ export class SubscribeService {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
     }
 
+    Logger.log("여기는 찍히지");
     try {
+      Logger.log("요기");
       subscribeHistory.title = body.title;
       subscribeHistory.body = body.body;
       subscribeHistory.send_time = body.sendDate;
       subscribeHistory.is_send = false;
+
+      const historyUser = new SubscribeHistoryUser();
+      const users: User[] = [];
+      Logger.log("요기1");
+      body.users.forEach((userPk) => {
+        User.findOne({ where: { pk: userPk } }).then((user) => {
+          if (isNil(user)) {
+            return;
+          }
+          users.push(user);
+        });
+      });
+
+      Logger.log("요기2");
       await subscribeHistory.save();
 
-      // TODO :: 세컨더리 테이블 넣기
-      // await SubscribeHistoryUser.insert(
-      //   body.users.map((userPk) => ({ user_pk: userPk, history_pk: subscribeHistory.pk }))
-      // );
+      historyUser.users = users;
+      historyUser.history = subscribeHistory;
+      await historyUser.save();
+      Logger.log("요기3");
 
       return { pk: subscribeHistory.pk };
     } catch (e) {
