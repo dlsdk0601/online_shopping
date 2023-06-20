@@ -45,6 +45,9 @@ export class SubscribeHistory extends TimeSet {
 
   @Column({ type: "boolean", nullable: false, comment: "발송 완료 여부", default: false })
   is_send: boolean;
+
+  // @OneToOne(() => SubscribeHistoryUser, (history) => history.user)
+  // users: User[];
 }
 
 // history X user secondary
@@ -55,9 +58,9 @@ export class SubscribeHistoryUser extends BaseEntity {
 
   @OneToOne(() => SubscribeHistory, { onDelete: "CASCADE" })
   @JoinColumn({ name: "history_pk", referencedColumnName: "pk" })
-  histories: SubscribeHistory[];
+  history: SubscribeHistory;
 
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
-  user: User[];
+  users: User[];
 }
