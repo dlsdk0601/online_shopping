@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Moment } from "moment";
 import classNames from "classnames";
 import { isNil } from "lodash";
-import { dateFormatter } from "../../ex/utils";
+import { dateFormatter, isBlank } from "../../ex/utils";
 import { ValueField } from "../../ex/field";
 import { UserType } from "../../api/enum.g";
 
@@ -22,16 +22,21 @@ export const TextFieldView = (props: {
       <input
         type="text"
         className={classNames(
-          "w-full rounded border-0 px-3 py-3 text-sm text-blueGray-600 placeholder-blueGray-300 shadow transition-all duration-150 ease-linear focus:outline-none focus:ring lg:w-10/12",
+          "w-full rounded px-3 py-3 text-sm text-blueGray-600 placeholder-blueGray-300 shadow transition-all duration-150 ease-linear focus:outline-none focus:ring lg:w-10/12",
           {
             "bg-white": !props.disabled,
             "bg-gray-100": props.disabled,
+            "border-red-500": !isBlank(props.value.error),
+            "border-0": isBlank(props.value.error),
           },
         )}
         value={props.value.value}
         onChange={(e) => props.onChange(e.target.value)}
         disabled={props.disabled}
       />
+      {!isBlank(props.value.error) && (
+        <p className="mt-1 text-xs text-red-500">{props.value.error}</p>
+      )}
     </div>
   );
 };
