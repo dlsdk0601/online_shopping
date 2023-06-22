@@ -1,12 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import TimeSet from "./timeSet.entity";
 import { User } from "./user.entity";
 
@@ -45,22 +37,4 @@ export class SubscribeHistory extends TimeSet {
 
   @Column({ type: "boolean", nullable: false, comment: "발송 완료 여부", default: false })
   is_send: boolean;
-
-  // @OneToOne(() => SubscribeHistoryUser, (history) => history.user)
-  // users: User[];
-}
-
-// history X user secondary
-@Entity("subscribe_history_user")
-export class SubscribeHistoryUser extends BaseEntity {
-  @PrimaryGeneratedColumn({ comment: "pk" })
-  pk: number;
-
-  @OneToOne(() => SubscribeHistory, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "history_pk", referencedColumnName: "pk" })
-  history: SubscribeHistory;
-
-  @ManyToOne(() => User, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
-  users: User[];
 }
