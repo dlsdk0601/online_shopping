@@ -1,12 +1,7 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
-import { Like } from "typeorm";
-import { Subscribe, SubscribeHistory, SubscribeHistoryUser } from "../../entities/subscribe.entity";
+import { In, Like } from "typeorm";
+import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
 import errorMessage from "../../config/errorMessage";
 import { DeleteSubscribeReqDto } from "./dto/delete-subscribe.dto";
 import {
@@ -136,33 +131,21 @@ export class SubscribeService {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
     }
 
-    Logger.log("여기는 찍히지");
     try {
-      Logger.log("요기");
       subscribeHistory.title = body.title;
       subscribeHistory.body = body.body;
       subscribeHistory.send_time = body.sendDate;
       subscribeHistory.is_send = false;
 
-      const historyUser = new SubscribeHistoryUser();
-      const users: User[] = [];
-      Logger.log("요기1");
-      body.users.forEach((userPk) => {
-        User.findOne({ where: { pk: userPk } }).then((user) => {
-          if (isNil(user)) {
-            return;
-          }
-          users.push(user);
-        });
-      });
+      let users: User[];
+      if (isNil(body.users)) {
+        users = await User.find();
+      } else {
+        users = await User.find({ where: { pk: In(body.users) } });
+      }
 
-      Logger.log("요기2");
+      // subscribeHistory.users = users;
       await subscribeHistory.save();
-
-      historyUser.users = users;
-      historyUser.history = subscribeHistory;
-      await historyUser.save();
-      Logger.log("요기3");
 
       return { pk: subscribeHistory.pk };
     } catch (e) {
