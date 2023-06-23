@@ -144,7 +144,7 @@ export class SubscribeService {
         users = await User.find({ where: { pk: In(body.users) } });
       }
 
-      // subscribeHistory.users = users;
+      subscribeHistory.users = users;
       await subscribeHistory.save();
 
       return { pk: subscribeHistory.pk };
