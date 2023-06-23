@@ -5,6 +5,7 @@ import {
   IsDate,
   IsEmail,
   IsEnum,
+  IsISO8601,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -146,8 +147,8 @@ export class ShowSubscribeHistoryResDto {
   @IsNotEmpty()
   body: string;
 
-  @ApiProperty({ description: "발송 시간", nullable: false, type: "string" })
-  @IsDate()
+  @ApiProperty({ description: "발송 시간", nullable: false, type: "string", format: "date-time" })
+  @IsISO8601({ strict: true })
   @IsNotEmpty()
   sendAt: Date;
 
