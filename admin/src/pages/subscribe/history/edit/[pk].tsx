@@ -11,7 +11,7 @@ import { TextFieldView } from "../../../../components/field/field";
 import DatePickerView from "../../../../view/DatePickerView";
 import UserBadgeView from "../../../../view/UserBadgeView";
 import SubscribeSelectBoxView from "../../../../view/SubscribeSelectBoxView";
-import { ignorePromise, isNotNil, validatePk } from "../../../../ex/utils";
+import { editAlert, ignorePromise, isNotNil, validatePk } from "../../../../ex/utils";
 import { queryKeys } from "../../../../lib/contants";
 import { api } from "../../../../api/url.g";
 import { AddSubscribeHistoryReq, ShowSubscribeHistoryRes } from "../../../../api/type.g";
@@ -57,6 +57,7 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
           return;
         }
 
+        editAlert(isNil(props.res));
         ignorePromise(() =>
           router.replace(Urls.subscribe.history.edit["[pk]"].url({ pk: res.pk })),
         );
@@ -73,7 +74,7 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
     setBody.set(props.res.body);
     setIsSend.set(props.res.isSend);
     setSendDate.set(moment(props.res.sendAt));
-  }, []);
+  }, [props.res]);
 
   const onEdit = useCallback(() => {
     if (setTitle.validate() || setSendDate.validate() || setBody.validate()) {
