@@ -1,4 +1,12 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import TimeSet from "./timeSet.entity";
 import { User } from "./user.entity";
 
@@ -37,4 +45,8 @@ export class SubscribeHistory extends TimeSet {
 
   @Column({ type: "boolean", nullable: false, comment: "발송 완료 여부", default: false })
   is_send: boolean;
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  users: User[];
 }
