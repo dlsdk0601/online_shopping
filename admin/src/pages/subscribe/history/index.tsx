@@ -82,6 +82,9 @@ const SubscribeHistoryListPage = () => {
             ["발송 일자", d2(value.send_time)],
             ["발송 여부", value.is_send ? "완료" : "미발송"],
           ]}
+          links={(historyList?.rows ?? []).map((history) =>
+            Urls.subscribe.history.edit["[pk]"].url({ pk: history.pk }),
+          )}
         />
         <CreateButtonView
           onClick={() => router.push(Urls.subscribe.history.edit["[pk]"].url({ pk: NEWPK }))}
