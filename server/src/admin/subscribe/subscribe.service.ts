@@ -16,6 +16,7 @@ import { SubscribeSearchType } from "../../type/commonType";
 import { AddSubscribeHistoryReqDto } from "./dto/add-subscribe-history.dto";
 import { isNotNil } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
+import { DeleteSubscribeHistoryReqDto } from "./dto/delete-subscribe-history.dto";
 
 @Injectable()
 export class SubscribeService {
@@ -148,6 +149,22 @@ export class SubscribeService {
       await subscribeHistory.save();
 
       return { pk: subscribeHistory.pk };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
+
+  async deleteSubscribeHistory(body: DeleteSubscribeHistoryReqDto) {
+    const history = await SubscribeHistory.findOne({ where: { pk: body.pk } });
+
+    if (isNil(history)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    try {
+      history.users = []; // secondary 테이블에 데이터 모두 지운다.
+      await history.softRemove();
+      return { pk: history.pk };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }

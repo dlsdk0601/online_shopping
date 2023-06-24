@@ -17,6 +17,10 @@ import {
   AddSubscribeHistoryReqDto,
   AddSubscribeHistoryResDto,
 } from "./dto/add-subscribe-history.dto";
+import {
+  DeleteSubscribeHistoryReqDto,
+  DeleteSubscribeHistoryResDto,
+} from "./dto/delete-subscribe-history.dto";
 
 @Controller("admin")
 @ApiTags("admin-subscribe")
@@ -58,5 +62,11 @@ export class SubscribeController {
   @ApiCreatedResponse({ type: AddSubscribeHistoryResDto })
   async addSubscribeHistory(@Body() body: AddSubscribeHistoryReqDto) {
     return this.subscribeService.addSubscribeHistory(body);
+  }
+
+  @Post("delete-subscribe-history")
+  @ApiCreatedResponse({ type: DeleteSubscribeHistoryResDto })
+  async deleteSubscribeHistory(@Body() body: DeleteSubscribeHistoryReqDto) {
+    return this.subscribeService.deleteSubscribeHistory(body);
   }
 }
