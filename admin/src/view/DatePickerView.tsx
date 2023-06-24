@@ -43,6 +43,7 @@ const DatePickerView = (props: {
           props.onChange(m);
         }}
         disabled={props.disabled}
+        minDate={new Date()}
       />
       {!isBlank(props.field.error) && (
         <p className="mt-1 text-xs text-red-500">{props.field.error}</p>
