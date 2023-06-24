@@ -14,7 +14,11 @@ import SubscribeSelectBoxView from "../../../../view/SubscribeSelectBoxView";
 import { editAlert, ignorePromise, isNotNil, validatePk } from "../../../../ex/utils";
 import { queryKeys } from "../../../../lib/contants";
 import { api } from "../../../../api/url.g";
-import { AddSubscribeHistoryReq, ShowSubscribeHistoryRes } from "../../../../api/type.g";
+import {
+  AddSubscribeHistoryReq,
+  DeleteSubscribeHistoryReq,
+  ShowSubscribeHistoryRes,
+} from "../../../../api/type.g";
 import { EditButtonView } from "../../../../components/tailwindEx/EditButtonView";
 import { Urls } from "../../../../url/url.g";
 
@@ -31,6 +35,11 @@ const SendEmailEditPage = () => {
     () => api.showSubscribeHistory({ pk }),
     {
       enabled: router.isReady && isNotNil(pk),
+      onSuccess: (res) => {
+        if (isNil(res)) {
+          ignorePromise(() => router.replace(Urls.subscribe.history.index.url()));
+        }
+      },
     },
   );
 
@@ -65,6 +74,19 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
     },
   );
 
+  const { mutate: onDeleteApi } = useMutation(
+    (req: DeleteSubscribeHistoryReq) => api.deleteSubscribeHistory(req),
+    {
+      onSuccess: (res) => {
+        if (isNil(res)) {
+          return;
+        }
+
+        router.reload();
+      },
+    },
+  );
+
   useEffect(() => {
     if (isNil(props.res)) {
       return;
@@ -75,6 +97,44 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
     setIsSend.set(props.res.isSend);
     setSendDate.set(moment(props.res.sendAt));
   }, [props.res]);
+
+  const onChangeSubscribeSelectBox = useCallback((value: [number | null, string] | null) => {
+    // 전체 선택
+    if (isNil(value)) {
+      setUserList([]);
+      return;
+    }
+
+    // 단일 선택
+    setUserList((prev) => {
+      prev.push(value);
+      return [...prev];
+    });
+  }, []);
+
+  const onClickRemoveUser = useCallback(
+    (pk: number | null) => {
+      if (isSend.value) {
+        return;
+      }
+      const newList = userList.filter(([value, _]) => value !== pk);
+      setUserList(newList);
+    },
+    [userList],
+  );
+
+  const onDeleteSubscribeHistory = useCallback(() => {
+    if (isNil(props.res)) {
+      return;
+    }
+
+    // 이미 발송한 내역은 지울수 없다.
+    if (isSend.value) {
+      return alert("이미 발송한 메일은 지울 수 없습니다.");
+    }
+
+    onDeleteApi({ pk: props.res.pk });
+  }, [isSend]);
 
   const onEdit = useCallback(() => {
     if (setTitle.validate() || setSendDate.validate() || setBody.validate()) {
@@ -104,19 +164,7 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
       <EditorEx field={body} onChange={(value) => setBody.set(value)} />
       <SubscribeSelectBoxView
         userList={userList}
-        onChange={(value) => {
-          // 전체 선택
-          if (isNil(value)) {
-            setUserList([]);
-            return;
-          }
-
-          // 단일 선택
-          setUserList((prev) => {
-            prev.push(value);
-            return [...prev];
-          });
-        }}
+        onChange={(value) => onChangeSubscribeSelectBox(value)}
         disabled={isSend.value}
       />
       <div
@@ -128,17 +176,15 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
           <UserBadgeView
             key={`user-list-${pk}`}
             label={label}
-            onClickRemove={() => {
-              if (isSend.value) {
-                return;
-              }
-              const newList = userList.filter(([value, _]) => value !== pk);
-              setUserList(newList);
-            }}
+            onClickRemove={() => onClickRemoveUser(pk)}
           />
         ))}
       </div>
-      <EditButtonView isNew onClick={() => onEdit()} />
+      <EditButtonView
+        isNew={isNil(props.res)}
+        onClick={() => onEdit()}
+        onDelete={isNotNil(props.res) && onDeleteSubscribeHistory}
+      />
     </CardFormView>
   );
 });
