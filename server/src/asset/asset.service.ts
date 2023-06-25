@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { ConfigService } from "@nestjs/config";
 import { v4 as uuidv4 } from "uuid";
@@ -112,5 +112,15 @@ export class AssetService {
 
   getTempPath(uuid: string) {
     return path.join(__dirname, "..", "..", "..", "src", "temp", uuid);
+  }
+
+  async fromUuid(uuid: string) {
+    const asset = await Asset.findOne({ where: { uuid } });
+
+    if (isNil(asset)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    return asset;
   }
 }
