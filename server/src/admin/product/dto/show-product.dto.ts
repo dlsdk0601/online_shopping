@@ -49,7 +49,7 @@ export class ProductListResProductDto {
   @IsNotEmpty()
   category: ProductCategory;
 
-  @ApiProperty({ description: "create at", nullable: false, type: "date", format: "date-time" })
+  @ApiProperty({ description: "create at", nullable: false, type: "string", format: "date-time" })
   @IsDate()
   @IsNotEmpty()
   create_at: Date;
