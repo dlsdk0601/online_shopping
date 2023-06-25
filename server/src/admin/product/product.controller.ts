@@ -15,7 +15,7 @@ export class ProductController {
     return this.productService.add(body);
   }
 
-  @Post("list-product")
+  @Post("product-list")
   @ApiCreatedResponse({ type: ProductListResDto })
   list(@Body() body: ProductListReqDto) {
     return this.productService.list(body);
