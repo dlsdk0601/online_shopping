@@ -10,6 +10,7 @@ import { AssetModule } from "./asset/asset.module";
 import { AdminSubscribeModule } from "./admin/subscribe/subscribe.module";
 import { AdminAuthModule } from "./admin/auth/admin-auth.module";
 import { SubscribeModule } from "./front/subscribe/subscribe.module";
+import { ProductModule } from "./admin/product/product.module";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { SubscribeModule } from "./front/subscribe/subscribe.module";
     AdminAuthModule,
     AdminSubscribeModule,
     SubscribeModule,
+    ProductModule,
   ],
 })
 export class AppModule {}
