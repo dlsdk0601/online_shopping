@@ -20,3 +20,10 @@ export enum SubscribeHistorySearchType {
   ISSEND = "ISSEND",
   TITLE = "TITLE",
 }
+
+export enum ProductCategory {
+  MEN = "MEN",
+  WOMEN = "WOMEN",
+  KIDS = "KIDS",
+  ACCESSORY = "ACCESSORY",
+}
