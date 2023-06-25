@@ -4,6 +4,8 @@ import { Product } from "../../entities/product.entity";
 import { AssetService } from "../../asset/asset.service";
 import { Asset } from "../../entities/asset.entity";
 import errorMessage from "../../config/errorMessage";
+import { ProductListReqDto, ProductListResDto } from "./dto/show-product.dto";
+import { LIMIT } from "../../type/pagination.dto";
 
 @Injectable()
 export class ProductService {
@@ -35,8 +37,20 @@ export class ProductService {
     }
   }
 
-  list() {
-    return `This action returns all product`;
+  async list(body: ProductListReqDto) {
+    const [products, count] = await Product.findAndCount({
+      take: LIMIT,
+      skip: LIMIT * (body.page - 1),
+      select: {
+        pk: true,
+        name: true,
+        price: true,
+        category: true,
+        create_at: true,
+      },
+    });
+
+    return new ProductListResDto(products, count, body.page);
   }
 
   edit(id: number) {
