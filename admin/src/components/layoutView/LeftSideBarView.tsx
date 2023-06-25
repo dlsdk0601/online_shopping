@@ -44,6 +44,12 @@ const menu: MenuItem[] = [
       },
     ],
   },
+  {
+    name: "상품",
+    pathname: Urls.product.index.pathname,
+    icon: "fa-person-dress",
+    url: Urls.product.index.url(),
+  },
 ];
 
 export default function LeftSideBarView() {
