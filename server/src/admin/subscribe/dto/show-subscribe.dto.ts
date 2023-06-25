@@ -47,7 +47,7 @@ export class SubscribeListResSubscribeDto {
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty({ description: "create at", nullable: false })
+  @ApiProperty({ description: "create at", nullable: false, type: "date", format: "date-time" })
   @IsDate()
   @IsNotEmpty()
   create_at: Date;
