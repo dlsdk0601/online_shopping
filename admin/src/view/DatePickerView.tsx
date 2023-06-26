@@ -7,17 +7,17 @@ import { ValueField } from "../ex/field";
 import { isBlank } from "../ex/utils";
 
 const DatePickerView = (props: {
-  label?: string;
   field: ValueField<Moment | null>;
   onChange: (value: Moment) => void;
   disabled?: boolean;
+  isShowingLabel?: boolean;
 }) => {
   return (
     <div className="relative mb-3 w-full lg:w-5/12">
       {/* 아이콘 때문에 width 값을 다른 input 과 다르게 한다. */}
-      {props.label && (
+      {props.isShowingLabel && (
         <label className="mb-2 block text-xs font-bold uppercase text-blueGray-600">
-          {props.label}
+          {props.field.name}
         </label>
       )}
       <Datepicker
