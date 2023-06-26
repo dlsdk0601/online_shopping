@@ -4,6 +4,7 @@ export const queryKeys = {
   showUser: "edit-user",
   userList: "userList",
   subscribe: "subscribe",
+  product: "product",
 };
 
 export const CONSTANT = {
