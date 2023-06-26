@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
-import { ReadOnlyTextView, TextFieldView, UserTypeView } from "../../../components/field/field";
+import { ReadOnlyTextView, TextFieldView } from "../../../components/field/field";
 import useValueField from "../../../hooks/useValueField";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
@@ -20,6 +20,7 @@ import { vEmail, vPhone } from "../../../ex/validate";
 import { UserType } from "../../../api/enum.g";
 import { Urls } from "../../../url/url.g";
 import { EditButtonView } from "../../../components/tailwindEx/EditButtonView";
+import { UserTypeView } from "../../../view/UserTypeView";
 
 const UserShowPage = () => {
   const router = useRouter();
@@ -92,12 +93,12 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
         <ReadOnlyTextView value={props.user?.id ?? ""} label="아이디" />
         <UserTypeView value={type} />
         <ReadOnlyTextView value={props.user?.name ?? ""} label="이름" />
-        <TextFieldView value={phone} label={phone.name} onChange={(value) => setPhone.set(value)} />
+        <TextFieldView value={phone} onChange={(value) => setPhone.set(value)} isShowingLabel />
         <TextFieldView
           value={email}
-          label={email.name}
           onChange={(value) => setEmail.set(value)}
           disabled={type !== UserType.LOCAL}
+          isShowingLabel
         />
         <ReadOnlyTextView value={buyCount} label="상품 구매 횟수" />
         <ReadOnlyTextView value={refundCount} label="상품 환뷸 횟수" />
