@@ -154,12 +154,12 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
 
   return (
     <CardFormView title="구독 이메일">
-      <TextFieldView value={title} label={title.name} onChange={(value) => setTitle.set(value)} />
+      <TextFieldView value={title} onChange={(value) => setTitle.set(value)} isShowingLabel />
       <DatePickerView
-        label={sendDate.name}
         field={sendDate}
         onChange={(value) => setSendDate.set(value)}
         disabled={isSend.value}
+        isShowingLabel
       />
       <EditorEx field={body} onChange={(value) => setBody.set(value)} />
       <SubscribeSelectBoxView
