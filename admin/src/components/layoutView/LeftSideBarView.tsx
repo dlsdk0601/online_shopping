@@ -47,7 +47,7 @@ const menu: MenuItem[] = [
   {
     name: "상품",
     pathname: Urls.product.index.pathname,
-    icon: "fa-person-dress",
+    icon: "fa-tshirt",
     url: Urls.product.index.url(),
   },
 ];
