@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { ProductService } from "./product.service";
-import { AddProductReqDto, AddProductResDto } from "./dto/add-product.dto";
+import { EditProductReqDto, EditProductResDto } from "./dto/add-product.dto";
 import {
   ProductListReqDto,
   ProductListResDto,
@@ -14,10 +14,10 @@ import {
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Post("add-product")
-  @ApiCreatedResponse({ type: AddProductResDto })
-  add(@Body() body: AddProductReqDto) {
-    return this.productService.add(body);
+  @Post("edit-product")
+  @ApiCreatedResponse({ type: EditProductResDto })
+  edit(@Body() body: EditProductReqDto) {
+    return this.productService.edit(body);
   }
 
   @Post("product-list")

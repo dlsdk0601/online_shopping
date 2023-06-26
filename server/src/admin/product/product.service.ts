@@ -1,19 +1,29 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
-import { AddProductReqDto } from "./dto/add-product.dto";
+import { EditProductReqDto } from "./dto/add-product.dto";
 import { Product } from "../../entities/product.entity";
 import { AssetService } from "../../asset/asset.service";
 import { Asset } from "../../entities/asset.entity";
 import errorMessage from "../../config/errorMessage";
 import { ProductListReqDto, ProductListResDto, ShowProductReqDto } from "./dto/show-product.dto";
 import { LIMIT } from "../../type/pagination.dto";
+import { isNotNil } from "../../ex/ex";
 
 @Injectable()
 export class ProductService {
   constructor(private assetService: AssetService) {}
 
-  async add(body: AddProductReqDto) {
-    const product = new Product();
+  async edit(body: EditProductReqDto) {
+    let product: Product | null = new Product();
+
+    if (isNotNil(body.pk)) {
+      product = await Product.findOne({ where: { pk: body.pk } });
+    }
+
+    if (isNil(product)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
     product.name = body.name;
     product.description_title = body.descriptionTitle;
     product.description = body.description;
@@ -72,13 +82,5 @@ export class ProductService {
       stockCount: product.stock_count,
       category: product.category,
     };
-  }
-
-  edit(id: number) {
-    return `This action returns a #${id} product`;
-  }
-
-  delete(id: number) {
-    return `This action removes a #${id} product`;
   }
 }

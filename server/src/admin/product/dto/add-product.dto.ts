@@ -1,8 +1,21 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, IsUUID } from "class-validator";
+import {
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from "class-validator";
 import { ProductCategory } from "../../../type/commonType";
 
-export class AddProductReqDto {
+export class EditProductReqDto {
+  @ApiProperty({ description: "pk", type: "number", nullable: true })
+  @IsNumber()
+  @IsOptional()
+  pk: number | null;
+
   @ApiProperty({ description: "상품 이름", type: "string", nullable: false })
   @IsString()
   @IsNotEmpty()
@@ -54,7 +67,7 @@ export class AddProductReqDto {
   category: ProductCategory;
 }
 
-export class AddProductResDto {
+export class EditProductResDto {
   @ApiProperty({ description: "pk" })
   @IsNumber()
   pk: number;
