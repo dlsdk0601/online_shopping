@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
-import { isNil } from "lodash";
-import { useQuery } from "react-query";
+import { isEmpty, isNil } from "lodash";
+import { useMutation, useQuery } from "react-query";
 import React, { memo, useCallback, useEffect } from "react";
-import { ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
+import { editAlert, ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
 import { Urls } from "../../../url/url.g";
-import { FileSet, ShowProductRes } from "../../../api/type.g";
+import { EditProductReq, FileSet, ShowProductRes } from "../../../api/type.g";
 import useValueField from "../../../hooks/useValueField";
 import { ProductCategory } from "../../../api/enum.g";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
@@ -49,6 +49,17 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
   const [stockCount, setStockCount] = useValueField(0, "재고");
   const [category, setCategory] = useValueField<ProductCategory | null>(null, "카테고리");
 
+  const { mutate: onEditApi } = useMutation((req: EditProductReq) => api.editProduct(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      editAlert(isNil(props.res));
+      ignorePromise(() => router.replace(Urls.product.edit["[pk]"].url({ pk: res.pk })));
+    },
+  });
+
   useEffect(() => {
     if (isNil(props.res)) {
       return;
@@ -71,8 +82,14 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
       setDescription.validate() ||
       setPrice.validate() ||
       setStockCount.validate() ||
-      setCategory.validate()
+      setCategory.validate() ||
+      setMainImage.validate()
     ) {
+      return;
+    }
+
+    if (isEmpty(subImages.value)) {
+      setSubImages.err("서브 이미지들은 필수입니다.");
       return;
     }
 
