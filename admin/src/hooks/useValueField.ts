@@ -40,6 +40,13 @@ const useValueField = <T>(
       return res;
     }
 
+    // 숫자 타입은 1 이하를 잡는다.
+    if (typeof state.value === "number" && state.value < 1) {
+      onDefaultError();
+      res = true;
+      return res;
+    }
+
     for (let i = 0; i < validator.length; i++) {
       const val = validator[i];
       const errorMessage = val(state.value);
