@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import { useQuery } from "react-query";
-import { memo, useEffect } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
@@ -11,6 +11,8 @@ import useValueField from "../../../hooks/useValueField";
 import { ProductCategory } from "../../../api/enum.g";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
 import { NumberFieldView, TextFieldView } from "../../../components/field/field";
+import ProductSelectView from "../../../view/ProductSelectView";
+import { EditButtonView } from "../../../components/tailwindEx/EditButtonView";
 
 const ProductEditPage = () => {
   const router = useRouter();
@@ -62,6 +64,21 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
     setSubImages.set(props.res.subImages);
   }, [props.res]);
 
+  const onEdit = useCallback(() => {
+    if (
+      setName.validate() ||
+      setDescriptionTitle.validate() ||
+      setDescription.validate() ||
+      setPrice.validate() ||
+      setStockCount.validate() ||
+      setCategory.validate()
+    ) {
+      return;
+    }
+
+    console.log("test");
+  }, [name, descriptionTitle, description, price, mainImage, subImages, stockCount, category]);
+
   return (
     <CardFormView title="상품 정보">
       <TextFieldView value={name} onChange={(value) => setName.set(value)} isShowingLabel />
@@ -81,6 +98,8 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
         onChange={(value) => setStockCount.set(value)}
         isShowingLabel
       />
+      <ProductSelectView value={category} onChange={(value) => setCategory.set(value)} />
+      <EditButtonView isNew={isNil(props.res)} onClick={() => onEdit()} onDelete={() => {}} />
     </CardFormView>
   );
 });
