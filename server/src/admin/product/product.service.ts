@@ -1,10 +1,11 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { isNil } from "lodash";
 import { AddProductReqDto } from "./dto/add-product.dto";
 import { Product } from "../../entities/product.entity";
 import { AssetService } from "../../asset/asset.service";
 import { Asset } from "../../entities/asset.entity";
 import errorMessage from "../../config/errorMessage";
-import { ProductListReqDto, ProductListResDto } from "./dto/show-product.dto";
+import { ProductListReqDto, ProductListResDto, ShowProductReqDto } from "./dto/show-product.dto";
 import { LIMIT } from "../../type/pagination.dto";
 
 @Injectable()
@@ -51,6 +52,26 @@ export class ProductService {
     });
 
     return new ProductListResDto(products, count, body.page);
+  }
+
+  async show(body: ShowProductReqDto) {
+    const product = await Product.findOne({ where: { pk: body.pk } });
+
+    if (isNil(product)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    return {
+      pk: product.pk,
+      name: product.name,
+      descriptionTitle: product.description_title,
+      description: product.description,
+      price: product.price,
+      mainImage: this.assetService.getFileSet(product.main_image),
+      subImages: product.sub_images.map((image) => this.assetService.getFileSet(image)),
+      stockCount: product.stock_count,
+      category: product.category,
+    };
   }
 
   edit(id: number) {
