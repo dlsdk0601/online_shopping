@@ -19,3 +19,5 @@ export const ATOM_KEY = {
 };
 
 export const NEWPK = "new";
+
+export const FILE_LIMIT = 10 * 1024 * 1024;
