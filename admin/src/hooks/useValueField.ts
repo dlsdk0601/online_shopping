@@ -4,15 +4,19 @@ import { ValueField } from "../ex/field";
 import { isBlank, isNotNil } from "../ex/utils";
 import { k } from "../ex/korean-postposition";
 
-type Validator = (value: string) => string | undefined;
+type Validator<T> = (value: T) => string | undefined;
+
+export interface SetValueField<T> {
+  set: (payload: T) => void;
+  err: (error?: string) => void;
+  validate: () => boolean;
+}
+
 const useValueField = <T>(
   init: T,
   name: string,
-  ...validator: Validator[]
-): [
-  ValueField<T>,
-  { set: (payload: T) => void; err: (error?: string) => void; validate: () => boolean },
-] => {
+  ...validator: Validator<T>[]
+): [ValueField<T>, SetValueField<T>] => {
   const [state, setState] = useState<ValueField<T>>({ value: init, error: "", name });
 
   const onChangeState = (payload: T) => {
