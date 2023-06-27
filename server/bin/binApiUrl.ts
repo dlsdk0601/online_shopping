@@ -26,6 +26,21 @@ export function getApiList(router) {
       return;
     }
 
+    if (layer.route.path.includes("asset")) {
+      adminRoutes.push({
+        route: {
+          path: layer.route?.path,
+          method: layer.route?.stack[0].method,
+        },
+      });
+      frontRoutes.push({
+        route: {
+          path: layer.route?.path,
+          method: layer.route?.stack[0].method,
+        },
+      });
+    }
+
     if (layer.route.path.includes("admin")) {
       adminRoutes.push({
         route: {
