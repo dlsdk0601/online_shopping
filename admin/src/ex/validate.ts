@@ -1,8 +1,9 @@
 import { isEmpty, isNil } from "lodash";
 import isEmail from "validator/lib/isEmail";
 import isUrl from "validator/lib/isURL";
+import { FILE_LIMIT } from "../lib/contants";
 
-export const vEmail = (value: string): string => {
+export const vEmail = (value: string): string | undefined => {
   // 값이 없을 경우 무시
   if (isNil(value) || isEmpty(value)) {
     return "이메일은 필수 입력사항입니다.";
@@ -13,7 +14,7 @@ export const vEmail = (value: string): string => {
   }
 };
 
-export const vPhone = (value: string): string => {
+export const vPhone = (value: string): string | undefined => {
   if (isNil(value) || isEmpty(value)) {
     return "핸드폰번호는 필수 입력사항입니다.";
   }
@@ -30,7 +31,7 @@ export const vPhone = (value: string): string => {
   }
 };
 
-export const vUrl = (value: string): string => {
+export const vUrl = (value: string): string | undefined => {
   if (isNil(value) || isEmpty(value)) {
     return "url은 필수 입력사항입니다.";
   }
@@ -40,7 +41,7 @@ export const vUrl = (value: string): string => {
   }
 };
 
-export const vPassword = (value: string): string => {
+export const vPassword = (value: string): string | undefined => {
   // 값이 없을 경우 무시
   if (isNil(value) || isEmpty(value)) {
     return "비밀번호는 필수 입력사항입니다.";
@@ -65,5 +66,19 @@ export const vPassword = (value: string): string => {
 
   if (value.length <= 8 || count < 3) {
     return "비밀번호는 8자 이상 대문자, 소문자, 숫자, 특수문자 중 3가지 이상 조합을 포함해야 합니다.";
+  }
+};
+
+export const vImage = (value: File | undefined | null, accepts: string[]): string | undefined => {
+  if (isNil(value)) {
+    return "파일 선택은 필수입니다.";
+  }
+
+  if (FILE_LIMIT < value.size) {
+    return "첨부파일 사이즈는 10MB 이내로 등록 가능합니다.";
+  }
+
+  if (!accepts.includes(value.type)) {
+    return "파일 형식이 맞지 않습니다.";
   }
 };
