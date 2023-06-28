@@ -1,6 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import "reflect-metadata";
+import { json, urlencoded } from "body-parser";
 import { AppModule } from "./app.module";
 import constant from "./config/constant";
 import { ExceptionEx } from "./ex";
@@ -25,6 +26,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true, // 허용하지 않은 속성을 제거하는 대신 예외를 throw 하는 옵션
     })
   );
+
+  // entity 용량을 키워준다. (entity 가 커지면 막히기 때문에)
+  app.use(json({ limit: "50mb" }));
+  app.use(urlencoded({ limit: "50mb", extended: true }));
 
   // api path prefix
   app.setGlobalPrefix(constant().ApiVersion);
