@@ -16,7 +16,7 @@ const ImageUploadView = memo(
     accept?: string[];
     disabled?: boolean;
   }) => {
-    const [accepts, setAccepts] = useState([]);
+    const [accepts, setAccepts] = useState<string[]>([]);
 
     useEffect(() => {
       if (isNil(props.accept)) {
