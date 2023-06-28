@@ -14,6 +14,7 @@ import { NumberFieldView, TextFieldView } from "../../../components/field/field"
 import ProductSelectView from "../../../view/ProductSelectView";
 import { EditButtonView } from "../../../components/tailwindEx/EditButtonView";
 import ImageUploadView from "../../../view/ImageUploadView";
+import ImageMultipleUploadView from "../../../view/ImageMultipleUploadView";
 
 const ProductEditPage = () => {
   const router = useRouter();
@@ -118,6 +119,12 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
       />
       <ProductSelectView value={category} onChange={(value) => setCategory.set(value)} />
       <ImageUploadView field={mainImage} onChange={(res) => setMainImage.set({ ...res.fileSet })} />
+      <ImageMultipleUploadView
+        field={subImages}
+        onChange={(res) => {
+          setSubImages.set([...subImages.value, ...res.fileSets]);
+        }}
+      />
       <EditButtonView isNew={isNil(props.res)} onClick={() => onEdit()} onDelete={() => {}} />
     </CardFormView>
   );
