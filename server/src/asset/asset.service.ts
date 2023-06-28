@@ -56,6 +56,11 @@ export class AssetService {
     }
   }
 
+  async uploadsService(body: UploadReqDto[]) {
+    const res = await Promise.all(body.map((file) => this.uploadService(file)));
+    return { fileSets: res };
+  }
+
   async findByUuid(uuid: string, name: string) {
     const thumbnail = await this.generateThumbnail(name);
 
