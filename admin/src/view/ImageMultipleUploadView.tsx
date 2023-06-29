@@ -52,9 +52,14 @@ const ImageMultipleUploadView = memo(
       }
 
       // const fileData = await Promise.all(fileList.map((file) => fileToBase64(file)));
-      const promises = fileList.map((file) => fileToBase64(file));
-      const fileData = (await Promise.all(promises)) as UploadReq[];
-      onUploadsApi({ files: fileData });
+      const fileData: UploadReq[] = [];
+      for (let i = 0; i < fileList.length; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        const data = await fileToBase64(fileList[i]);
+        fileData.push(data);
+      }
+      const req = await Promise.all(fileData);
+      onUploadsApi({ files: req });
     };
 
     return (
