@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
-import { EditProductReqDto } from "./dto/add-product.dto";
+import { EditProductReqDto } from "./dto/edit-product.dto";
 import { Product } from "../../entities/product.entity";
 import { AssetService } from "../../asset/asset.service";
 import { Asset } from "../../entities/asset.entity";

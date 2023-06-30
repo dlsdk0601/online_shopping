@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { ProductService } from "./product.service";
-import { EditProductReqDto, EditProductResDto } from "./dto/add-product.dto";
+import { EditProductReqDto, EditProductResDto } from "./dto/edit-product.dto";
 import {
   ProductListReqDto,
   ProductListResDto,
