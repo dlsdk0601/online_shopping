@@ -95,7 +95,17 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
       return;
     }
 
-    console.log("test");
+    onEditApi({
+      pk: isNil(props.res) ? null : props.res.pk,
+      name: name.value,
+      descriptionTitle: descriptionTitle.value,
+      description: description.value,
+      price: price.value,
+      mainImage: mainImage.value?.uuid ?? "",
+      subImages: subImages.value.map((img) => img.uuid),
+      stockCount: stockCount.value,
+      category: category.value as ProductCategory,
+    });
   }, [name, descriptionTitle, description, price, mainImage, subImages, stockCount, category]);
 
   return (
@@ -122,7 +132,10 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
       <ImageMultipleUploadView
         field={subImages}
         onChange={(res) => {
-          setSubImages.set([...subImages.value, ...res.fileSets]);
+          setSubImages.set(res);
+        }}
+        onDelete={(res) => {
+          setSubImages.set(res);
         }}
       />
       <EditButtonView isNew={isNil(props.res)} onClick={() => onEdit()} onDelete={() => {}} />
