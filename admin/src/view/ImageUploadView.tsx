@@ -66,7 +66,7 @@ const ImageUploadView = memo(
         <label
           htmlFor={props.field.name}
           className={classNames(
-            "flex h-64 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 lg:w-10/12",
+            "flex h-96 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 lg:w-10/12",
             {
               "cursor-pointer hover:bg-gray-100": !props.disabled,
               "border-red-500": !isBlank(props.field.error),
