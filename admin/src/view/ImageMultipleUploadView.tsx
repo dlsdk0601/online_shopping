@@ -19,6 +19,7 @@ const ImageMultipleUploadView = memo(
   }) => {
     const [accepts, setAccepts] = useState<string[]>([]);
     const [list, setList] = useState<FileSet[]>([]);
+
     useEffect(() => {
       if (isNil(props.accept)) {
         setAccepts(["image/png", "image/jpeg", "image/jpg", "image/gif"]);
@@ -26,6 +27,14 @@ const ImageMultipleUploadView = memo(
       }
 
       setAccepts([...props.accept]);
+    }, []);
+
+    useEffect(() => {
+      if (isEmpty(props.field.value)) {
+        return;
+      }
+
+      setList([...props.field.value]);
     }, []);
 
     const { mutate: onUploadApi, isLoading } = useMutation((req: UploadReq) => api.upload(req), {
@@ -39,7 +48,6 @@ const ImageMultipleUploadView = memo(
           props.onChange(newArr);
           return newArr;
         });
-        props.onChange([...list]);
       },
     });
 
@@ -131,7 +139,7 @@ const ImageMultipleUploadView = memo(
         </label>
         <ul className="my-4 flex items-center justify-start">
           {list.map((image) => (
-            <li className="mr-3 mb-1">
+            <li key={`product-img-${image.uuid}`} className="mr-3 mb-1">
               <div key={`multiple-image-${image.name}`} className="h-[100px] w-[100px]">
                 <img className="m-auto h-full" src={image.url} alt={`img-${props.field.name}`} />
               </div>

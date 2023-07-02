@@ -74,7 +74,7 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
     setStockCount.set(props.res.stockCount);
     setCategory.set(props.res.category as ProductCategory);
     setMainImage.set(props.res.mainImage);
-    setSubImages.set(props.res.subImages);
+    setSubImages.set([...props.res.subImages]);
   }, [props.res]);
 
   const onEdit = useCallback(() => {

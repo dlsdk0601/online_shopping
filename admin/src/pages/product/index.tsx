@@ -88,7 +88,7 @@ const ProductListPage = () => {
             ["생성 일자", d2(value.create_at)],
           ]}
           links={(products?.rows ?? []).map((product) =>
-            Urls.product.edit["[pk]"].url({ Pk: product.pk }),
+            Urls.product.edit["[pk]"].url({ pk: product.pk }),
           )}
         />
         <CreateButtonView
