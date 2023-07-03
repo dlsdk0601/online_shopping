@@ -65,7 +65,10 @@ export class ProductService {
   }
 
   async show(body: ShowProductReqDto) {
-    const product = await Product.findOne({ where: { pk: body.pk } });
+    const product = await Product.findOne({
+      where: { pk: body.pk },
+      relations: { main_image: true, sub_images: true },
+    });
 
     if (isNil(product)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
