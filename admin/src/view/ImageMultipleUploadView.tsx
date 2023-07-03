@@ -35,7 +35,7 @@ const ImageMultipleUploadView = memo(
       }
 
       setList([...props.field.value]);
-    }, []);
+    }, [props.field.value]);
 
     const { mutate: onUploadApi, isLoading } = useMutation((req: UploadReq) => api.upload(req), {
       onSuccess: (res) => {
