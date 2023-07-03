@@ -35,7 +35,7 @@ const ProductEditPage = () => {
 
   return (
     <div className="w-full px-4">
-      <ProductEditPage res={product} />
+      <ProductEditView res={product} />
     </div>
   );
 };
