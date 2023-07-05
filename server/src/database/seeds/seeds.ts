@@ -1,10 +1,11 @@
 import { DataSource } from "typeorm";
 import { Seeder } from "typeorm-extension";
 import { Faker, faker } from "@faker-js/faker";
+import { isNil } from "lodash";
 import Manager, { ManagerType } from "../../entities/manager.entity";
 import { getHash } from "../../ex/bcryptEx";
 import { User } from "../../entities/user.entity";
-import { UserType } from "../../type/commonType";
+import { ProductCategory, UserType } from "../../type/commonType";
 import { LocalUser } from "../../entities/local-user.entity";
 import Authentication from "../../entities/manager-authentication.entity";
 import {
@@ -14,6 +15,8 @@ import {
   NaverAuthentication,
 } from "../../entities/user-authentication.entity";
 import { Subscribe } from "../../entities/subscribe.entity";
+import { Product } from "../../entities/product.entity";
+import { Asset } from "../../entities/asset.entity";
 
 export default class TypeOrmSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
@@ -23,13 +26,8 @@ export default class TypeOrmSeeder implements Seeder {
     return Promise.all([
       this.onAddManager(faker, dataSource),
       this.onAddUser(faker, dataSource),
+      this.onAddProduct(faker),
     ]).then(() => console.log("success"));
-  }
-
-  async onAddSubscribe(faker: Faker, dataSource: DataSource) {
-    const subscribe = dataSource.getRepository(Subscribe);
-    const oldSubscribes = await subscribe.find();
-    await subscribe.remove([...oldSubscribes]);
   }
 
   async onAddManager(faker: Faker, dataSource: DataSource) {
@@ -61,6 +59,23 @@ export default class TypeOrmSeeder implements Seeder {
     await localUser.insert([...users]);
   }
 
+  async onAddProduct(faker: Faker) {
+    const oldProducts = await Product.find();
+    await Product.remove(oldProducts);
+
+    const newMensProducts = await this.productList(faker, ProductCategory.MEN);
+    const newWomensProducts = await this.productList(faker, ProductCategory.WOMEN);
+    const newKidsProducts = await this.productList(faker, ProductCategory.KIDS);
+    const newAccessoryProducts = await this.productList(faker, ProductCategory.ACCESSORY);
+
+    await Product.insert([
+      ...newMensProducts,
+      ...newWomensProducts,
+      ...newKidsProducts,
+      ...newAccessoryProducts,
+    ]);
+  }
+
   async managerList(faker: Faker) {
     const managers: {
       id: string;
@@ -90,6 +105,48 @@ export default class TypeOrmSeeder implements Seeder {
     managers[0].password_hash = await getHash("1234");
 
     return managers;
+  }
+
+  async productList(faker: Faker, category: ProductCategory): Promise<Product[]> {
+    const products: Product[] = [];
+
+    let pk: number;
+    switch (category) {
+      case ProductCategory.MEN:
+        pk = 65;
+        break;
+      case ProductCategory.WOMEN:
+        pk = 66;
+        break;
+      case ProductCategory.KIDS:
+        pk = 67;
+        break;
+      case ProductCategory.ACCESSORY:
+      default:
+        pk = 68;
+        break;
+    }
+
+    const mainImage = await Asset.findOne({ where: { pk } });
+    if (isNil(mainImage)) {
+      return [];
+    }
+
+    const subImages = await Asset.find({ where: [{ pk: 64 }, { pk: 63 }] });
+    for (let i = 0; i < 20; i++) {
+      const mens = new Product();
+      mens.name = faker.name.fullName();
+      mens.description_title = faker.random.words(4);
+      mens.description = faker.random.words(50);
+      mens.price = Number(faker.random.numeric(3));
+      mens.main_image = mainImage;
+      mens.sub_images = subImages; // TODO :: 서브 이미지들이 안들어간다.
+      mens.category = category;
+      mens.stock_count = 10;
+      products.push(mens);
+    }
+
+    return products;
   }
 
   async userList(faker: Faker, dataSource: DataSource) {
