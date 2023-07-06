@@ -50,6 +50,12 @@ const menu: MenuItem[] = [
     icon: "fa-tshirt",
     url: Urls.product.index.url(),
   },
+  {
+    name: "배너",
+    pathname: Urls.banner.index.pathname,
+    icon: "fa-image",
+    url: Urls.banner.index.url(),
+  },
 ];
 
 export default function LeftSideBarView() {
