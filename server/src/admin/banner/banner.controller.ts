@@ -8,6 +8,7 @@ import {
   ShowBannerResDto,
 } from "./dto/show-banner.dto";
 import { EditBannerReqDto, EditBannerResDto } from "./dto/edit-banner.dto";
+import { DeleteBannerReqDto, DeleteBannerResDto } from "./dto/delete-banner.dto";
 
 @Controller("admin")
 @ApiTags("admin-banner")
@@ -30,5 +31,11 @@ export class BannerController {
   @ApiCreatedResponse({ type: EditBannerResDto })
   async edit(@Body() body: EditBannerReqDto) {
     return this.bannerService.edit(body);
+  }
+
+  @Post("delete-banner")
+  @ApiCreatedResponse({ type: DeleteBannerResDto })
+  async delete(@Body() body: DeleteBannerReqDto) {
+    return this.bannerService.delete(body);
   }
 }

@@ -4,6 +4,7 @@ import { AssetService } from "../../asset/asset.service";
 import { MainBanner } from "../../entities/main-banner.entity";
 import errorMessage from "../../config/errorMessage";
 import { EditBannerReqDto } from "./dto/edit-banner.dto";
+import { DeleteBannerReqDto } from "./dto/delete-banner.dto";
 
 @Injectable()
 export class BannerService {
@@ -69,6 +70,21 @@ export class BannerService {
 
     try {
       await banner.save();
+      return { pk: banner.pk };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
+
+  async delete(body: DeleteBannerReqDto) {
+    const banner = await MainBanner.findOne({ where: { pk: body.pk } });
+
+    if (isNil(banner)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    try {
+      await banner.softRemove();
       return { pk: banner.pk };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
