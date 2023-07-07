@@ -3,7 +3,7 @@ import { isNil } from "lodash";
 import { useMutation, useQuery } from "react-query";
 import React, { useCallback, useEffect } from "react";
 import { editAlert, ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
-import { EditBannerReq, FileSet, ShowBannerRes } from "../../../api/type.g";
+import { DeleteBannerReq, EditBannerReq, FileSet, ShowBannerRes } from "../../../api/type.g";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
 import { Urls } from "../../../url/url.g";
@@ -58,6 +58,17 @@ const BannerEditView = (props: { res?: ShowBannerRes }) => {
     },
   });
 
+  const { mutate: onDeleteApi } = useMutation((req: DeleteBannerReq) => api.deleteBanner(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      alert("삭제 되었습니다.");
+      router.reload();
+    },
+  });
+
   useEffect(() => {
     if (isNil(props.res)) {
       return;
@@ -90,6 +101,18 @@ const BannerEditView = (props: { res?: ShowBannerRes }) => {
     });
   }, [title, description, subTitle, category, image]);
 
+  const onDelete = useCallback(() => {
+    if (isNil(props.res)) {
+      return;
+    }
+
+    if (!confirm("정말로 삭제 하시겠습니까?")) {
+      return;
+    }
+
+    onDeleteApi({ pk: props.res.pk });
+  }, [props.res]);
+
   return (
     <CardFormView title="배너 정보">
       <TextFieldView value={title} onChange={(value) => setTitle.set(value)} isShowingLabel />
@@ -101,7 +124,11 @@ const BannerEditView = (props: { res?: ShowBannerRes }) => {
       <TextFieldView value={subTitle} onChange={(value) => setSubTitle.set(value)} isShowingLabel />
       <ProductSelectView value={category} onChange={(value) => setCategory.set(value)} />
       <ImageUploadView field={image} onChange={(res) => setImage.set({ ...res.fileSet })} />
-      <EditButtonView isNew={isNil(props.res)} onClick={() => onEdit()} onDelete={() => {}} />
+      <EditButtonView
+        isNew={isNil(props.res)}
+        onClick={() => onEdit()}
+        onDelete={() => onDelete()}
+      />
     </CardFormView>
   );
 };
