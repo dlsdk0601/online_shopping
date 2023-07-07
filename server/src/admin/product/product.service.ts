@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
+import { FindOptionsWhere, Like } from "typeorm";
 import { EditProductReqDto } from "./dto/edit-product.dto";
 import { Product } from "../../entities/product.entity";
 import { AssetService } from "../../asset/asset.service";
@@ -49,6 +50,14 @@ export class ProductService {
   }
 
   async list(body: ProductListReqDto) {
+    let searchOption: FindOptionsWhere<Product> = { name: Like(`%${body.search}%`) };
+
+    if (isNotNil(body.category)) {
+      searchOption = {
+        category: body.category,
+        name: Like(`%${body.search}%`),
+      };
+    }
     const [products, count] = await Product.findAndCount({
       take: LIMIT,
       skip: LIMIT * (body.page - 1),
@@ -59,6 +68,7 @@ export class ProductService {
         category: true,
         create_at: true,
       },
+      where: searchOption,
     });
 
     return new ProductListResDto(products, count, body.page);
