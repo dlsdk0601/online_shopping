@@ -51,9 +51,9 @@ export class BannerService {
     let banner: MainBanner | null;
 
     if (isNil(body.pk)) {
-      banner = await MainBanner.findOne({ where: { pk: body.pk }, relations: { image: true } });
-    } else {
       banner = new MainBanner();
+    } else {
+      banner = await MainBanner.findOne({ where: { pk: body.pk }, relations: { image: true } });
     }
 
     if (isNil(banner)) {
