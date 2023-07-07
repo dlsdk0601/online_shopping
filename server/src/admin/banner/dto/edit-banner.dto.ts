@@ -1,13 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
-import { Optional } from "@nestjs/common";
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { ProductCategory } from "../../../type/commonType";
 
 export class EditBannerReqDto {
   @ApiProperty({ description: "pk", type: "number", nullable: true })
   @IsNumber()
-  @Optional()
-  pk: number;
+  @IsOptional()
+  pk: number | null;
 
   @ApiProperty({ description: "배너 제목", nullable: false, type: "string" })
   @IsString()
@@ -16,7 +15,7 @@ export class EditBannerReqDto {
 
   @ApiProperty({ description: "배너 설명", nullable: true, type: "string" })
   @IsString()
-  @Optional()
+  @IsOptional()
   description: string | null;
 
   @ApiProperty({ description: "배너 서브 제목", nullable: false, type: "string" })
