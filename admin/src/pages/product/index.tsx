@@ -81,9 +81,8 @@ const ProductListPage = () => {
           title="상품 리스트"
           pagination={products ?? null}
           mapper={(value) => [
-            ["이름", value.name],
             ["상품명", value.name],
-            ["가격", mf1(value.price)],
+            ["가격", `${mf1(value.price)} $`],
             ["카테고리", categoryEnumToLabel(value.category)],
             ["생성 일자", d2(value.create_at)],
           ]}
