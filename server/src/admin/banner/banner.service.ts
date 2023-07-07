@@ -14,17 +14,18 @@ export class BannerService {
       select: {
         pk: true,
         title: true,
-        sub_title: true,
-        description: true,
         category: true,
-      },
-      relations: {
-        image: true,
+        create_at: true,
       },
     });
 
     const list = banners.map((banner) => {
-      return { ...banner, image: this.assetService.fromUuid(banner.image.uuid) };
+      return {
+        pk: banner.pk,
+        title: banner.title,
+        category: banner.category,
+        createAt: banner.create_at,
+      };
     });
 
     return { list };
@@ -43,7 +44,7 @@ export class BannerService {
       description: banner.description,
       subTitle: banner.sub_title,
       category: banner.category,
-      image: this.assetService.fromUuid(banner.image.uuid),
+      image: await this.assetService.fromUuid(banner.image.uuid),
     };
   }
 
