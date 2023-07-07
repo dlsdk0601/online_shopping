@@ -50,12 +50,12 @@ const BannerListPage = () => {
                 ["카테고리", categoryEnumToLabel(entry.category)],
                 ["생성 일자", d2(entry.createAt)],
               ])}
-              // links={Urls.banner.index}
+              links={banners.map((entry) => Urls.banner.edit["[pk]"].url({ pk: entry.pk }))}
             />
           </div>
         </div>
         <CreateButtonView
-          onClick={() => router.push(Urls.product.edit["[pk]"].url({ pk: NEWPK }))}
+          onClick={() => router.push(Urls.banner.edit["[pk]"].url({ pk: NEWPK }))}
         />
       </div>
     </div>
