@@ -70,5 +70,6 @@ export class EditProductReqDto {
 export class EditProductResDto {
   @ApiProperty({ description: "pk" })
   @IsNumber()
+  @IsNotEmpty()
   pk: number;
 }

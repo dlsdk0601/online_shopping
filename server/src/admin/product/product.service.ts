@@ -96,4 +96,19 @@ export class ProductService {
       category: product.category,
     };
   }
+
+  async delete(pk: number) {
+    const product = await Product.findOne({ where: { pk } });
+
+    if (isNil(product)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    try {
+      await product.softRemove();
+      return { pk: product.pk };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
 }

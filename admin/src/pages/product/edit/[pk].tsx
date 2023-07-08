@@ -6,7 +6,7 @@ import { editAlert, ignorePromise, isNotNil, validatePk } from "../../../ex/util
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
 import { Urls } from "../../../url/url.g";
-import { EditProductReq, FileSet, ShowProductRes } from "../../../api/type.g";
+import { DeleteProductReq, EditProductReq, FileSet, ShowProductRes } from "../../../api/type.g";
 import useValueField from "../../../hooks/useValueField";
 import { ProductCategory } from "../../../api/enum.g";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
@@ -62,6 +62,17 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
     },
   });
 
+  const { mutate: onDeleteApi } = useMutation((req: DeleteProductReq) => api.deleteProduct(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      alert("삭제 되었습니다.");
+      router.reload();
+    },
+  });
+
   useEffect(() => {
     if (isNil(props.res)) {
       return;
@@ -108,6 +119,18 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
     });
   }, [name, descriptionTitle, description, price, mainImage, subImages, stockCount, category]);
 
+  const onDelete = useCallback(() => {
+    if (isNil(props.res)) {
+      return;
+    }
+
+    if (!confirm("정말로 삭제 하시겠습니까?")) {
+      return;
+    }
+
+    onDeleteApi({ pk: props.res.pk });
+  }, [props.res]);
+
   return (
     <CardFormView title="상품 정보">
       <TextFieldView value={name} onChange={(value) => setName.set(value)} isShowingLabel />
@@ -138,7 +161,11 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
           setSubImages.set(res);
         }}
       />
-      <EditButtonView isNew={isNil(props.res)} onClick={() => onEdit()} onDelete={() => {}} />
+      <EditButtonView
+        isNew={isNil(props.res)}
+        onClick={() => onEdit()}
+        onDelete={() => onDelete()}
+      />
     </CardFormView>
   );
 });

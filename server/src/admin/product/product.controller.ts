@@ -8,6 +8,7 @@ import {
   ShowProductReqDto,
   ShowProductResDto,
 } from "./dto/show-product.dto";
+import { DeleteProductReqDto, DeleteProductResDto } from "./dto/delete-product.dto";
 
 @Controller("admin")
 @ApiTags("admin-product")
@@ -30,5 +31,11 @@ export class ProductController {
   @ApiCreatedResponse({ type: ShowProductResDto })
   show(@Body() body: ShowProductReqDto) {
     return this.productService.show(body);
+  }
+
+  @Post("delete-product")
+  @ApiCreatedResponse({ type: DeleteProductResDto })
+  delete(@Body() body: DeleteProductReqDto) {
+    return this.productService.delete(body.pk);
   }
 }
