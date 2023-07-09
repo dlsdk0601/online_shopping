@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { sleep } from "sleepjs";
+import { isString } from "lodash";
 import { baseConfig } from "../lib/config";
 import { CONSTANT } from "../lib/contants";
 
@@ -75,12 +76,16 @@ export class ApiBase {
 
   delete = async (url: string, config?: AxiosRequestConfig<any>) => {
     return this.with(async () => {
-      if (baseConfig.apiDelay) {
-        await sleep(baseConfig.apiDelay);
-      }
+      try {
+        if (baseConfig.apiDelay) {
+          await sleep(baseConfig.apiDelay);
+        }
 
-      const res = await axiosInstance.delete(url, config);
-      return res.data;
+        const res = await axiosInstance.delete(url, config);
+        return res.data;
+      } catch (e) {
+        this.errorHandle(e);
+      }
     });
   };
 
@@ -90,6 +95,30 @@ export class ApiBase {
 
   build<T, U>(url: string): (req: T) => Promise<U> {
     return (req: T) => this.post(url, req);
+  }
+
+  deleteBuild<T extends { pk: number }, U>(url: string): (req: T) => Promise<U> {
+    return (req: T) => this.delete(url.replace(":pk", `${req.pk}`));
+  }
+
+  getBuild<T, U>(url: string): (req: T) => Promise<U> {
+    return (req: T) => this.get(this.getParameterHandle(url, req));
+  }
+
+  getParameterHandle<T>(url: string, req: T): string {
+    const query = Object.entries(req)
+      .flatMap(([key, values]) => {
+        if (values === undefined) {
+          return [];
+        }
+
+        return (isString(values) ? [values] : values)
+          .map(encodeURIComponent)
+          .map((value) => `${key}=${value}`);
+      })
+      .join("&");
+
+    return `${url}?${query}`;
   }
 
   errorHandle(err: unknown) {
