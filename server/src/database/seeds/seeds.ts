@@ -17,6 +17,7 @@ import {
 import { Subscribe } from "../../entities/subscribe.entity";
 import { Product } from "../../entities/product.entity";
 import { Asset } from "../../entities/asset.entity";
+import { MainBanner } from "../../entities/main-banner.entity";
 
 export default class TypeOrmSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
@@ -27,6 +28,7 @@ export default class TypeOrmSeeder implements Seeder {
       this.onAddManager(faker, dataSource),
       this.onAddUser(faker, dataSource),
       this.onAddProduct(faker),
+      this.onAddBanner(faker),
     ]).then(() => console.log("success"));
   }
 
@@ -57,6 +59,14 @@ export default class TypeOrmSeeder implements Seeder {
 
     const users = await this.userList(faker, dataSource);
     await localUser.insert([...users]);
+  }
+
+  async onAddBanner(faker: Faker) {
+    const oldBanners = await MainBanner.find();
+    await MainBanner.remove([...oldBanners]);
+
+    const newBanners = await this.bannerList(faker);
+    await MainBanner.insert([...newBanners]);
   }
 
   async onAddProduct(faker: Faker) {
@@ -191,6 +201,42 @@ export default class TypeOrmSeeder implements Seeder {
     localUsers[0].password_hash = await getHash("1234");
 
     return localUsers;
+  }
+
+  async newBanner(faker: Faker, category: ProductCategory) {
+    let imagePk: number;
+    switch (category) {
+      case ProductCategory.WOMEN:
+        imagePk = 72;
+        break;
+      case ProductCategory.MEN:
+        imagePk = 73;
+        break;
+      case ProductCategory.KIDS:
+        imagePk = 74;
+        break;
+      case ProductCategory.ACCESSORY:
+      default:
+        imagePk = 75;
+        break;
+    }
+    const banner = new MainBanner();
+    banner.category = category;
+    banner.title = faker.random.words(2);
+    banner.sub_title = faker.random.words(4);
+    banner.description = category === ProductCategory.WOMEN ? null : faker.random.words(4);
+    banner.image = await Asset.findOneByOrFail({ pk: imagePk });
+
+    return banner;
+  }
+
+  async bannerList(faker: Faker) {
+    return [
+      await this.newBanner(faker, ProductCategory.WOMEN),
+      await this.newBanner(faker, ProductCategory.MEN),
+      await this.newBanner(faker, ProductCategory.KIDS),
+      await this.newBanner(faker, ProductCategory.ACCESSORY),
+    ];
   }
 
   makeFakerPhone(faker: Faker) {
