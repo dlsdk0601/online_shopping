@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { BannerService } from "./banner.service";
 import {
@@ -33,9 +33,15 @@ export class BannerController {
     return this.bannerService.edit(body);
   }
 
-  @Post("delete-banner")
+  // @Post("delete-banner")
+  // @ApiCreatedResponse({ type: DeleteBannerResDto })
+  // async delete(@Body() body: DeleteBannerReqDto) {
+  //   return this.bannerService.delete(body);
+  // }
+
+  @Delete("delete-banner/:pk")
   @ApiCreatedResponse({ type: DeleteBannerResDto })
-  async delete(@Body() body: DeleteBannerReqDto) {
+  async delete(@Param() body: DeleteBannerReqDto) {
     return this.bannerService.delete(body);
   }
 }
