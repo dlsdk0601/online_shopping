@@ -1,4 +1,4 @@
-import { camelCase, isNil, uniq } from "lodash";
+import { camelCase, compact, isNil, uniq } from "lodash";
 import path from "path";
 import fs from "fs";
 import prettier from "prettier";
@@ -58,14 +58,8 @@ export function getApiList(router) {
     }
   });
 
-  binApiUrl(
-    adminRoutes.filter((item) => !isNil(item)),
-    "ADMIN"
-  );
-  binApiUrl(
-    frontRoutes.filter((item) => !isNil(item)),
-    "FRONT"
-  );
+  binApiUrl(compact(adminRoutes), "ADMIN");
+  binApiUrl(compact(frontRoutes), "FRONT");
 }
 
 function generateSources(apis: ApiItem[], type: OriginType): string[] {
@@ -78,27 +72,26 @@ function generateImports(apis: ApiItem[], type: OriginType): string {
 }
 
 function generateSource(api: ApiItem, type: OriginType): string {
-  const pathArray = api.route.path.split("/");
-  const apiName = pathArray[pathArray.length - 1];
+  const apiName = apiNameHandle(api.route.path);
   if (exceptApiList.includes(apiName)) {
     return "";
   }
+
   if (apiName.includes("auth")) {
     const key = camelCase(apiName);
-    const camel = camelCase(apiName);
-    const capital = capitalTransform(camel);
+    const capital = capitalTransform(key);
     const res = type === "ADMIN" ? `${capital}ManagerRes` : `${capital}UserRes`;
     return `${key}= this.build<${capital}Req, ${res}>("${api.route.path}");`;
   }
+
   const key = camelCase(apiName);
-  const camel = camelCase(apiName);
-  const capital = capitalTransform(camel);
-  return `${key}= this.build<${capital}Req, ${capital}Res>("${api.route.path}");`;
+  const capital = capitalTransform(key);
+  const method = selectMethod(api.route.method);
+  return `${key}= ${method}<${capital}Req, ${capital}Res>("${api.route.path}");`;
 }
 
 function generateImport(api: ApiItem, type: OriginType): string[] {
-  const pathArray = api.route.path.split("/");
-  const apiName = pathArray[pathArray.length - 1];
+  const apiName = apiNameHandle(api.route.path);
   if (exceptApiList.includes(apiName)) {
     return [];
   }
@@ -115,6 +108,31 @@ function generateImport(api: ApiItem, type: OriginType): string[] {
 
 function capitalTransform(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function selectMethod(method: string): string {
+  switch (method) {
+    case "get":
+      return "this.getBuild";
+    case "delete":
+      return "this.deleteBuild";
+    case "put":
+      return "this.putBuild";
+    case "post":
+    default:
+      return "this.build";
+  }
+}
+
+function apiNameHandle(path: string): string {
+  const pathArray = path.split("/");
+  const apiName = pathArray[pathArray.length - 1];
+
+  if (apiName === ":pk") {
+    return pathArray[pathArray.length - 2];
+  }
+
+  return apiName;
 }
 
 function binApiUrl(list: ApiItem[], type: OriginType) {
