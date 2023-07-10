@@ -53,11 +53,15 @@ const menu: MenuItem[] = [
   {
     name: "배너",
     pathname: Urls.banner.index.pathname,
-    icon: "fa-image",
+    icon: "fa-images",
     url: Urls.banner.index.url(),
   },
+  {
+    name: "장바구니",
+    icon: "fa-cart-shopping-fast", // 장바구니 아이콘 찾기
+    pathname: "",
+  },
 ];
-
 export default function LeftSideBarView() {
   const [isShow, setIsShow] = useState(false);
 
