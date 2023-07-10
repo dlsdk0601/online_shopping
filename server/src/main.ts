@@ -7,6 +7,7 @@ import constant from "./config/constant";
 import { ExceptionEx } from "./ex";
 import { getApiList } from "../bin/binApiUrl";
 import { setupSwagger } from "./lib/swagger";
+import { middle } from "./middleware/auth.middleware";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -36,6 +37,9 @@ async function bootstrap() {
 
   // global exception 처리
   app.useGlobalFilters(new ExceptionEx());
+
+  // global middleware
+  app.use(middle);
 
   // swagger
   setupSwagger(app);

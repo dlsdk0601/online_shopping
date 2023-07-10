@@ -11,8 +11,8 @@ import { AdminSubscribeModule } from "./admin/subscribe/subscribe.module";
 import { AdminAuthModule } from "./admin/auth/admin-auth.module";
 import { SubscribeModule } from "./front/subscribe/subscribe.module";
 import { ProductModule } from "./admin/product/product.module";
-import { HomeModule } from './front/home/home.module';
-import { BannerModule } from './admin/banner/banner.module';
+import { HomeModule } from "./front/home/home.module";
+import { BannerModule } from "./admin/banner/banner.module";
 
 @Module({
   imports: [
