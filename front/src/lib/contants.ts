@@ -1,8 +1,9 @@
 import { baseConfig } from "./config";
 
 export const queryKeys = {
-  user: "user",
-  token: "token",
+  user: "USER",
+  token: "TOKEN",
+  home: "HOME",
 };
 
 export const ATOM_KEY = {
