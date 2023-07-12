@@ -43,19 +43,14 @@ const SliderView = (props: { items: ProductListItem[] }) => {
                   <div className="hover-content">
                     <ul>
                       <li>
-                        <a href="single-product.html">
-                          <i className="fa fa-eye" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="single-product.html">
+                        <button type="button">
                           <i className="fa fa-star" />
-                        </a>
+                        </button>
                       </li>
                       <li>
-                        <a href="single-product.html">
+                        <button type="button">
                           <i className="fa fa-shopping-cart" />
-                        </a>
+                        </button>
                       </li>
                     </ul>
                   </div>
