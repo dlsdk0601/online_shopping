@@ -513,6 +513,10 @@ banner
     padding-bottom: 30px;
 }
 
+.main-banner .left-content.skeleton {
+    height: 800px;
+}
+
 .main-banner .left-content .thumb img {
     width: 100%;
     overflow: hidden;
@@ -2045,6 +2049,11 @@ responsive
         margin-bottom: 30px;
     }
 
+    .main-banner .left-content.skeleton {
+        margin-bottom: 30px;
+        height: 400px;
+    }
+
     #explore .left-content {
         margin-bottom: 30px;
     }
@@ -2180,5 +2189,25 @@ responsive
     }
     100% {
         opacity: 0;
+    }
+}
+
+.right-first-image.skeleton {
+    height: 385px
+}
+
+.thumb.skeleton {
+    height: 385px
+}
+
+@media (max-width: 992px) {
+    .right-first-image.skeleton {
+        height: 400px
+    }
+}
+
+@media (max-width: 767px) {
+    .right-first-image.skeleton {
+        height: 400px
     }
 }
