@@ -9,9 +9,9 @@ export class HomeService {
   constructor(private assetService: AssetService) {}
 
   async home(body: HomeReqDto) {
-    const productMens = await this.prodictList(ProductCategory.MEN, 6);
-    const productWomens = await this.prodictList(ProductCategory.WOMEN, 6);
-    const productKids = await this.prodictList(ProductCategory.KIDS, 6);
+    const productMens = await this.productList(ProductCategory.MEN, 6);
+    const productWomens = await this.productList(ProductCategory.WOMEN, 6);
+    const productKids = await this.productList(ProductCategory.KIDS, 6);
 
     return {
       mainBanners: [],
@@ -21,17 +21,24 @@ export class HomeService {
     };
   }
 
-  async prodictList(category: ProductCategory, limit: number) {
-    return Product.find({
+  async productList(category: ProductCategory, limit: number) {
+    const products = await Product.find({
       where: { category },
       take: limit,
-      order: { create_at: "desc" },
+      relations: { main_image: true },
       select: {
         pk: true,
         name: true,
         price: true,
         category: true,
       },
+    });
+
+    return products.map((product) => {
+      return {
+        ...product,
+        image: this.assetService.getFileSet(product.main_image),
+      };
     });
   }
 }

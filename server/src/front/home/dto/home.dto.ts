@@ -42,6 +42,7 @@ export class HomeBannerDto {
 }
 
 // TODO :: 나중에 상품 리스트 DTO 만들때 거기로 옮기기, 아니면 common 만들어서 옮기기
+@ApiExtraModels(FileSetDto)
 export class ProductListItem {
   @ApiProperty({ description: "상품 pk", nullable: false, type: "number" })
   @IsNumber()
@@ -67,6 +68,14 @@ export class ProductListItem {
   @IsEnum(HomeBannerDto)
   @IsNotEmpty()
   category: ProductCategory;
+
+  @ApiProperty({
+    description: "상품 메인 이미지",
+    nullable: false,
+    items: { $ref: getSchemaPath(FileSetDto) },
+  })
+  @IsNotEmpty()
+  image: FileSetDto;
 
   // TODO :: 별점 추가
 }
