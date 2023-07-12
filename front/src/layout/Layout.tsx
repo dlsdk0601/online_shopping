@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState } from "react";
 import Head from "next/head";
-import { useIsMutating } from "react-query";
+import { useIsFetching, useIsMutating } from "react-query";
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -192,8 +192,9 @@ const FooterView = () => {
 };
 
 const BlockView = () => {
-  const loadingCount = useIsMutating();
-  const isLocked = loadingCount > 0;
+  const postLoadingCount = useIsMutating();
+  const getLoadingCount = useIsFetching();
+  const isLocked = getLoadingCount + postLoadingCount > 0;
   return (
     <div id="preloader" className={classNames({ show: isLocked })}>
       <div className="jumper">
