@@ -1,14 +1,14 @@
 import React, { useCallback } from "react";
 import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
-import GoogleSignInView from "../../view/GoogleSignInView";
-import LocalSignInView from "../../view/LocalSignInView";
+import GoogleSignInView from "../../view/account/GoogleSignInView";
+import LocalSignInView from "../../view/account/LocalSignInView";
 import { tokenModel } from "../../store/user";
 import { Urls } from "../../url/url.g";
 import { UserType } from "../../api/enum.g";
 import { GoogleTokenVerifyRes } from "../../api/type.g";
-import KakaoSignInView from "../../view/KakaoSignInView";
-import NaverSignInView from "../../view/NaverSignInView";
+import KakaoSignInView from "../../view/account/KakaoSignInView";
+import NaverSignInView from "../../view/account/NaverSignInView";
 
 const SignIn = () => {
   const router = useRouter();
@@ -17,15 +17,14 @@ const SignIn = () => {
   const onSuccess = useCallback((token: string) => {
     setToken(token);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const ignore = router.replace(Urls.index);
+    const ignore = router.replace(Urls.index.url());
   }, []);
 
   const onPushSnsSingUp = useCallback((res: GoogleTokenVerifyRes) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const ignore = router.replace({
-      pathname: Urls.auth.snsSignUp,
-      query: { email: res.email, type: UserType.GOOGLE },
-    });
+    const ignore = router.replace(
+      Urls.auth.snsSignUp.url({ email: res.email, type: UserType.GOOGLE }),
+    );
   }, []);
 
   return (

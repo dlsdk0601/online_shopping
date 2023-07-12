@@ -1,13 +1,13 @@
 import React, { useCallback } from "react";
 import { useMutation } from "react-query";
 import { useRouter } from "next/router";
-import { preventDefaulted } from "../ex/utils";
-import { SignInReq, SignInRes } from "../api/type.g";
-import { api } from "../api/url.g";
-import AuthInputFieldView from "./AuthInputFieldView";
-import useValueField from "../hooks/useValueField";
-import { Urls } from "../url/url.g";
-import { vPassword } from "../ex/validate";
+import { preventDefaulted } from "../../ex/utils";
+import { SignInReq, SignInRes } from "../../api/type.g";
+import { api } from "../../api/url.g";
+import AuthInputFieldView from "../AuthInputFieldView";
+import useValueField from "../../hooks/useValueField";
+import { Urls } from "../../url/url.g";
+import { vPassword } from "../../ex/validate";
 
 const LocalSignInView = (props: { onSuccess: (token: string) => void }) => {
   const router = useRouter();

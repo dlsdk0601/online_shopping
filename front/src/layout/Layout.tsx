@@ -10,7 +10,7 @@ import Favicon from "../../public/favicon.ico";
 import { Urls } from "../url/url.g";
 import { tokenModel } from "../store/user";
 import { isNotNil } from "../ex/utils";
-import SignOutButtonView from "../view/SignOutButtonView";
+import SignOutButtonView from "../view/account/SignOutButtonView";
 
 // 로그인 유저가 보는 화면 (ex 어드민 메인화면)
 export const LayoutView = (props: PropsWithChildren) => {
@@ -39,12 +39,12 @@ export const DefaultLayoutView = (props: PropsWithChildren<Record<never, any>>) 
 };
 
 const headerMenuList = [
-  { name: "Men's", path: Urls.mens.index },
+  { name: "Men's", path: Urls.mens.index.pathname },
   {
     name: "Women's",
-    path: Urls.womens.index,
+    path: Urls.womens.index.pathname,
   },
-  { name: "Kid's", path: Urls.kids.index },
+  { name: "Kid's", path: Urls.kids.index.pathname },
 ];
 
 export const HeaderView = () => {
@@ -68,7 +68,8 @@ export const HeaderView = () => {
                       href={menu.path}
                       className={classNames({
                         active:
-                          router.pathname !== Urls.index && menu.path.startsWith(router.pathname),
+                          router.pathname !== Urls.index.pathname &&
+                          menu.path.startsWith(router.pathname),
                       })}
                     >
                       {menu.name}

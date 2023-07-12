@@ -1,11 +1,11 @@
 import React, { useCallback, useRef } from "react";
 import { useMutation } from "react-query";
-import useScript from "../hooks/useScript";
-import { SNS_URL } from "../lib/contants";
-import { baseConfig } from "../lib/config";
-import { api } from "../api/url.g";
-import { isNotNil } from "../ex/utils";
-import { GoogleTokenVerifyReq, GoogleTokenVerifyRes } from "../api/type.g";
+import useScript from "../../hooks/useScript";
+import { SNS_URL } from "../../lib/contants";
+import { baseConfig } from "../../lib/config";
+import { api } from "../../api/url.g";
+import { isNotNil } from "../../ex/utils";
+import { GoogleTokenVerifyReq, GoogleTokenVerifyRes } from "../../api/type.g";
 
 const GoogleSignInView = (props: {
   onSuccess: (token: string) => void;

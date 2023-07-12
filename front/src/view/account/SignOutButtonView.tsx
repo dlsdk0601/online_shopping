@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
-import { api } from "../api/url.g";
-import { Urls } from "../url/url.g";
-import { useUser } from "../hooks/useUser";
-import { SignOutReq, SignOutRes } from "../api/type.g";
-import { ignorePromise } from "../ex/utils";
+import { api } from "../../api/url.g";
+import { Urls } from "../../url/url.g";
+import { useUser } from "../../hooks/useUser";
+import { SignOutReq, SignOutRes } from "../../api/type.g";
+import { ignorePromise } from "../../ex/utils";
 
 const SignOutButtonView = (props: { label?: string; className?: string }) => {
   const router = useRouter();

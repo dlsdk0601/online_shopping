@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { SNS_URL } from "../lib/contants";
+import { SNS_URL } from "../../lib/contants";
 
 const KakaoSignInView = () => {
   const onClick = useCallback(() => {
