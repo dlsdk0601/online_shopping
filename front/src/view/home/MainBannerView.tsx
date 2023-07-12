@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Urls } from "../../url/url.g";
+import { Banner } from "../../api/type.g";
 
-const MainBannerView = () => {
+const MainBannerView = (props: { banner: Banner }) => {
   return (
     <div className="main-banner" id="top">
       <div className="container-fluid">
@@ -10,8 +11,8 @@ const MainBannerView = () => {
             <div className="left-content">
               <div className="thumb">
                 <div className="inner-content">
-                  <h4>We Are Online-Shop</h4>
-                  <span>Awesome, best &amp; perfect Shop</span>
+                  <h4>{props.banner.mainBannerMain.title}</h4>
+                  <span>{props.banner.mainBannerMain.subTitle}</span>
                   <div className="main-border-button">
                     <Link href={Urls.womens.index.url()}>Purchase Now!</Link>
                   </div>
@@ -28,20 +29,18 @@ const MainBannerView = () => {
                     <div className="thumb">
                       <div className="inner-content">
                         <h4>Women</h4>
-                        <span>Best Clothes For Women</span>
+                        <span>{props.banner.mainBannerMain.description}</span>
                       </div>
                       <div className="hover-content">
                         <div className="inner">
-                          <h4>Women</h4>
-                          <p>
-                            Discover your style with our stunning collection of women's fashion.
-                          </p>
+                          <h4>{props.banner.mainBannerWomen.title}</h4>
+                          <p>{props.banner.mainBannerWomen.subTitle}</p>
                           <div className="main-border-button">
-                            <a href="#">Discover More</a>
+                            <Link href={Urls.womens.index.url()}>Discover More</Link>
                           </div>
                         </div>
                       </div>
-                      <img src="/images/baner-right-image-01.jpg" alt="banner-right" />
+                      <img src={props.banner.mainBannerWomen.image.url} alt="banner-right" />
                     </div>
                   </div>
                 </div>
@@ -50,21 +49,18 @@ const MainBannerView = () => {
                     <div className="thumb">
                       <div className="inner-content">
                         <h4>Men</h4>
-                        <span>Best Clothes For Men</span>
+                        <span>{props.banner.mainBannerMen.description}</span>
                       </div>
                       <div className="hover-content">
                         <div className="inner">
-                          <h4>Men</h4>
-                          <p>
-                            Elevate your style with our exclusive men's fashion collection, designed
-                            for the modern gentleman.
-                          </p>
+                          <h4>{props.banner.mainBannerMen.title}</h4>
+                          <p>{props.banner.mainBannerMen.subTitle}</p>
                           <div className="main-border-button">
-                            <a href="#">Discover More</a>
+                            <Link href={Urls.mens.index.url()}>Discover More</Link>
                           </div>
                         </div>
                       </div>
-                      <img src="/images/baner-right-image-02.jpg" alt="banner-right" />
+                      <img src={props.banner.mainBannerMen.image.url} alt="banner-right" />
                     </div>
                   </div>
                 </div>
@@ -73,21 +69,18 @@ const MainBannerView = () => {
                     <div className="thumb">
                       <div className="inner-content">
                         <h4>Kids</h4>
-                        <span>Best Clothes For Kids</span>
+                        <span>{props.banner.mainBannerKid.description}</span>
                       </div>
                       <div className="hover-content">
                         <div className="inner">
-                          <h4>Kids</h4>
-                          <p>
-                            Discover adorable outfits for your little ones with our charming
-                            children's clothing collection.
-                          </p>
+                          <h4>{props.banner.mainBannerKid.title}</h4>
+                          <p>{props.banner.mainBannerKid.subTitle}</p>
                           <div className="main-border-button">
-                            <a href="#">Discover More</a>
+                            <Link href={Urls.kids.index.url()}>Discover More</Link>
                           </div>
                         </div>
                       </div>
-                      <img src="/images/baner-right-image-03.jpg" alt="banner-right" />
+                      <img src={props.banner.mainBannerKid.image.url} alt="banner-right" />
                     </div>
                   </div>
                 </div>
@@ -96,21 +89,19 @@ const MainBannerView = () => {
                     <div className="thumb">
                       <div className="inner-content">
                         <h4>Accessories</h4>
-                        <span>Best Trend Accessories</span>
+                        <span>{props.banner.mainBannerAccessory.description}</span>
                       </div>
                       <div className="hover-content">
                         <div className="inner">
-                          <h4>Accessories</h4>
-                          <p>
-                            Accessorize in style with our exquisite collection of fashion
-                            accessories, perfect for adding the finishing touch to any outfit.
-                          </p>
+                          <h4>{props.banner.mainBannerAccessory.title}</h4>
+                          <p>{props.banner.mainBannerAccessory.subTitle}</p>
                           <div className="main-border-button">
-                            <a href="#">Discover More</a>
+                            {/* TODO :: 악세서리 페이지 만들고 수정하기 */}
+                            <Link href={Urls.kids.index.url()}>Discover More</Link>
                           </div>
                         </div>
                       </div>
-                      <img src="/images/baner-right-image-04.jpg" alt="banner-right" />
+                      <img src={props.banner.mainBannerAccessory.image.url} alt="banner-right" />
                     </div>
                   </div>
                 </div>

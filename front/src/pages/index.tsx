@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <>
-      <MainBannerView />
+      <MainBannerView banner={home.banner} />
       <section className="section" id="men">
         <div className="container">
           <div className="row">
