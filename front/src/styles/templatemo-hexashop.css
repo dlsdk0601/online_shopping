@@ -30,10 +30,10 @@ header
     background-color: #fff;
     height: 80px !important;
     position: fixed !important;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15) !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15) !important;
 }
 
 .background-header .logo,
@@ -54,9 +54,9 @@ header
     box-shadow: none;
     background-color: #fff;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
     height: 100px;
     -webkit-transition: all .5s ease 0s;
@@ -95,7 +95,7 @@ header
 .header-area .main-nav .nav {
     float: right;
     margin-top: 30px;
-    margin-right: 0px;
+    margin-right: 0;
     background-color: transparent;
     -webkit-transition: all 0.3s ease 0s;
     -moz-transition: all 0.3s ease 0s;
@@ -111,7 +111,7 @@ header
 }
 
 .header-area .main-nav .nav li:last-child {
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 .header-area .main-nav .nav li a {
@@ -178,9 +178,9 @@ header
 }
 
 .header-area .main-nav .nav li.submenu ul li {
-    margin-left: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .header-area .main-nav .nav li.submenu ul li a {
@@ -385,14 +385,14 @@ header
 
     .header-area {
         background-color: #f7f7f7;
-        padding: 0px 15px;
+        padding: 0 15px;
         height: 100px;
         box-shadow: none;
         text-align: center;
     }
 
     .header-area .container {
-        padding: 0px;
+        padding: 0;
     }
 
     .header-area .logo {
@@ -438,14 +438,14 @@ header
         width: 100%;
         background: #fff;
         border-bottom: 1px solid #eee;
-        padding-left: 0px !important;
-        padding-right: 0px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
     .header-area .main-nav .nav li a {
         height: 50px !important;
         line-height: 50px !important;
-        padding: 0px !important;
+        padding: 0 !important;
         border: none !important;
         background: #f7f7f7 !important;
         color: #191a20 !important;
@@ -463,10 +463,10 @@ header
         z-index: 1;
         transform: translateY(0%);
         transition-delay: 0s, 0s, 0.3s;
-        top: 0px;
+        top: 0;
         width: 100%;
         box-shadow: none;
-        height: 0px;
+        height: 0;
     }
 
     .header-area .main-nav .nav li.submenu ul li a {
@@ -475,7 +475,7 @@ header
     }
 
     .header-area .main-nav .nav li.submenu ul li a:hover:before {
-        width: 0px;
+        width: 0;
     }
 
     .header-area .main-nav .nav li.submenu ul.active {
@@ -490,7 +490,7 @@ header
     }
 
     .header-area .main-nav .nav li.submenu:hover ul, .header-area .main-nav .nav li.submenu:focus ul {
-        height: 0px;
+        height: 0;
     }
 }
 
@@ -612,7 +612,7 @@ banner
 
 .main-banner .right-content .right-first-image .thumb .hover-content p {
     color: #fff;
-    padding: 0px 20px;
+    padding: 0 20px;
     margin-bottom: 20px;
 }
 
@@ -688,16 +688,17 @@ Men
 
 #men .item .thumb .hover-content ul li {
     display: inline;
-    margin: 0px 10px;
+    margin: 0 10px;
 }
 
-#men .item .thumb .hover-content ul li a {
+#men .item .thumb .hover-content ul li button {
     width: 50px;
     height: 50px;
     text-align: center;
     line-height: 50px;
     display: inline-block;
     color: #2a2a2a;
+    border: none;
     background-color: #fff;
 }
 
@@ -849,16 +850,17 @@ Women
 
 #women .item .thumb .hover-content ul li {
     display: inline;
-    margin: 0px 10px;
+    margin: 0 10px;
 }
 
-#women .item .thumb .hover-content ul li a {
+#women .item .thumb .hover-content ul li button {
     width: 50px;
     height: 50px;
     text-align: center;
     line-height: 50px;
     display: inline-block;
     color: #2a2a2a;
+    border: none;
     background-color: #fff;
 }
 
@@ -1009,16 +1011,17 @@ Kids
 
 #kids .item .thumb .hover-content ul li {
     display: inline;
-    margin: 0px 10px;
+    margin: 0 10px;
 }
 
-#kids .item .thumb .hover-content ul li a {
+#kids .item .thumb .hover-content ul li button {
     width: 50px;
     height: 50px;
     text-align: center;
     line-height: 50px;
     display: inline-block;
     color: #2a2a2a;
+    border: none;
     background-color: #fff;
 }
 
@@ -1292,19 +1295,19 @@ Subscribe
     width: 100%;
     height: 44px;
     line-height: 44px;
-    padding: 0px 15px;
+    padding: 0 15px;
     font-size: 14px;
     font-style: italic;
     font-weight: 500;
     color: #aaa;
-    border-radius: 0px;
+    border-radius: 0;
     border: 1px solid #7a7a7a;
     box-shadow: none;
 }
 
-.subscribe form input::focus {
+.subscribe form input:focus {
     border-color: #2a2a2a;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .subscribe form button {
@@ -1358,14 +1361,14 @@ Products Page
 .page-heading {
     margin-top: 160px;
     margin-bottom: 30px;
-    background-image: url(/images/products-page-heading.jpg);
+    background-image: url('/images/products-page-heading.jpg');
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
 }
 
 .page-heading .inner-content {
-    padding: 150px 0px;
+    padding: 150px 0;
     text-align: center;
 }
 
@@ -1453,16 +1456,17 @@ Products Page
 
 #products .item .thumb .hover-content ul li {
     display: inline;
-    margin: 0px 10px;
+    margin: 0 10px;
 }
 
-#products .item .thumb .hover-content ul li a {
+#products .item .thumb .hover-content ul li button {
     width: 50px;
     height: 50px;
     text-align: center;
     line-height: 50px;
     display: inline-block;
     color: #2a2a2a;
+    border: none;
     background-color: #fff;
 }
 
@@ -1478,7 +1482,7 @@ Products Page
 
 #products .pagination ul li {
     display: inline;
-    margin: 0px 5px;
+    margin: 0 5px;
 }
 
 #products .pagination ul li a {
@@ -1526,7 +1530,7 @@ Single Product Page
     font-size: 22px;
     color: #2a2a2a;
     font-weight: 700;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 #product .right-content span.price {
@@ -1703,7 +1707,7 @@ About Us Page
 .about-page-heading {
     margin-top: 160px;
     margin-bottom: 30px;
-    background-image: url(/images/about-us-page-heading.jpg);
+    background-image: url("/images/about-us-page-heading.jpg");
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1841,7 +1845,7 @@ About Us Page
 
 .our-team .team-item .thumb .hover-effect .inner-content ul li {
     display: inline-block;
-    margin: 0px 5px;
+    margin: 0 5px;
 }
 
 .our-team .team-item .thumb .hover-effect .inner-content ul li a {
@@ -1899,7 +1903,7 @@ About Us Page
 
 .our-services .service-item {
     padding: 30px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.10);
     text-align: center;
 }
 
@@ -1944,19 +1948,19 @@ contact Us Page
     width: 100%;
     height: 44px;
     line-height: 44px;
-    padding: 0px 15px;
+    padding: 0 15px;
     font-size: 14px;
     font-style: italic;
     font-weight: 500;
     color: #aaa;
-    border-radius: 0px;
+    border-radius: 0;
     border: 1px solid #7a7a7a;
     box-shadow: none;
 }
 
-.contact-us form input::focus {
+.contact-us form input:focus {
     border-color: #2a2a2a;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .contact-us form textarea {
@@ -1967,19 +1971,19 @@ contact Us Page
     margin-top: 30px;
     margin-bottom: 25px;
     line-height: 44px;
-    padding: 0px 15px;
+    padding: 0 15px;
     font-size: 14px;
     font-style: italic;
     font-weight: 500;
     color: #aaa;
-    border-radius: 0px;
+    border-radius: 0;
     border: 1px solid #7a7a7a;
     box-shadow: none;
 }
 
-.contact-us form textarea::focus {
+.contact-us form textarea:focus {
     border-color: #2a2a2a;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .contact-us form button {
@@ -2034,7 +2038,7 @@ responsive
 
     .header-area .main-nav .nav li a {
         font-size: 14px;
-        letter-spacing: 0px;
+        letter-spacing: 0;
     }
 
     .main-banner .left-content {
@@ -2059,7 +2063,7 @@ responsive
     }
 
     .about-us .right-content {
-        margin-left: 0px;
+        margin-left: 0;
         margin-top: 30px;
     }
 
@@ -2072,7 +2076,7 @@ responsive
     }
 
     .contact-us #map {
-        margin-right: 0px;
+        margin-right: 0;
         margin-bottom: 30px;
     }
 }
