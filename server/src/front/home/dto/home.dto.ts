@@ -80,17 +80,58 @@ export class ProductListItem {
   // TODO :: 별점 추가
 }
 
-@ApiExtraModels(HomeBannerDto, ProductListItem)
-export class HomeResDto {
+@ApiExtraModels(HomeBannerDto)
+export class BannerDto {
   @ApiProperty({
-    description: "메인 베너",
+    description: "메인 베너 메인",
     nullable: false,
-    type: "array",
     items: { $ref: getSchemaPath(HomeBannerDto) },
   })
-  @IsArray()
   @IsNotEmpty()
-  mainBanners: HomeBannerDto[];
+  mainBannerMain: HomeBannerDto;
+
+  @ApiProperty({
+    description: "메인 베너 여성",
+    nullable: false,
+    items: { $ref: getSchemaPath(HomeBannerDto) },
+  })
+  @IsNotEmpty()
+  mainBannerWomen: HomeBannerDto;
+
+  @ApiProperty({
+    description: "메인 베너 남성",
+    nullable: false,
+    items: { $ref: getSchemaPath(HomeBannerDto) },
+  })
+  @IsNotEmpty()
+  mainBannerMen: HomeBannerDto;
+
+  @ApiProperty({
+    description: "메인 베너 키즈",
+    nullable: false,
+    items: { $ref: getSchemaPath(HomeBannerDto) },
+  })
+  @IsNotEmpty()
+  mainBannerKid: HomeBannerDto;
+
+  @ApiProperty({
+    description: "메인 베너 악세서리",
+    nullable: false,
+    items: { $ref: getSchemaPath(HomeBannerDto) },
+  })
+  @IsNotEmpty()
+  mainBannerAccessory: HomeBannerDto;
+}
+
+@ApiExtraModels(HomeBannerDto, ProductListItem, BannerDto)
+export class HomeResDto {
+  @ApiProperty({
+    description: "배너",
+    nullable: false,
+    items: { $ref: getSchemaPath(BannerDto) },
+  })
+  @IsNotEmpty()
+  banner: BannerDto;
 
   @ApiProperty({
     description: "남성 최신 상품 리스트",
