@@ -6,6 +6,7 @@ import MainBannerView from "../view/home/MainBannerView";
 import SliderView from "../view/home/SliderView";
 import { api } from "../api/url.g";
 import { queryKeys } from "../lib/contants";
+import IndexSkeleton from "../view/skeleton/IndexSkeleton";
 
 export default function Home() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function Home() {
   });
 
   if (isNil(home)) {
-    return <></>;
+    return <IndexSkeleton />;
   }
 
   return (
