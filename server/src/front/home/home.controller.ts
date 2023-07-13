@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { HomeService } from "./home.service";
 import { HomeReqDto, HomeResDto } from "./dto/home.dto";
@@ -8,7 +8,7 @@ import { HomeReqDto, HomeResDto } from "./dto/home.dto";
 export class HomeController {
   constructor(private readonly homeService: HomeService) {}
 
-  @Post("")
+  @Get("")
   @ApiCreatedResponse({ type: HomeResDto })
   async home(@Body() body: HomeReqDto) {
     return this.homeService.home(body);
