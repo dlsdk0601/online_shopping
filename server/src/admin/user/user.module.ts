@@ -9,6 +9,5 @@ import { LocalUser } from "../../entities/local-user.entity";
   imports: [TypeOrmModule.forFeature([User, LocalUser])],
   controllers: [UserController],
   providers: [UserService],
-  exports: [UserService],
 })
 export class UserModule {}
