@@ -9,4 +9,4 @@ import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
   controllers: [SubscribeController],
   providers: [SubscribeService],
 })
-export class AdminSubscribeModule {}
+export class SubscribeModule {}
