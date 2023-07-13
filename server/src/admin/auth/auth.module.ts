@@ -6,10 +6,10 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ManagerModule } from "../manager/manager.module";
 import Authentication from "../../entities/manager-authentication.entity";
 import Manager from "../../entities/manager.entity";
-import { AdminAuthController } from "./admin-auth.controller";
-import { AdminAuthService } from "./admin-auth.service";
-import { AdminJwtStrategy } from "./admin-jwt.strategy";
-import { AdminLocalStrategy } from "./admin-local.strategy";
+import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
+import { JwtStrategy } from "./jwt-strategy.service";
+import { LocalStrategy } from "./local-strategy.service";
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { AdminLocalStrategy } from "./admin-local.strategy";
     }),
     TypeOrmModule.forFeature([Authentication, Manager]),
   ],
-  controllers: [AdminAuthController],
-  providers: [AdminAuthService, AdminJwtStrategy, AdminLocalStrategy, AdminAuthService],
+  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy, LocalStrategy, AuthService],
 })
-export class AdminAuthModule {}
+export class AuthModule {}

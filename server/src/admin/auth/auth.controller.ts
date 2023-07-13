@@ -1,7 +1,7 @@
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { AdminAuthService } from "./admin-auth.service";
+import { AuthService } from "./auth.service";
 import { GetUser } from "../../decorator/user.decorator";
 import { CustomRequest, GlobalManager } from "../../type/type";
 import { SignInReqDto, SignInResDto } from "./dto/sign-in.dto";
@@ -10,8 +10,8 @@ import { SignOutReqDto, SignOutResDto } from "./dto/sign-out.dto";
 
 @ApiTags("admin-auth")
 @Controller("admin")
-export class AdminAuthController {
-  constructor(private readonly authService: AdminAuthService) {}
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
   @UseGuards(AuthGuard("admin-local"))
   @Post("sign-in")

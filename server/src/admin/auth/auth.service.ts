@@ -9,7 +9,7 @@ import errorMessage from "../../config/errorMessage";
 import { ManagerService } from "../manager/manager.service";
 
 @Injectable()
-export class AdminAuthService {
+export class AuthService {
   constructor(private jwtService: JwtService, private managerService: ManagerService) {}
 
   async signIn(pk: number, req: CustomRequest) {

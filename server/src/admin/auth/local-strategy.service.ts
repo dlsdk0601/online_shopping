@@ -7,7 +7,7 @@ import errorMessage from "../../config/errorMessage";
 import { compare } from "../../ex/bcryptEx";
 
 @Injectable()
-export class AdminLocalStrategy extends PassportStrategy(Strategy, "admin-local") {
+export class LocalStrategy extends PassportStrategy(Strategy, "admin-local") {
   constructor() {
     super({
       usernameField: "id",
