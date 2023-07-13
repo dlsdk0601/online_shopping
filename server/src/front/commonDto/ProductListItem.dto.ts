@@ -2,7 +2,6 @@ import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { FileSetDto } from "../../asset/dto/fileSet.dto";
 import { ProductCategory } from "../../type/commonType";
-import { HomeBannerDto } from "../home/dto/home.dto";
 
 @ApiExtraModels(FileSetDto)
 export class ProductListItem {
@@ -27,7 +26,7 @@ export class ProductListItem {
     type: "enum",
     enum: ProductCategory,
   })
-  @IsEnum(HomeBannerDto)
+  @IsEnum(ProductCategory)
   @IsNotEmpty()
   category: ProductCategory;
 
