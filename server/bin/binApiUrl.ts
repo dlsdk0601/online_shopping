@@ -39,6 +39,7 @@ export function getApiList(router) {
           method: layer.route?.stack[0].method,
         },
       });
+      return;
     }
 
     if (layer.route.path.includes("admin")) {
