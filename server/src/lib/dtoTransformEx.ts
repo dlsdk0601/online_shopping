@@ -1,5 +1,4 @@
-import { BadRequestException } from "@nestjs/common";
-import errorMessage from "../config/errorMessage";
+import { isString } from "lodash";
 
 export function toLowerCase(value: string): string {
   return value.toLowerCase();
@@ -19,11 +18,15 @@ export function toBoolean(value: string): boolean {
   return strValue === "true" || strValue === "1";
 }
 
-export function toNumber(value: string): number {
+export function toNumber(value: any, option: { default: number }): number {
+  if (!isString(value)) {
+    return option.default;
+  }
+
   const newValue: number = parseInt(value, 10);
 
   if (isNaN(newValue)) {
-    throw new BadRequestException(errorMessage.BAD_REQUEST);
+    return option.default;
   }
 
   return newValue;
