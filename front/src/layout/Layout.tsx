@@ -30,7 +30,6 @@ export const DefaultLayoutView = (props: PropsWithChildren<Record<never, any>>) 
   return (
     <>
       <Head>
-        {/* TODO :: Favicon 변경 */}
         <link rel="shortcut icon" type="image/x-icon" href={Favicon.src} />
       </Head>
       {props.children}
