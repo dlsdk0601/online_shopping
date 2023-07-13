@@ -5,40 +5,35 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 import { isNil } from "lodash";
-import Manager from "../../entities/manager.entity";
 import { AddManagerReqDto } from "./dto/add-manager.dto";
 import { LIMIT } from "../../type/pagination.dto";
 import { ManagerListResDto } from "./dto/show-manager.dto";
 import errorMessage from "../../config/errorMessage";
 import { EditManagerReqDto } from "./dto/edit-manager.dto";
 import { getHash } from "../../ex/bcryptEx";
+import Manager from "../../entities/manager.entity";
 
 @Injectable()
 export class ManagerService {
-  constructor(
-    @InjectRepository(Manager)
-    private manager: Repository<Manager>
-  ) {}
+  constructor() {}
 
   async addManager(body: AddManagerReqDto) {
-    const isExist = await this.manager.findOne({ where: { id: body.id } });
+    const isExist = await Manager.findOne({ where: { id: body.id } });
 
     if (isNil(isExist)) {
       throw new BadRequestException(errorMessage.ALREADY_USER_EXIST);
     }
 
-    const manager = this.manager.create({
-      name: body.name,
-      email: body.email,
-      id: body.id,
-      password_hash: body.password,
-    });
+    const manager = new Manager();
+
+    manager.name = body.name;
+    manager.email = body.email;
+    manager.id = body.id;
+    manager.password_hash = body.password;
 
     try {
-      await this.manager.save(manager);
+      await manager.save();
 
       return manager.pk;
     } catch (e) {
@@ -47,7 +42,7 @@ export class ManagerService {
   }
 
   async findAll(page: number) {
-    const [managers, total] = await this.manager.findAndCount({
+    const [managers, total] = await Manager.findAndCount({
       take: LIMIT,
       skip: LIMIT * (page - 1),
       select: {
@@ -62,7 +57,7 @@ export class ManagerService {
   }
 
   async findOneOr404(pk: number) {
-    const manager = await this.manager.findOne({
+    const manager = await Manager.findOne({
       where: { pk },
       relations: { authentications: true },
     });
@@ -75,11 +70,11 @@ export class ManagerService {
   }
 
   async findOneOrNull(pk: number) {
-    return this.manager.findOne({ where: { pk }, relations: { authentications: true } });
+    return Manager.findOne({ where: { pk }, relations: { authentications: true } });
   }
 
   async findById(id: string) {
-    return this.manager.findOne({ where: { id }, relations: { authentications: true } });
+    return Manager.findOne({ where: { id }, relations: { authentications: true } });
   }
 
   async update(req: EditManagerReqDto) {
@@ -92,7 +87,7 @@ export class ManagerService {
     manager.type = req.type;
 
     try {
-      await this.manager.save(manager);
+      await manager.save();
       return manager.pk;
     } catch (e) {
       throw new ConflictException(errorMessage.UPDATE_FAILED);
@@ -103,7 +98,7 @@ export class ManagerService {
     const manager = await this.findOneOr404(pk);
 
     try {
-      await this.manager.softDelete(manager.pk);
+      await manager.softRemove();
       return manager.pk;
     } catch (e) {
       throw new ConflictException(errorMessage.UPDATE_FAILED);
