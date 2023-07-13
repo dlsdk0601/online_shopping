@@ -14,7 +14,6 @@ import { TokenPayload } from "google-auth-library/build/src/auth/loginticket";
 import moment from "moment";
 import axios from "axios";
 import { GoogleUser } from "src/entities/google-user.entity";
-import { UserService } from "../../admin/user/user.service";
 import { getHash } from "../../ex/bcryptEx";
 import errorMessage from "../../config/errorMessage";
 import { UserType } from "../../type/commonType";
@@ -35,11 +34,7 @@ import { FrontUserAuth, User } from "../../entities/user.entity";
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private userService: UserService,
-    private jwtService: JwtService,
-    private readonly configService: ConfigService
-  ) {}
+  constructor(private jwtService: JwtService, private readonly configService: ConfigService) {}
 
   oauth2Client = new google.auth.OAuth2(
     this.configService.get("GOOGLE_ID"),
@@ -295,7 +290,7 @@ export class AuthService {
   async signIn(pk: number, req: CustomRequest) {
     const token = this.jwtService.sign({ pk });
 
-    const user = await this.userService.findLocalUserOneOr404(pk);
+    const user = await this.findLocalUserOneOr404(pk);
     const localAuth = new LocalAuthentication();
     localAuth.local_user = user;
     localAuth.token = token;
@@ -448,5 +443,18 @@ export class AuthService {
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.SIGN_UP_FAILED);
     }
+  }
+
+  async findLocalUserOneOr404(pk: number) {
+    const user = await LocalUser.findOne({
+      where: { pk },
+      relations: { user: true },
+    });
+
+    if (isNil(user)) {
+      throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
+    }
+
+    return user;
   }
 }

@@ -5,7 +5,6 @@ import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
-import { UserModule } from "../../admin/user/user.module";
 import {
   GoogleAuthentication,
   KakaoAuthentication,
@@ -23,7 +22,6 @@ import { LocalUser } from "../../entities/local-user.entity";
 @Module({
   imports: [
     ConfigModule,
-    UserModule,
     PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
