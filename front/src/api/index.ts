@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { sleep } from "sleepjs";
-import { isString } from "lodash";
 import { baseConfig } from "../lib/config";
 import { CONSTANT } from "../lib/contants";
 import errorMessageG from "./errorMessage.g";
@@ -110,17 +109,9 @@ export class ApiBase {
   }
 
   getParameterHandle<T>(url: string, req: T): string {
-    const query = Object.entries(req)
-      .flatMap(([key, values]) => {
-        if (values === undefined) {
-          return [];
-        }
-
-        return (isString(values) ? [values] : values)
-          .map(encodeURIComponent)
-          .map((value) => `${key}=${value}`);
-      })
-      .join("&");
+    // 받아오는 제네릭의 타입은 오브젝트 형태인데, 표현을 어떻게 할까
+    // @ts-ignore
+    const query = new URLSearchParams(req).toString();
 
     return `${url}?${query}`;
   }
