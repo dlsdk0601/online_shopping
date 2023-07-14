@@ -14,14 +14,14 @@ import { EditManagerReqDto, EditManagerResDto } from "./dto/edit-manager.dto";
 import { DeleteManagerReqDto, DeleteManagerResDto } from "./dto/delete-manager.dto";
 
 @ApiTags("manager")
-@Controller("admin/manager")
+@Controller("admin")
 export class ManagerController {
   constructor(private readonly managerService: ManagerService) {}
 
   @Post("/add-manager")
   @ApiCreatedResponse({ type: AddManagerResDto })
   @Roles(ManagerType.SUPER)
-  async addManager(@Body() body: AddManagerReqDto) {
+  async add(@Body() body: AddManagerReqDto) {
     const pk = await this.managerService.addManager(body);
     return { pk };
   }
@@ -29,14 +29,14 @@ export class ManagerController {
   @Post("/manager-list")
   @ApiCreatedResponse({ type: ManagerListResDto })
   @Roles(ManagerType.MANAGER)
-  findAll(@Body() body: ManagerListReqDto) {
+  list(@Body() body: ManagerListReqDto) {
     return this.managerService.findAll(body.page);
   }
 
   // @Roles(ManagerType.MANAGER)
   @Post("/show-manager")
   @ApiCreatedResponse({ type: ShowManagerResDto })
-  async findOne(@Body() body: ShowManagerReqDto) {
+  async show(@Body() body: ShowManagerReqDto) {
     // eslint-disable-next-line camelcase
     const { password_hash, ...result } = await this.managerService.findOneOr404(body.pk);
     return result;
@@ -45,7 +45,7 @@ export class ManagerController {
   @Post("/edit-manager")
   @ApiCreatedResponse({ type: EditManagerResDto })
   @Roles(ManagerType.MANAGER)
-  update(@Body() body: EditManagerReqDto) {
+  edit(@Body() body: EditManagerReqDto) {
     return this.managerService.update(body);
   }
 
