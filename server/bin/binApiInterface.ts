@@ -1,15 +1,13 @@
 import { generateApi } from "swagger-typescript-api";
-import constant from "../src/config/constant";
 import path from "path";
 import prettier from "prettier";
 import fs from "fs";
 import { ignorePromise } from "../src/ex/ex";
 
-// TODO :: front / admin 분리해서 생성해주기
-// 일단 admin, front 두군데 똑같은 파일을 만든다. 나중에 지워주는 식으로 해결
-async function transformInterface() {
+async function transformInterface(input: string, filePath: string) {
   const data = await generateApi({
-    url: `${constant().originUrl}/swagger-json`,
+    // url: `${constant().originUrl}/swagger-json`,
+    input,
     httpClientType: "axios",
     output: false,
     templates: "./admin/src",
@@ -36,16 +34,14 @@ async function transformInterface() {
   ts.push("/* tslint:disable */");
   ts.push("/* eslint-disable */");
   ts.push(`// 자동 생성 파일 수정하지 말것 ${new Date().toString()}`);
+
   data.files.forEach((item) => {
     ts.push(item.content.replace(/Dto/g, ""));
   });
-
-  const adminTargetPath = path.join(__dirname, "..", "..", "admin/src/api/type.g.ts");
-  const frontTargetPath = path.join(__dirname, "..", "..", "front/src/api/type.g.ts");
-  const adminTsFormatted = prettier.format(ts.join("\n"), { filepath: adminTargetPath });
-  const frontTsFormatted = prettier.format(ts.join("\n"), { filepath: frontTargetPath });
-  fs.writeFileSync(adminTargetPath, adminTsFormatted);
-  fs.writeFileSync(frontTargetPath, frontTsFormatted);
+  const targetPath = path.join(__dirname, "..", "..", filePath);
+  const tsFormatted = prettier.format(ts.join("\n"), { filepath: targetPath });
+  fs.writeFileSync(targetPath, tsFormatted);
 }
 
-ignorePromise(() => transformInterface());
+ignorePromise(() => transformInterface("./front-api.json", "front/src/api/type.g.ts"));
+ignorePromise(() => transformInterface("./admin-api.json", "admin/src/api/type.g.ts"));
