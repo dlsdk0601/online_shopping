@@ -52,7 +52,7 @@ export class ManagerListResManagerDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ description: "create at", type: "date", format: "date-time" })
+  @ApiProperty({ description: "create at", type: "string", format: "date-time" })
   @IsDate()
   create_at: Date;
 }
