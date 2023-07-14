@@ -42,7 +42,7 @@ async function bootstrap() {
   app.use(middle);
 
   // swagger
-  setupSwagger(app);
+  await setupSwagger(app);
 
   await app.listen(constant().Port);
 
