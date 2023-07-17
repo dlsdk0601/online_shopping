@@ -1,57 +1,23 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
-import { isArray, isNil } from "lodash";
-import { api } from "../../api/url.g";
+import { isNil } from "lodash";
 import { ProductCategory } from "../../api/enum.g";
-import useIsReady from "../../hooks/useIsReady";
-import { Urls } from "../../url/url.g";
 import ProductPaginationView from "../../view/product/ProductPaginationView";
+import { useProduct } from "../../hooks/useProduct";
+import { validatePageQuery } from "../../ex/utils";
+import { Replace } from "../../layout/App";
 
 const WomensPage = () => {
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const [page, setPage] = useState(1);
+  const page = validatePageQuery(router.query.page) ?? 1;
 
-  const { data: pagination } = useQuery(
-    [ProductCategory.WOMEN, page],
-    () => api.productList({ page, category: ProductCategory.WOMEN }),
-    {
-      enabled: router.isReady,
-      staleTime: 60 * 1000, // 1시간을 기준으로 최신화
-      keepPreviousData: true, // 이전 데이터 유지
-    },
-  );
+  const { pagination, isLoading } = useProduct(ProductCategory.WOMEN, page);
 
-  useIsReady(() => {
-    if (isNil(pagination)) {
-      return;
-    }
-
-    const { page: currentPage } = router.query;
-
-    if (isNil(currentPage)) {
-      return router.replace(Urls.womens.index.url({ page: 1 }));
-    }
-
-    if (isArray(currentPage)) {
-      return router.replace(Urls.womens.index.url({ page: 1 }));
-    }
-
-    if (!isNaN(Number(currentPage))) {
-      setPage(Number(currentPage));
-    }
-
-    if (pagination.hasNext) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const ignore = queryClient.prefetchQuery([ProductCategory.WOMEN, pagination.nextPage], () =>
-        api.productList({ page: pagination.nextPage, category: ProductCategory.WOMEN }),
-      );
-    }
-  }, [queryClient]);
+  if (isLoading) {
+    return <></>;
+  }
 
   if (isNil(pagination)) {
-    return <></>;
+    return <Replace url="_error" />;
   }
 
   return (
