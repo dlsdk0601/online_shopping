@@ -18,10 +18,9 @@ const KakaoRedirectView = () => {
     onSuccess: (res: KakaoCodeVerifyRes) => {
       if (!res.isSignUp) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const ignore = router.replace({
-          pathname: Urls.auth.snsSignUp,
-          query: { email: res.email, type: UserType.KAKAO },
-        });
+        const ignore = router.replace(
+          Urls.auth.snsSignUp.url({ email: res.email, type: UserType.KAKAO }),
+        );
       } else {
         setToken(res.token);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
