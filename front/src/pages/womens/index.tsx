@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import { ProductCategory } from "../../api/enum.g";
-import ProductPaginationView from "../../view/product/ProductPaginationView";
 import { useProduct } from "../../hooks/useProduct";
 import { validatePageQuery } from "../../ex/utils";
+import ProductListSkeleton from "../../view/skeleton/ProductListSkeleton";
 import { Replace } from "../../layout/App";
+import ProductPaginationView from "../../view/product/ProductPaginationView";
 
 const WomensPage = () => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const WomensPage = () => {
   const { pagination, isLoading } = useProduct(ProductCategory.WOMEN, page);
 
   if (isLoading) {
-    return <></>;
+    return <ProductListSkeleton />;
   }
 
   if (isNil(pagination)) {
