@@ -166,3 +166,17 @@ export const isPhone = (value: string): boolean => {
 
   return true;
 };
+
+export function validatePageQuery(page: string | string[] | undefined): number | null {
+  if (isNil(page) || isArray(page)) {
+    return null;
+  }
+
+  const pageNum = Number(page);
+
+  if (isNaN(pageNum)) {
+    return null;
+  }
+
+  return pageNum;
+}
