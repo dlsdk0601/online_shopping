@@ -62,7 +62,7 @@ export const HeaderView = () => {
               </Link>
               <ul className={classNames("nav", { show: isOpen })}>
                 {headerMenuList.map((menu) => (
-                  <li className="scroll-to-section">
+                  <li key={`header-menu-${menu.name}`} className="scroll-to-section">
                     <Link
                       href={menu.path}
                       className={classNames({
@@ -80,7 +80,9 @@ export const HeaderView = () => {
                     // TODO :: token 있을 때는 마이페이지로
                     href={isNil(token) ? Urls.auth.signIn : Urls.auth.signIn}
                     className={classNames({
-                      active: router.pathname !== Urls.index && router.pathname.startsWith("/auth"),
+                      active:
+                        router.pathname !== Urls.index.pathname &&
+                        router.pathname.startsWith("/auth"),
                     })}
                   >
                     Account
@@ -138,13 +140,13 @@ const FooterView = () => {
             <h4>Shopping &amp; Categories</h4>
             <ul>
               <li>
-                <Link href={Urls.mens.index}>Men’s Shopping</Link>
+                <Link href={Urls.mens.index.url()}>Men’s Shopping</Link>
               </li>
               <li>
-                <Link href={Urls.womens.index}>Women’s Shopping</Link>
+                <Link href={Urls.womens.index.url()}>Women’s Shopping</Link>
               </li>
               <li>
-                <Link href={Urls.kids.index}>Kid's Shopping</Link>
+                <Link href={Urls.kids.index.url()}>Kid's Shopping</Link>
               </li>
             </ul>
           </div>
@@ -152,13 +154,13 @@ const FooterView = () => {
             <h4>Useful Links</h4>
             <ul>
               <li>
-                <Link href={Urls.index}>Homepage</Link>
+                <Link href={Urls.index.url()}>Homepage</Link>
               </li>
               <li>
-                <Link href={Urls.about.index}>About Us</Link>
+                <Link href={Urls.about.index.url()}>About Us</Link>
               </li>
               <li>
-                <Link href={Urls.contact.index}>Contact Us</Link>
+                <Link href={Urls.contact.index.url()}>Contact Us</Link>
               </li>
             </ul>
           </div>
