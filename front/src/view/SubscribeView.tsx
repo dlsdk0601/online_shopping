@@ -9,8 +9,8 @@ import { api } from "../api/url.g";
 import { AddSubscribeReq } from "../api/type.g";
 
 const SubscribeView = () => {
-  const [name, setName] = useValueField("");
-  const [email, setEmail] = useValueField("");
+  const [name, setName] = useValueField("", "이름");
+  const [email, setEmail] = useValueField("", "이메일");
 
   const { mutate } = useMutation((req: AddSubscribeReq) => api.addSubscribe(req), {
     onSuccess: (res) => {
