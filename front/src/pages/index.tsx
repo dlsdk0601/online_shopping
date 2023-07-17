@@ -11,12 +11,16 @@ import IndexSkeleton from "../view/skeleton/IndexSkeleton";
 export default function Home() {
   const router = useRouter();
 
-  const { data: home } = useQuery([queryKeys.home], () => api.home({}), {
+  const { data: home, isLoading } = useQuery([queryKeys.home], () => api.home({}), {
     enabled: router.isReady,
   });
 
-  if (isNil(home)) {
+  if (isLoading) {
     return <IndexSkeleton />;
+  }
+
+  if (isNil(home)) {
+    return <></>;
   }
 
   return (
