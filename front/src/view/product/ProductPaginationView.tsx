@@ -19,7 +19,7 @@ const ProductPaginationView = (props: { pagination: ProductListRes }) => {
                   <Link
                     href={{
                       pathname: router.pathname,
-                      query: { ...router.query, page: props.pagination.nextPage },
+                      query: { ...router.query, page: props.pagination.prevPage },
                     }}
                   >
                     -
