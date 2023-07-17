@@ -80,22 +80,13 @@ const SnsSignInPage = () => {
       <section className="section">
         <div className="container sign-container">
           <form className="form-container" onSubmit={preventDefaulted(() => onSnsSignUp())}>
-            <AuthInputFieldView
-              field={email}
-              label="이메일"
-              onChange={(e) => setEmail.set(e.target.value)}
-            />
+            <AuthInputFieldView field={email} onChange={(e) => setEmail.set(e.target.value)} />
             <AuthInputFieldView
               field={name}
-              label="이름"
               onChange={(e) => setName.set(e.target.value)}
               type="tel"
             />
-            <AuthInputFieldView
-              field={phone}
-              label="휴대폰"
-              onChange={(e) => setPhone.set(e.target.value)}
-            />
+            <AuthInputFieldView field={phone} onChange={(e) => setPhone.set(e.target.value)} />
             <button type="submit" className="sign-button">
               Sign Up
             </button>
