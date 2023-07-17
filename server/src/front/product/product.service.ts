@@ -13,6 +13,9 @@ export class ProductService {
       take: this.LIMIT,
       skip: this.LIMIT * (query.page - 1),
       relations: { main_image: true },
+      where: {
+        category: query.category,
+      },
       select: {
         pk: true,
         name: true,
