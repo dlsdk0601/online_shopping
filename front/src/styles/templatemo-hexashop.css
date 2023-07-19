@@ -2196,6 +2196,10 @@ responsive
     height: 385px
 }
 
+.left-images.skeleton {
+    height: 385px;
+}
+
 .thumb.skeleton {
     height: 385px
 }
@@ -2204,10 +2208,18 @@ responsive
     .right-first-image.skeleton {
         height: 400px
     }
+
+    .left-images.skeleton {
+        height: 400px;
+    }
 }
 
 @media (max-width: 767px) {
     .right-first-image.skeleton {
         height: 400px
+    }
+
+    .left-images.skeleton {
+        height: 400px;
     }
 }
