@@ -1,13 +1,41 @@
-import { memo } from "react";
+import { UrlObject } from "url";
+import { memo, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { mf2 } from "../ex/numberEx";
 import { ProductListItem } from "../api/type.g";
+import { Urls } from "../url/url.g";
 
 const ProductItemView = (props: { item: ProductListItem }) => {
+  const router = useRouter();
+  const [url, setUrl] = useState<UrlObject | null>(null);
+
+  useEffect(() => {
+    switch (props.item.category) {
+      case "KIDS":
+        setUrl(Urls.kids.show["[pk]"].url({ pk: props.item.pk }));
+        return;
+      case "MEN":
+        setUrl(Urls.mens.show["[pk]"].url({ pk: props.item.pk }));
+        return;
+      case "WOMEN":
+        setUrl(Urls.womens.show["[pk]"].url({ pk: props.item.pk }));
+        return;
+      case "ACCESSORY":
+      default:
+        setUrl(Urls.kids.show["[pk]"].url({ pk: props.item.pk }));
+    }
+  }, []);
+
   return (
     <li className="item">
       <div className="thumb">
         <div className="hover-content">
           <ul>
+            <li>
+              <button type="button" onClick={() => router.push(url ?? "/")}>
+                <i className="fa fa-eye" />
+              </button>
+            </li>
             <li>
               <button type="button">
                 <i className="fa fa-star" />
