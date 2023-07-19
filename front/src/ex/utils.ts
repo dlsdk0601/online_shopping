@@ -2,6 +2,7 @@ import { ParsedUrlQuery } from "querystring";
 import { BaseSyntheticEvent } from "react";
 import { isArray, isDate, isEmpty, isNil, isNull, isNumber, isString, isUndefined } from "lodash";
 import moment, { Moment } from "moment";
+import { NEWPK } from "../lib/contants";
 
 export const returnTo = (query: ParsedUrlQuery): string | undefined => {
   const returnTo = query.returnTo;
@@ -179,4 +180,22 @@ export function validatePageQuery(page: string | string[] | undefined): number |
   }
 
   return pageNum;
+}
+
+export function validatePk(pk: string | string[] | undefined): number | null {
+  if (isNil(pk) || isArray(pk)) {
+    return null;
+  }
+
+  if (pk === NEWPK) {
+    return null;
+  }
+
+  const numberPk = Number(pk);
+
+  if (isNaN(numberPk)) {
+    return null;
+  }
+
+  return numberPk;
 }
