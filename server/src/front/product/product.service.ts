@@ -1,7 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { isNil } from "lodash";
 import { AssetService } from "../../asset/asset.service";
 import { ProductListReqDto, ProductListResDto } from "./dto/show-product.dto";
 import { Product } from "../../entities/product.entity";
+import errorMessage from "../../config/errorMessage";
 
 @Injectable()
 export class ProductService {
@@ -30,5 +32,24 @@ export class ProductService {
     }));
 
     return new ProductListResDto(productListItems, count, query.page);
+  }
+
+  async show(pk: number) {
+    const product = await Product.findOne({ where: { pk }, relations: { sub_images: true } });
+
+    if (isNil(product)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    return {
+      pk: product.pk,
+      name: product.name,
+      price: product.price,
+      stockCount: product.stock_count,
+      category: product.category,
+      subImages: product.sub_images.map((img) => this.assetService.getFileSet(img)),
+      descriptionTitle: product.description_title,
+      description: product.description,
+    };
   }
 }
