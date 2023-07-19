@@ -19,7 +19,7 @@ const WomenProductShowPage = () => {
   }
 
   const { data: product, isLoading } = useQuery(
-    [queryKeys.product, router.query.pk],
+    [queryKeys.product, pk],
     () => api.showProduct({ pk }),
     {
       enabled: isNotNil(pk),
