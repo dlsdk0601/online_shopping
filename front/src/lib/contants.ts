@@ -4,6 +4,7 @@ export const queryKeys = {
   user: "USER",
   token: "TOKEN",
   home: "HOME",
+  product: "PRODUCT",
 };
 
 export const ATOM_KEY = {
@@ -21,3 +22,5 @@ export const SNS_URL = {
   kakao: `https://kauth.kakao.com/oauth/authorize?client_id=${baseConfig.kakao_client_id}&redirect_uri=${baseConfig.kakao_redirect_url}&response_type=code`,
   naver: `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${baseConfig.naver_client_id}&redirect_uri=${baseConfig.naver_redirect_url}&state=${baseConfig.naver_state}`,
 };
+
+export const NEWPK = "new";
