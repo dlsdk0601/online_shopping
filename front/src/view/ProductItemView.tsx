@@ -22,7 +22,7 @@ const ProductItemView = (props: { item: ProductListItem }) => {
         return;
       case "ACCESSORY":
       default:
-        setUrl(Urls.kids.show["[pk]"].url({ pk: props.item.pk }));
+        setUrl(Urls.accessory.show["[pk]"].url({ pk: props.item.pk }));
     }
   }, []);
 
