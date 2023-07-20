@@ -44,6 +44,7 @@ const headerMenuList = [
     path: Urls.womens.index.pathname,
   },
   { name: "Kid's", path: Urls.kids.index.pathname },
+  { name: "Accessory", path: Urls.accessory.index.pathname },
 ];
 
 export const HeaderView = () => {
