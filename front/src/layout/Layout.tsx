@@ -78,8 +78,7 @@ export const HeaderView = () => {
                 ))}
                 <li className="scroll-to-section">
                   <Link
-                    // TODO :: token 있을 때는 마이페이지로
-                    href={isNil(token) ? Urls.auth.signIn.url() : Urls.auth.signIn.url()}
+                    href={isNil(token) ? Urls.auth.signIn.url() : Urls["my-page"].index.pathname}
                     className={classNames({
                       active:
                         router.pathname !== Urls.index.pathname &&
