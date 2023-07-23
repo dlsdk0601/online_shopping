@@ -1,6 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
+import { isNil } from "lodash";
 import GoogleSignInView from "../../view/account/GoogleSignInView";
 import LocalSignInView from "../../view/account/LocalSignInView";
 import { tokenModel } from "../../store/user";
@@ -12,7 +13,16 @@ import NaverSignInView from "../../view/account/NaverSignInView";
 
 const SignIn = () => {
   const router = useRouter();
-  const setToken = useSetRecoilState(tokenModel);
+  const [token, setToken] = useRecoilState(tokenModel);
+
+  useEffect(() => {
+    if (isNil(token)) {
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const ignore = router.replace(Urls.index.url());
+  }, [token]);
 
   const onSuccess = useCallback((token: string) => {
     setToken(token);
