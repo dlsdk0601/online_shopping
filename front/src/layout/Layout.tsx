@@ -1,3 +1,4 @@
+import { UrlObject } from "url";
 import React, { PropsWithChildren, useState } from "react";
 import Head from "next/head";
 import { useIsFetching, useIsMutating } from "react-query";
@@ -14,10 +15,15 @@ import SignOutButtonView from "../view/account/SignOutButtonView";
 
 // 로그인 유저가 보는 화면 (ex 어드민 메인화면)
 export const LayoutView = (props: PropsWithChildren) => {
+  const router = useRouter();
   return (
     <>
       <HeaderView />
-      {props.children}
+      {router.pathname.includes("my-page") ? (
+        <MyPageWrapper>{props.children}</MyPageWrapper>
+      ) : (
+        props.children
+      )}
       <BlockView />
       <FooterView />
     </>
@@ -37,7 +43,12 @@ export const DefaultLayoutView = (props: PropsWithChildren<Record<never, any>>) 
   );
 };
 
-const headerMenuList = [
+interface HeaderMenuList {
+  name: string;
+  path: string;
+}
+
+const headerMenuList: HeaderMenuList[] = [
   { name: "Men's", path: Urls.mens.index.pathname },
   {
     name: "Women's",
@@ -204,5 +215,85 @@ const BlockView = () => {
         <div />
       </div>
     </div>
+  );
+};
+
+interface MyPageMenu {
+  name: string;
+  path: string;
+  url: UrlObject;
+  disabled?: boolean;
+}
+
+const myPageMenuList: MyPageMenu[] = [
+  { name: "Home", path: Urls["my-page"].index.pathname, url: Urls["my-page"].index.url() },
+];
+
+export const MyPageWrapper = (props: PropsWithChildren) => {
+  const router = useRouter();
+  return (
+    <>
+      {/* 마이 페이지에서만 배너를 공통 처리 한 이유는 LayoutView 에서 분기처리가 많아 지기 때문이다. */}
+      <div className="page-heading" id="top">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="inner-content">
+                <h2>My Page</h2>
+                <span>Awesome &amp; Creative HTML CSS layout by TemplateMo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav mx-auto">
+            {myPageMenuList.map((menu) => {
+              return (
+                <li
+                  className={classNames("nav-item", {
+                    active: router.pathname === menu.path,
+                    disabled: menu.disabled,
+                  })}
+                >
+                  <Link className="nav-link" href={menu.url}>
+                    {menu.name}
+                  </Link>
+                </li>
+              );
+            })}
+            {/* 드롭 다운 예시 */}
+            {/* <li className="nav-item dropdown"> */}
+            {/*  <a */}
+            {/*    className="nav-link dropdown-toggle" */}
+            {/*    href="#" */}
+            {/*    id="navbarDropdown" */}
+            {/*    role="button" */}
+            {/*    data-toggle="dropdown" */}
+            {/*    aria-haspopup="true" */}
+            {/*    aria-expanded="false" */}
+            {/*  > */}
+            {/*    Dropdown */}
+            {/*  </a> */}
+            {/*  <div className="dropdown-menu" aria-labelledby="navbarDropdown"> */}
+            {/*    <a className="dropdown-item" href="#"> */}
+            {/*      Action */}
+            {/*    </a> */}
+            {/*    <a className="dropdown-item" href="#"> */}
+            {/*      Another action */}
+            {/*    </a> */}
+            {/*    <div className="dropdown-divider" /> */}
+            {/*    <a className="dropdown-item" href="#"> */}
+            {/*      Something else here */}
+            {/*    </a> */}
+            {/*  </div> */}
+            {/* </li> */}
+          </ul>
+        </div>
+      </nav>
+      {props.children}
+    </>
   );
 };
