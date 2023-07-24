@@ -227,6 +227,11 @@ interface MyPageMenu {
 
 const myPageMenuList: MyPageMenu[] = [
   { name: "Home", path: Urls["my-page"].index.pathname, url: Urls["my-page"].index.url() },
+  {
+    name: "Cart",
+    path: Urls["my-page"].cart.index.pathname,
+    url: Urls["my-page"].cart.index.url(),
+  },
 ];
 
 export const MyPageWrapper = (props: PropsWithChildren) => {
@@ -294,7 +299,7 @@ export const MyPageWrapper = (props: PropsWithChildren) => {
         </div>
       </nav>
 
-      <section className="section" id="product">
+      <section className="section" id="products">
         <div className="container">
           <div className="row">{props.children}</div>
         </div>
