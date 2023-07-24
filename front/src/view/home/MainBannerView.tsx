@@ -96,8 +96,7 @@ const MainBannerView = (props: { banner: Banner }) => {
                           <h4>{props.banner.mainBannerAccessory.title}</h4>
                           <p>{props.banner.mainBannerAccessory.subTitle}</p>
                           <div className="main-border-button">
-                            {/* TODO :: 악세서리 페이지 만들고 수정하기 */}
-                            <Link href={Urls.kids.index.url()}>Discover More</Link>
+                            <Link href={Urls.accessory.index.url()}>Discover More</Link>
                           </div>
                         </div>
                       </div>
