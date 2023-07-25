@@ -58,7 +58,13 @@ function generateSource(page: Page | Dir, parents: string[]): string[] {
     case "page": {
       const pathname = `/${newParents.join("/")}`;
       const key = `"${page.name}"`;
-      lines.push(`${key}: new PageUrl("${pathname}"),`);
+      lines.push(
+        `${key}: new PageUrl("${
+          pathname.endsWith("/") && pathname !== "/"
+            ? pathname.substring(0, pathname.length - 1)
+            : pathname
+        }"),`,
+      );
       break;
     }
     case "dir":
