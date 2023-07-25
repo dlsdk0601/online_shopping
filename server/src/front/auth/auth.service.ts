@@ -431,7 +431,7 @@ export class AuthService {
       }
 
       if (isNil(auth)) {
-        return new InternalServerErrorException(errorMessage.SIGN_UP_FAILED);
+        throw new InternalServerErrorException(errorMessage.SIGN_UP_FAILED);
       }
 
       auth.token = token;
