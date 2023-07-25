@@ -298,12 +298,7 @@ export const MyPageWrapper = (props: PropsWithChildren) => {
           </ul>
         </div>
       </nav>
-
-      <section className="section" id="products">
-        <div className="container">
-          <div className="row">{props.children}</div>
-        </div>
-      </section>
+      {props.children}
     </>
   );
 };
