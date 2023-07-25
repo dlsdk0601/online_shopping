@@ -11,6 +11,7 @@ import { GoogleTokenVerifyReqDto, GoogleTokenVerifyResDto } from "./dto/google-a
 import { SignOutReqDto, SignOutResDto } from "./dto/sign-out.dto";
 import { KakaoCodeVerifyReqDto, KakaoCodeVerifyResDto } from "./dto/kakao-auth.dto";
 import { NaverCodeVerifyReqDto, NaverCodeVerifyResDto } from "./dto/naver-auth.dto";
+import { EditUserReqDto, EditUserResDto } from "./dto/edit-user.dto";
 
 @ApiTags("auth")
 @Controller("")
@@ -34,7 +35,7 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   @Post("auth")
   @ApiCreatedResponse({ type: AuthUserResDto })
-  getUserDataInfo(@Body() body: AuthReqDto, @GetUser() user: GlobalUser) {
+  show(@Body() body: AuthReqDto, @GetUser() user: GlobalUser) {
     return user;
   }
 
@@ -67,5 +68,11 @@ export class AuthController {
   @ApiCreatedResponse({ type: NaverCodeVerifyResDto, description: "네이버 토큰 검증" })
   async naverCodeVerify(@Body() body: NaverCodeVerifyReqDto, @Req() req: CustomRequest) {
     return this.authService.validateNaverCode(body, req);
+  }
+
+  @Post("/edit-user")
+  @ApiCreatedResponse({ type: EditUserResDto })
+  async editUser(@Body() body: EditUserReqDto) {
+    return this.authService.editUser(body);
   }
 }

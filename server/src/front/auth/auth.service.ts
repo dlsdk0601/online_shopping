@@ -31,6 +31,7 @@ import { KakaoUser } from "../../entities/kakao-user.entity";
 import { NaverUser } from "../../entities/naver-user.entity";
 import { LocalUser } from "../../entities/local-user.entity";
 import { FrontUserAuth, User } from "../../entities/user.entity";
+import { EditUserReqDto } from "./dto/edit-user.dto";
 
 @Injectable()
 export class AuthService {
@@ -456,5 +457,40 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  async editUser(body: EditUserReqDto) {
+    const userType = `${body.type.toLowerCase()}User`;
+    const user = await User.findOne({
+      where: { pk: body.pk },
+      relations: {
+        [userType]: true,
+      },
+    });
+
+    if (isNil(user)) {
+      throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
+    }
+
+    if (user.type === UserType.LOCAL) {
+      user.localUser.id = body.id;
+      user.localUser.email = body.email;
+
+      // 비밀번호는 LOCAL 유저만 가지므로, if 안에 if 를 넣는다.
+      if (body.isPasswordEdit) {
+        user.localUser.password_hash = await getHash(body.password);
+      }
+    }
+
+    user.name = body.name;
+    user.phone = body.phone;
+    user[userType].email = body.email;
+
+    try {
+      await user.save();
+      return { pk: user.pk };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
   }
 }
