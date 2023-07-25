@@ -56,7 +56,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     try {
       lastAuth.expired_at = moment().add("7", "d").toDate();
       await lastAuth.save();
-      return { pk, type: user.type, name: user.name, phone: user.phone };
+      return {
+        pk,
+        id: user.userData().id,
+        type: user.userData().type,
+        name: user.userData().name,
+        phone: user.userData().phone,
+        email: user.userData().email,
+      };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
