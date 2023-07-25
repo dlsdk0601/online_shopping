@@ -43,6 +43,16 @@ const useValueField = <T>(
 
     for (let i = 0; i < validator.length; i++) {
       const val = validator[i];
+
+      if (isNil(val)) {
+        continue;
+      }
+
+      if (typeof state.value !== "string") {
+        // 사실 string 이 아니면 validation 이 굳이 필요하지 않으니까 narrowing 해준다.
+        continue;
+      }
+
       const errorMessage = val(state.value);
       if (isNotNil(errorMessage)) {
         setState({ ...state, error: errorMessage });
