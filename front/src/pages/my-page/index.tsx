@@ -12,6 +12,7 @@ import { EditUserReq } from "../../api/type.g";
 import { api } from "../../api/url.g";
 
 const MyPage = () => {
+  // TODO :: 비밀번호 체크 로직 추가
   const { user } = useUser();
 
   const { mutate } = useMutation((req: EditUserReq) => api.editUser(req), {
@@ -50,6 +51,7 @@ const MyPage = () => {
   }, [user]);
 
   const onSubmit = useCallback(() => {
+    // TODO :: validation 이 기니까 함수로 따로 빼기
     if (!isUpdate) {
       setIsUpdate(!isUpdate);
       return;
