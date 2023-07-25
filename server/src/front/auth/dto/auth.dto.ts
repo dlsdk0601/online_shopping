@@ -1,13 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-} from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString } from "class-validator";
 import { UserType } from "../../../type/commonType";
 
 export class AuthReqDto {}
@@ -24,9 +16,9 @@ export class AuthUserResDto {
   id: string;
 
   @ApiProperty({ description: "user type", enum: UserType, nullable: true })
-  @IsOptional()
+  @IsNotEmpty()
   @IsEnum(UserType)
-  type: UserType | null;
+  type: UserType;
 
   @ApiProperty({ description: "name", nullable: false, type: "string" })
   @IsNotEmpty()
