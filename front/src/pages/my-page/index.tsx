@@ -32,6 +32,8 @@ const MyPage = () => {
 
   const [id, setId] = useValueField("", "아이디");
   const [password, setPassword] = useValueField("", "비밀번호", vPassword);
+  const [newPassword, setNewPassword] = useValueField("", "새 비밀번호", vPassword);
+  const [confirmPassword, setConfirmPassword] = useValueField("", "새 비밀번호 확인", vPassword);
   const [name, setName] = useValueField("", "이름");
   const [phone, setPhone] = useValueField("", "휴대폰", vPhone);
   const [email, setEmail] = useValueField("", "이메일", vEmail);
@@ -85,6 +87,14 @@ const MyPage = () => {
     });
   }, [id, password, phone, email]);
 
+  const onBlurPassword = useCallback(() => {
+    if (newPassword.value !== confirmPassword.value) {
+      setConfirmPassword.err("비밀번호가 일치하지 않습니다.");
+    } else {
+      setConfirmPassword.err("");
+    }
+  }, [newPassword, confirmPassword]);
+
   return (
     <section className="section mt-4">
       <div className="container sign-container">
@@ -96,12 +106,32 @@ const MyPage = () => {
               disabled={!isUpdate}
             />
           )}
-          <AuthInputFieldView
-            type="password"
-            field={password}
-            onChange={(e) => setPassword.set(e.target.value)}
-            disabled={!isUpdate}
-          />
+          {type === UserType.LOCAL &&
+            (isUpdate ? (
+              <>
+                <AuthInputFieldView
+                  type="password"
+                  field={newPassword}
+                  onChange={(e) => setNewPassword.set(e.target.value)}
+                  onBlur={() => onBlurPassword()}
+                  disabled={!isUpdate}
+                />
+                <AuthInputFieldView
+                  type="password"
+                  field={confirmPassword}
+                  onChange={(e) => setConfirmPassword.set(e.target.value)}
+                  onBlur={() => onBlurPassword()}
+                  disabled={!isUpdate}
+                />
+              </>
+            ) : (
+              <AuthInputFieldView
+                type="password"
+                field={password}
+                onChange={(e) => setPassword.set(e.target.value)}
+                disabled={!isUpdate}
+              />
+            ))}
           <AuthInputFieldView
             field={name}
             onChange={(e) => setName.set(e.target.value)}
