@@ -12,7 +12,6 @@ import { EditUserReq } from "../../api/type.g";
 import { api } from "../../api/url.g";
 
 const MyPage = () => {
-  // TODO :: 비밀번호 체크 로직 추가
   const { user } = useUser();
 
   const { mutate } = useMutation((req: EditUserReq) => api.editUser(req), {
