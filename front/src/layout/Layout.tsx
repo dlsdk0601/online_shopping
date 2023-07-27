@@ -255,9 +255,10 @@ export const MyPageWrapper = (props: PropsWithChildren) => {
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mx-auto">
-            {myPageMenuList.map((menu) => {
+            {myPageMenuList.map((menu, index) => {
               return (
                 <li
+                  key={`my-page-menu-${index}`}
                   className={classNames("nav-item", {
                     active: router.pathname === menu.path,
                     disabled: menu.disabled,
