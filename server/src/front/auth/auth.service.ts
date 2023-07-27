@@ -459,10 +459,10 @@ export class AuthService {
     return user;
   }
 
-  async editUser(body: EditUserReqDto) {
+  async editUser(pk: number, body: EditUserReqDto) {
     const userType = `${body.type.toLowerCase()}User`;
     const user = await User.findOne({
-      where: { pk: body.pk },
+      where: { pk },
       relations: {
         [userType]: true,
       },
@@ -477,9 +477,9 @@ export class AuthService {
       user.localUser.email = body.email;
 
       // 비밀번호는 LOCAL 유저만 가지므로, if 안에 if 를 넣는다.
-      if (body.isPasswordEdit) {
-        user.localUser.password_hash = await getHash(body.password);
-      }
+      // if (body.isPasswordEdit) {
+      //   user.localUser.password_hash = await getHash(body.password);
+      // }
     }
 
     user.name = body.name;
