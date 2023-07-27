@@ -10,13 +10,14 @@ import { tokenModel } from "../store/user";
 export interface UseUser {
   user: AuthUserRes | null | undefined;
   clearUser: () => void;
+  isLoading: boolean;
 }
 
 export function useUser(): UseUser {
   const queryClient = useQueryClient();
   const setToken = useSetRecoilState(tokenModel);
 
-  const { data: user } = useQuery(queryKeys.user, () => api.auth({}), {
+  const { data: user, isLoading } = useQuery(queryKeys.user, () => api.auth({}), {
     enabled: isNotNil(sessionStorage.getItem(CONSTANT.sessionTokenKey)),
     onSuccess: (res: AuthUserRes | null) => {
       if (isNil(res)) {
@@ -30,5 +31,5 @@ export function useUser(): UseUser {
     queryClient.setQueryData(queryKeys.user, null);
   };
 
-  return { user, clearUser };
+  return { user, clearUser, isLoading };
 }
