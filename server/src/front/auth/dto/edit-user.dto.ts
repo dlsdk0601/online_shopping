@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { UserType } from "../../../type/commonType";
 
 export class EditUserReqDto {
@@ -12,11 +12,6 @@ export class EditUserReqDto {
   @IsString()
   @IsNotEmpty()
   id: string;
-
-  @ApiProperty({ description: "비밀번호", nullable: false, type: "string" })
-  @IsString()
-  @IsNotEmpty()
-  password: string;
 
   @ApiProperty({ description: "이름", nullable: false, type: "string" })
   @IsString()
@@ -37,11 +32,6 @@ export class EditUserReqDto {
   @IsNotEmpty()
   @IsEnum(UserType)
   type: UserType;
-
-  @ApiProperty({ description: "비밀번호 업데이트 유무", nullable: true, type: "boolean" })
-  @IsNotEmpty()
-  @IsBoolean()
-  isPasswordEdit: boolean;
 }
 
 export class EditUserResDto {
