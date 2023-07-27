@@ -71,8 +71,9 @@ export class AuthController {
   }
 
   @Post("/edit-user")
+  @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: EditUserResDto })
-  async editUser(@Body() body: EditUserReqDto) {
-    return this.authService.editUser(body);
+  async editUser(@Body() body: EditUserReqDto, @GetUser() user: GlobalUser) {
+    return this.authService.editUser(user.pk, body);
   }
 }
