@@ -32,6 +32,7 @@ import { NaverUser } from "../../entities/naver-user.entity";
 import { LocalUser } from "../../entities/local-user.entity";
 import { FrontUserAuth, User } from "../../entities/user.entity";
 import { EditUserReqDto } from "./dto/edit-user.dto";
+import { EditPasswordReqDto } from "./dto/edit-password.dto";
 
 @Injectable()
 export class AuthService {
@@ -475,16 +476,35 @@ export class AuthService {
     if (user.type === UserType.LOCAL) {
       user.localUser.id = body.id;
       user.localUser.email = body.email;
-
-      // 비밀번호는 LOCAL 유저만 가지므로, if 안에 if 를 넣는다.
-      // if (body.isPasswordEdit) {
-      //   user.localUser.password_hash = await getHash(body.password);
-      // }
     }
 
     user.name = body.name;
     user.phone = body.phone;
     user[userType].email = body.email;
+
+    try {
+      await user.save();
+      return { pk: user.pk };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
+
+  async editPassword(pk: number, body: EditPasswordReqDto) {
+    // 비밀번호는 local 유저만 필요하기에 relation 필요 없음
+    const user = await User.findOne({
+      where: { pk },
+    });
+
+    if (isNil(user)) {
+      throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
+    }
+
+    if (user.type !== UserType.LOCAL) {
+      throw new BadRequestException(errorMessage.BAD_REQUEST);
+    }
+
+    user.localUser.password_hash = await getHash(body.password);
 
     try {
       await user.save();

@@ -12,6 +12,7 @@ import { SignOutReqDto, SignOutResDto } from "./dto/sign-out.dto";
 import { KakaoCodeVerifyReqDto, KakaoCodeVerifyResDto } from "./dto/kakao-auth.dto";
 import { NaverCodeVerifyReqDto, NaverCodeVerifyResDto } from "./dto/naver-auth.dto";
 import { EditUserReqDto, EditUserResDto } from "./dto/edit-user.dto";
+import { EditPasswordReqDto, EditPasswordResDto } from "./dto/edit-password.dto";
 
 @ApiTags("auth")
 @Controller("")
@@ -75,5 +76,12 @@ export class AuthController {
   @ApiCreatedResponse({ type: EditUserResDto })
   async editUser(@Body() body: EditUserReqDto, @GetUser() user: GlobalUser) {
     return this.authService.editUser(user.pk, body);
+  }
+
+  @Post("/edit-password")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiCreatedResponse({ type: EditPasswordResDto })
+  async editPassword(@Body() body: EditPasswordReqDto, @GetUser() user: GlobalUser) {
+    return this.authService.editPassword(user.pk, body);
   }
 }
