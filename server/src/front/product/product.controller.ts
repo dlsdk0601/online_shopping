@@ -8,7 +8,7 @@ import {
   ShowProductResDto,
 } from "./dto/show-product.dto";
 
-@Controller("")
+@Controller("/product")
 @ApiTags("상품")
 export class ProductController {
   constructor(private readonly productService: ProductService) {}

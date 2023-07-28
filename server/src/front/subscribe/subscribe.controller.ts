@@ -6,7 +6,7 @@ import { GetUser } from "../../decorator/user.decorator";
 import { GlobalUser } from "../../type/type";
 import { AddSubscribeReqDto, AddSubscribeResDto } from "./dto/add-subscribe.dto";
 
-@Controller("")
+@Controller("subscribe")
 @ApiTags("subscribe")
 export class SubscribeController {
   constructor(private readonly subscribeService: SubscribeService) {}
