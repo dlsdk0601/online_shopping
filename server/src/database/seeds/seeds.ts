@@ -94,6 +94,7 @@ export default class TypeOrmSeeder implements Seeder {
 
     for (let i = 0; i < carts.length; i++) {
       const cartProductEntity = new CartProduct();
+      // eslint-disable-next-line no-await-in-loop
       cartProductEntity.product = (await Product.findOne({
         where: { pk: carts[i].product_pk },
       })) as Product;
