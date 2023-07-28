@@ -18,6 +18,7 @@ import { Subscribe } from "../../entities/subscribe.entity";
 import { Product } from "../../entities/product.entity";
 import { Asset } from "../../entities/asset.entity";
 import { MainBanner } from "../../entities/main-banner.entity";
+import { Cart, CartProduct } from "../../entities/cart.entity";
 
 export default class TypeOrmSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
@@ -29,6 +30,7 @@ export default class TypeOrmSeeder implements Seeder {
       this.onAddUser(faker, dataSource),
       this.onAddProduct(faker),
       this.onAddBanner(faker),
+      this.onAddCart(faker),
     ]).then(() => console.log("success"));
   }
 
@@ -84,6 +86,33 @@ export default class TypeOrmSeeder implements Seeder {
       ...newKidsProducts,
       ...newAccessoryProducts,
     ]);
+  }
+
+  async onAddCart(faker: Faker) {
+    const carts = this.cartList(faker);
+    const cartProduct: CartProduct[] = [];
+
+    for (let i = 0; i < carts.length; i++) {
+      const cartProductEntity = new CartProduct();
+      cartProductEntity.product = (await Product.findOne({
+        where: { pk: carts[i].product_pk },
+      })) as Product;
+      cartProductEntity.count = carts[i].count;
+      cartProduct.push(cartProductEntity);
+    }
+
+    await CartProduct.insert(cartProduct);
+
+    const user = await User.findOne({ where: { pk: 4090 } });
+    const cart = new Cart();
+
+    if (isNil(user)) {
+      return;
+    }
+
+    cart.user = user;
+    cart.cart_products = cartProduct;
+    await cart.save();
   }
 
   async managerList(faker: Faker) {
@@ -237,6 +266,19 @@ export default class TypeOrmSeeder implements Seeder {
       await this.newBanner(faker, ProductCategory.KIDS),
       await this.newBanner(faker, ProductCategory.ACCESSORY),
     ];
+  }
+
+  cartList(faker: Faker) {
+    const carts: Array<{ product_pk: number; count: number }> = [];
+
+    for (let i = 0; i < 5; i++) {
+      carts.push({
+        product_pk: faker.datatype.number({ min: 86, max: 165 }),
+        count: faker.datatype.number({ min: 2, max: 10 }),
+      });
+    }
+
+    return carts;
   }
 
   makeFakerPhone(faker: Faker) {
