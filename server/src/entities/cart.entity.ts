@@ -20,7 +20,7 @@ export class Cart extends TimeSet {
   @ManyToOne(() => User, (user) => user)
   user: User;
 
-  @OneToMany(() => CartProduct, (cartProduct) => cartProduct.cart)
+  @OneToMany(() => CartProduct, (cartProduct) => cartProduct.cart, { nullable: true })
   cart_products: CartProduct[];
 }
 
