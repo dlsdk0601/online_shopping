@@ -232,6 +232,11 @@ const myPageMenuList: MyPageMenu[] = [
     path: Urls["my-page"].cart.index.pathname,
     url: Urls["my-page"].cart.index.url(),
   },
+  {
+    name: "Order",
+    path: Urls["my-page"].order.index.pathname,
+    url: Urls["my-page"].order.index.url(),
+  },
 ];
 
 export const MyPageWrapper = (props: PropsWithChildren) => {
