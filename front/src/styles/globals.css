@@ -405,3 +405,62 @@ footer .under-footer a:hover {
         letter-spacing: 0;
     }
 }
+
+
+.cart-item-wrapper{
+    width: 100%
+}
+
+.cart-item-wrapper li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    padding: 1vw;
+}
+
+.cart-item-wrapper figure {
+    width: 200px;
+}
+
+.cart-item-wrapper figure img {
+    width: 100%;
+    height: 100%;
+}
+
+.cart-item-wrapper .count-button{
+    background: white;
+    padding: 5px 10px;
+    margin: 0 10px;
+    border: 1px solid #eee;
+    transition: 0.3s all;
+}
+
+.cart-item-wrapper .count-button:hover{
+    color: white;
+    background: black;
+}
+
+.cart-item-wrapper .price{
+    font-size: 20px;
+}
+
+@media (max-width: 767px) {
+    .cart-item-wrapper li{
+        display: block;
+        margin-bottom: 4vw;
+        border: 1px solid #eee;
+        padding: 1vw;
+        text-align: center;
+    }
+
+    .cart-item-wrapper figure {
+        width: 100%;
+        height: 300px;
+    }
+
+    .cart-item-wrapper .count-button{
+        margin: 10px 10px;
+    }
+}
