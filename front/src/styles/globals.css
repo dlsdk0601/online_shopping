@@ -272,12 +272,12 @@ form
 
 
 .kakao-button {
-    background: url("public/images/kakao-logo.png") no-repeat;
+    background: url("/images/kakao-logo.png") no-repeat;
     background-size: cover;
 }
 
 .naver-button {
-    background: url("public/images/naver-logo.png") no-repeat;
+    background: url("/images/naver-logo.png") no-repeat;
     background-size: cover;
 }
 
