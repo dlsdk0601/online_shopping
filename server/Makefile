@@ -10,6 +10,9 @@ setUp: install
 revision:
 	npm run typeorm:generate
 
+create:
+	npm run typeorm:create
+
 upgrade:
 	npm run typeorm:upgrade
 
