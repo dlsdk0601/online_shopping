@@ -48,6 +48,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           },
         },
       },
+      order: {
+        cart: {
+          cart_products: {
+            pk: "desc",
+          },
+        },
+      },
     });
 
     if (isNil(user)) {
