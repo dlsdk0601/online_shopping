@@ -1,9 +1,11 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { compact, isEmpty } from "lodash";
-import { CartListItem } from "../../api/type.g";
+import { compact, isEmpty, isNil } from "lodash";
+import { useMutation } from "react-query";
+import { CartListItem, EditCartProductCountReq } from "../../api/type.g";
 import { mf1 } from "../../ex/numberEx";
+import { api } from "../../api/url.g";
 
-const CartListView = memo((props: { list: CartListItem[] }) => {
+const CartListView = (props: { pk: number; list: CartListItem[] }) => {
   const checkArray = new Array(props.list.length).fill(true);
   const [checkList, setCheckList] = useState<boolean[]>([...checkArray]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -78,30 +80,12 @@ const CartListView = memo((props: { list: CartListItem[] }) => {
             {!isEmpty(props.list) &&
               props.list.map((cart, index) => {
                 return (
-                  <li key={`cart-list-${cart.pk}`} className="rounded">
-                    <input
-                      type="checkbox"
-                      value=""
-                      onChange={() => onCheck(index)}
-                      checked={checkList[index]}
-                    />
-                    <figure className="figure">
-                      <img className="figure-img rounded" src={cart.image.url} alt="cart-img" />
-                    </figure>
-                    <p>{cart.name}</p>
-                    <div>
-                      <div>
-                        <button type="button" className="count-button">
-                          +
-                        </button>
-                        {cart.count}
-                        <button type="button" className="count-button">
-                          -
-                        </button>
-                      </div>
-                    </div>
-                    <p className="price">${mf1(cart.count * cart.price)}</p>
-                  </li>
+                  <CartListItemView
+                    key={`cart-list-${cart.pk}`}
+                    cart={cart}
+                    checked={checkList[index]}
+                    onChangeCheckBox={() => onCheck(index)}
+                  />
                 );
               })}
           </ul>
@@ -109,6 +93,64 @@ const CartListView = memo((props: { list: CartListItem[] }) => {
       </div>
     </section>
   );
-});
+};
 
-export default CartListView;
+const CartListItemView = memo(
+  (props: { cart: CartListItem; checked?: boolean; onChangeCheckBox: () => void }) => {
+    const [cartItem, setCartItem] = useState(props.cart);
+
+    const { mutate: onEditCount } = useMutation(
+      (req: EditCartProductCountReq) => api.editCartProductCount(req),
+      {
+        onSuccess: (res) => {
+          if (isNil(res)) {
+            return;
+          }
+
+          setCartItem({ ...res.data });
+        },
+      },
+    );
+
+    const onEdit = useCallback((count: number) => {
+      onEditCount({ pk: cartItem.pk, count });
+    }, []);
+
+    return (
+      <li className="rounded">
+        <input
+          type="checkbox"
+          value=""
+          onChange={() => props.onChangeCheckBox()}
+          checked={props.checked}
+        />
+        <figure className="figure">
+          <img className="figure-img rounded" src={cartItem.image.url} alt="cart-img" />
+        </figure>
+        <p>{cartItem.name}</p>
+        <div>
+          <div>
+            <button
+              type="button"
+              className="count-button"
+              onClick={() => onEdit(cartItem.count + 1)}
+            >
+              +
+            </button>
+            {cartItem.count}
+            <button
+              type="button"
+              className="count-button"
+              onClick={() => onEdit(cartItem.count - 1)}
+            >
+              -
+            </button>
+          </div>
+        </div>
+        <p className="price">${mf1(cartItem.count * cartItem.price)}</p>
+      </li>
+    );
+  },
+);
+
+export default memo(CartListView);
