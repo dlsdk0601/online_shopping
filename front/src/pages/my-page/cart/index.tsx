@@ -30,7 +30,7 @@ const CartPage = () => {
     return <Replace url={Urls.index.url()} />;
   }
 
-  return <CartListView list={cartList.list} />;
+  return <CartListView pk={cartList.pk} list={cartList.list} />;
 };
 
 export default CartPage;
