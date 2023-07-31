@@ -10,7 +10,7 @@ export class CartService {
   constructor(private assetService: AssetService) {}
 
   async list(body: CartListReqDto, pk: number) {
-    const userEntity = await User.findOne({
+    const user = await User.findOne({
       where: {
         pk,
       },
@@ -25,18 +25,16 @@ export class CartService {
       },
     });
 
-    if (isNil(userEntity)) {
+    if (isNil(user)) {
       throw new BadRequestException(errorMessage.BAD_REQUEST);
     }
 
-    if (userEntity.cart.length > 1) {
+    if (isNil(user.cart)) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
 
-    const cartEntity = userEntity.cart[0];
-
     return {
-      list: cartEntity.cart_products.map((cart) => ({
+      list: user.cart.cart_products.map((cart) => ({
         pk: cart.pk,
         name: cart.product.name,
         price: cart.product.price,
