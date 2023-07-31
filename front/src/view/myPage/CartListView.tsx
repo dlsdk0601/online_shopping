@@ -68,6 +68,9 @@ const CartListView = memo((props: { list: CartListItem[] }) => {
                 <button type="button" className="count-button" onClick={() => onDeleteCart()}>
                   선택 삭제
                 </button>
+                <button type="button" className="count-button">
+                  구매 하기
+                </button>
               </div>
               <p className="total-price">Total: ${mf1(totalPrice)}</p>
             </li>
