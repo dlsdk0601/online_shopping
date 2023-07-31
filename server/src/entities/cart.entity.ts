@@ -17,7 +17,8 @@ export class Cart extends TimeSet {
   @PrimaryGeneratedColumn({ comment: "pk" })
   pk: number;
 
-  @ManyToOne(() => User, (user) => user)
+  @OneToOne(() => User, (user) => user)
+  @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
   user: User;
 
   @OneToMany(() => CartProduct, (cartProduct) => cartProduct.cart, { nullable: true })

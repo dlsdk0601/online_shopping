@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import TimeSet from "./timeSet.entity";
 import { UserType } from "../type/commonType";
 import { LocalUser } from "./local-user.entity";
@@ -51,8 +51,8 @@ export class User extends TimeSet {
   @OneToOne(() => NaverUser, (naverUser) => naverUser.user)
   naverUser: NaverUser;
 
-  @OneToMany(() => Cart, (cart) => cart.user)
-  cart: Cart[];
+  @OneToOne(() => Cart, (cart) => cart.user)
+  cart: Cart;
 
   userData() {
     const userType = `${this.type.toLowerCase()}User`;
