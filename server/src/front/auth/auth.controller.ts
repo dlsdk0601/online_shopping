@@ -57,7 +57,7 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   @Post("/sign-out")
   @ApiCreatedResponse({ type: SignOutResDto, description: "로그아웃" })
-  signOut(@Body() body: SignOutReqDto, @GetUser() user: GlobalUser) {
+  signOut(@Body() body: SignOutReqDto, @GetUser() user: User) {
     return this.authService.signOut(user);
   }
 

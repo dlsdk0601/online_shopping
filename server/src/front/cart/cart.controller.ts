@@ -4,7 +4,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { CartService } from "./cart.service";
 import { CartListReqDto, CartListResDto } from "./dto/show-cart.dto";
 import { GetUser } from "../../decorator/user.decorator";
-import { GlobalUser } from "../../type/type";
+import { User } from "../../entities/user.entity";
 
 @Controller("/cart")
 @ApiTags("장바구니")
@@ -14,7 +14,7 @@ export class CartController {
   @Post("/cart-list")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: CartListResDto })
-  async list(@Body() body: CartListReqDto, @GetUser() user: GlobalUser) {
+  async list(@Body() body: CartListReqDto, @GetUser() user: User) {
     return this.cartService.list(body, user.pk);
   }
 }

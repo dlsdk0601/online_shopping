@@ -3,7 +3,7 @@ import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "@nestjs/passport";
 import { SubscribeService } from "./subscribe.service";
 import { GetUser } from "../../decorator/user.decorator";
-import { GlobalUser } from "../../type/type";
+import { User } from "../../entities/user.entity";
 import { AddSubscribeReqDto, AddSubscribeResDto } from "./dto/add-subscribe.dto";
 
 @Controller("subscribe")
@@ -14,7 +14,7 @@ export class SubscribeController {
   @Post("/add-subscribe")
   @ApiCreatedResponse({ type: AddSubscribeResDto })
   @UseGuards(AuthGuard("jwt"))
-  addSubscribe(@Body() body: AddSubscribeReqDto, @GetUser() user: GlobalUser) {
+  addSubscribe(@Body() body: AddSubscribeReqDto, @GetUser() user: User) {
     return this.subscribeService.create(body, user.pk);
   }
 }
