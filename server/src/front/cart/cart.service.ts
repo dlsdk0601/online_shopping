@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { isNil } from "lodash";
 import { AssetService } from "../../asset/asset.service";
 import { CartListReqDto } from "./dto/show-cart.dto";
@@ -9,31 +9,13 @@ import errorMessage from "../../config/errorMessage";
 export class CartService {
   constructor(private assetService: AssetService) {}
 
-  async list(body: CartListReqDto, pk: number) {
-    const user = await User.findOne({
-      where: {
-        pk,
-      },
-      relations: {
-        cart: {
-          cart_products: {
-            product: {
-              main_image: true,
-            },
-          },
-        },
-      },
-    });
-
-    if (isNil(user)) {
-      throw new BadRequestException(errorMessage.BAD_REQUEST);
-    }
-
+  list(body: CartListReqDto, user: User) {
     if (isNil(user.cart)) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
 
     return {
+      pk: user.cart.pk,
       list: user.cart.cart_products.map((cart) => ({
         pk: cart.pk,
         name: cart.product.name,

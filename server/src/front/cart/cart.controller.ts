@@ -15,6 +15,6 @@ export class CartController {
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: CartListResDto })
   async list(@Body() body: CartListReqDto, @GetUser() user: User) {
-    return this.cartService.list(body, user.pk);
+    return this.cartService.list(body, user);
   }
 }

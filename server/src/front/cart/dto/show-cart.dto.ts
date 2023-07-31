@@ -6,7 +6,7 @@ export class CartListReqDto {}
 
 @ApiExtraModels(FileSetDto)
 export class CartListItemDto {
-  @ApiProperty({ description: "장바구니 pk", nullable: false, type: "number" })
+  @ApiProperty({ description: "장바구니 상품 pk", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()
   pk: number;
@@ -37,6 +37,11 @@ export class CartListItemDto {
 
 @ApiExtraModels(CartListItemDto)
 export class CartListResDto {
+  @ApiProperty({ description: "장바구니 pk", nullable: false, type: "number" })
+  @IsNumber()
+  @IsNotEmpty()
+  pk: number;
+
   @ApiProperty({
     description: "장바구니 리스트",
     nullable: false,
