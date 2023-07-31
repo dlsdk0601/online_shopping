@@ -5,6 +5,7 @@ import { CartService } from "./cart.service";
 import { CartListReqDto, CartListResDto } from "./dto/show-cart.dto";
 import { GetUser } from "../../decorator/user.decorator";
 import { User } from "../../entities/user.entity";
+import { EditCartProductCountReqDto, EditCartProductCountResDto } from "./dto/edit-cart.dto";
 
 @Controller("/cart")
 @ApiTags("장바구니")
@@ -14,7 +15,14 @@ export class CartController {
   @Post("/cart-list")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: CartListResDto })
-  async list(@Body() body: CartListReqDto, @GetUser() user: User) {
+  list(@Body() body: CartListReqDto, @GetUser() user: User) {
     return this.cartService.list(body, user);
+  }
+
+  @Post("/edit-cart-product-count")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiCreatedResponse({ type: EditCartProductCountResDto })
+  editCartProductCount(@Body() body: EditCartProductCountReqDto) {
+    return this.cartService.editCartProductCount(body);
   }
 }
