@@ -420,6 +420,10 @@ footer .under-footer a:hover {
     padding: 1vw;
 }
 
+.cart-item-wrapper .total-price{
+    font-size: 24px;
+}
+
 .cart-item-wrapper figure {
     width: 200px;
 }
@@ -462,5 +466,10 @@ footer .under-footer a:hover {
 
     .cart-item-wrapper .count-button{
         margin: 10px 10px;
+    }
+
+    .cart-item-wrapper .total-price{
+        font-size: 20px;
+        margin: 5px 0;
     }
 }
