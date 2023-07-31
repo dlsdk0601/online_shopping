@@ -13,6 +13,7 @@ import { KakaoCodeVerifyReqDto, KakaoCodeVerifyResDto } from "./dto/kakao-auth.d
 import { NaverCodeVerifyReqDto, NaverCodeVerifyResDto } from "./dto/naver-auth.dto";
 import { EditUserReqDto, EditUserResDto } from "./dto/edit-user.dto";
 import { EditPasswordReqDto, EditPasswordResDto } from "./dto/edit-password.dto";
+import { User } from "../../entities/user.entity";
 
 @ApiTags("auth")
 @Controller("")
@@ -36,8 +37,15 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   @Post("auth")
   @ApiCreatedResponse({ type: AuthUserResDto })
-  show(@Body() body: AuthReqDto, @GetUser() user: GlobalUser) {
-    return user;
+  show(@Body() body: AuthReqDto, @GetUser() user: User) {
+    return {
+      pk: user.pk,
+      id: user.userData().id,
+      type: user.userData().type,
+      name: user.userData().name,
+      phone: user.userData().phone,
+      email: user.userData().email,
+    };
   }
 
   @Post("/google-token-verify")
@@ -74,14 +82,14 @@ export class AuthController {
   @Post("/edit-user")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: EditUserResDto })
-  async editUser(@Body() body: EditUserReqDto, @GetUser() user: GlobalUser) {
+  async editUser(@Body() body: EditUserReqDto, @GetUser() user: User) {
     return this.authService.editUser(user.pk, body);
   }
 
   @Post("/edit-password")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: EditPasswordResDto })
-  async editPassword(@Body() body: EditPasswordReqDto, @GetUser() user: GlobalUser) {
+  async editPassword(@Body() body: EditPasswordReqDto, @GetUser() user: User) {
     return this.authService.editPassword(user.pk, body);
   }
 }
