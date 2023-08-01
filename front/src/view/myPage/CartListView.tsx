@@ -5,7 +5,7 @@ import { CartListItem, EditCartProductCountReq } from "../../api/type.g";
 import { mf1 } from "../../ex/numberEx";
 import { api } from "../../api/url.g";
 
-const CartListView = (props: { pk: number; list: CartListItem[] }) => {
+const CartListView = (props: { list: CartListItem[] }) => {
   const checkArray = new Array(props.list.length).fill(true);
   const [checkList, setCheckList] = useState<boolean[]>([...checkArray]);
   const [totalPrice, setTotalPrice] = useState(0);
