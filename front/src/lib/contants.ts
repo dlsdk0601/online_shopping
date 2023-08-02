@@ -12,6 +12,7 @@ export const ATOM_KEY = {
   TOKEN: "TOKEN",
   USER: "USER",
   TOKEN_MODEL: "TOKEN_MODEL",
+  CART_TOTAL_PRICE: "CART_TOTAL_PRICE",
 };
 
 export const CONSTANT = {
