@@ -10,10 +10,21 @@ import { cartTotalPrice } from "../../store/cart";
 import { isNotNil } from "../../ex/utils";
 
 const CartListView = (props: { list: CartListItem[] }) => {
+  const router = useRouter();
   const checkArray = new Array(props.list.length).fill(true);
   const [totalPrice, setTotalPrice] = useRecoilState(cartTotalPrice);
   const [checkList, setCheckList] = useState<boolean[]>([...checkArray]);
-  const [totalPrice, setTotalPrice] = useState(0);
+
+  const { mutate: onDeleteApi } = useMutation((req: DeleteCartItemReq) => api.deleteCart(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      alert("삭제 되었습니다.");
+      router.reload();
+    },
+  });
 
   useEffect(() => {
     let total = 0;
@@ -45,7 +56,7 @@ const CartListView = (props: { list: CartListItem[] }) => {
   );
 
   const onDeleteCart = useCallback(() => {
-    const pks = compact(
+    const cartProductPks = compact(
       props.list.map((cart, index) => {
         if (!checkList[index]) {
           return;
@@ -55,7 +66,7 @@ const CartListView = (props: { list: CartListItem[] }) => {
       }),
     );
 
-    console.log(pks);
+    onDeleteApi({ cartProductPks });
   }, [checkList, props.list]);
 
   return (
