@@ -1,12 +1,17 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { compact, isEmpty, isNil } from "lodash";
 import { useMutation } from "react-query";
-import { CartListItem, EditCartProductCountReq } from "../../api/type.g";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRouter } from "next/router";
+import { CartListItem, DeleteCartItemReq, EditCartProductCountReq } from "../../api/type.g";
 import { mf1 } from "../../ex/numberEx";
 import { api } from "../../api/url.g";
+import { cartTotalPrice } from "../../store/cart";
+import { isNotNil } from "../../ex/utils";
 
 const CartListView = (props: { list: CartListItem[] }) => {
   const checkArray = new Array(props.list.length).fill(true);
+  const [totalPrice, setTotalPrice] = useRecoilState(cartTotalPrice);
   const [checkList, setCheckList] = useState<boolean[]>([...checkArray]);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -98,6 +103,7 @@ const CartListView = (props: { list: CartListItem[] }) => {
 const CartListItemView = memo(
   (props: { cart: CartListItem; checked?: boolean; onChangeCheckBox: () => void }) => {
     const [cartItem, setCartItem] = useState(props.cart);
+    const setTotalPrice = useSetRecoilState(cartTotalPrice);
 
     const { mutate: onEditCount } = useMutation(
       (req: EditCartProductCountReq) => api.editCartProductCount(req),
@@ -107,6 +113,11 @@ const CartListItemView = memo(
             return;
           }
 
+          // 체크가 되어있는 아이템만 총 가격을 수정한다.
+          if (isNotNil(props.checked) && props.checked) {
+            const price = res.data.price * res.data.count - cartItem.price * cartItem.count;
+            setTotalPrice((prev) => prev + price);
+          }
           setCartItem({ ...res.data });
         },
       },
