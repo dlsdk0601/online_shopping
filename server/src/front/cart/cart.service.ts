@@ -11,6 +11,7 @@ import { User } from "../../entities/user.entity";
 import errorMessage from "../../config/errorMessage";
 import { EditCartProductCountReqDto } from "./dto/edit-cart.dto";
 import { CartProduct } from "../../entities/cart.entity";
+import { DeleteCartItemReqDto } from "./dto/delete-cart.dto";
 
 @Injectable()
 export class CartService {
@@ -64,6 +65,26 @@ export class CartService {
           image: cartProduct.product.main_image,
         },
       };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
+
+  async deleteCartItem(body: DeleteCartItemReqDto, user: User) {
+    const userCartProductPks = user.cart.cart_products.map((product) => product.pk);
+    const isInclude = body.cartProductPks.every((pk) => userCartProductPks.includes(pk));
+
+    if (!isInclude) {
+      throw new BadRequestException(errorMessage.BAD_REQUEST);
+    }
+
+    const cartProduct = await CartProduct.find({
+      where: body.cartProductPks.map((pk) => ({ pk })),
+    });
+
+    try {
+      await CartProduct.remove(cartProduct);
+      return { pk: user.cart.pk };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
