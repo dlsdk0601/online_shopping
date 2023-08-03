@@ -1,12 +1,35 @@
 import { memo, useCallback } from "react";
-import Link from "next/link";
-import { ShowProductRes } from "../../api/type.g";
+import { useMutation } from "react-query";
+import { isNil } from "lodash";
+import { useRecoilValue } from "recoil";
+import { AddCartReq, ShowProductRes } from "../../api/type.g";
 import useValueField from "../../hooks/useValueField";
 import { mf2 } from "../../ex/numberEx";
 import Stars from "../../layout/components/Stars";
+import { api } from "../../api/url.g";
+import { tokenModel } from "../../store/user";
 
 const ProductShowView = (props: { product: ShowProductRes }) => {
+  const token = useRecoilValue(tokenModel);
   const [productCount, setProductCount] = useValueField(1, "제품 갯수");
+
+  const { mutate: onAddCartApi } = useMutation((req: AddCartReq) => api.addCart(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      alert("장바구니에 추가 되었습니다.");
+    },
+  });
+
+  const onAddCart = useCallback(() => {
+    if (isNil(token)) {
+      return alert("장바구니에 추가 하시려면\n 로그인을 해주세요.");
+    }
+
+    onAddCartApi({ pk: props.product.pk });
+  }, [props.product]);
 
   const onClickCount = useCallback(
     (type: "PLUS" | "MINUS") => {
@@ -93,7 +116,9 @@ const ProductShowView = (props: { product: ShowProductRes }) => {
                 <div className="total">
                   <h4>Total: {mf2(props.product.price * productCount.value)}</h4>
                   <div className="main-border-button">
-                    <Link href="/">Add To Cart</Link>
+                    <button type="button" onClick={() => onAddCart()}>
+                      Add To Cart
+                    </button>
                   </div>
                 </div>
               </div>
