@@ -92,7 +92,11 @@ const CartListView = (props: { list: CartListItem[] }) => {
               </div>
               <p className="total-price">Total: ${mf1(totalPrice)}</p>
             </li>
-            {isEmpty(props.list) && <li>cart is empty</li>}
+            {isEmpty(props.list) && (
+              <li>
+                <span>cart is empty</span>
+              </li>
+            )}
             {!isEmpty(props.list) &&
               props.list.map((cart, index) => {
                 return (
