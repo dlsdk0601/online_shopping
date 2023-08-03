@@ -7,6 +7,7 @@ import { GetUser } from "../../decorator/user.decorator";
 import { User } from "../../entities/user.entity";
 import { EditCartProductCountReqDto, EditCartProductCountResDto } from "./dto/edit-cart.dto";
 import { DeleteCartItemReqDto, DeleteCartItemResDto } from "./dto/delete-cart.dto";
+import { AddCartReqDto, AddCartResDto } from "./dto/add-cart.dto";
 
 @Controller("/cart")
 @ApiTags("장바구니")
@@ -16,8 +17,15 @@ export class CartController {
   @Post("/cart-list")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: CartListResDto })
-  list(@Body() body: CartListReqDto, @GetUser() user: User) {
+  async list(@Body() body: CartListReqDto, @GetUser() user: User) {
     return this.cartService.list(body, user);
+  }
+
+  @Post("/add-cart")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiCreatedResponse({ type: AddCartResDto })
+  add(@Body() body: AddCartReqDto, @GetUser() user: User) {
+    return this.cartService.add(body, user);
   }
 
   @Post("/edit-cart-product-count")

@@ -12,27 +12,16 @@ import errorMessage from "../../config/errorMessage";
 import { EditCartProductCountReqDto } from "./dto/edit-cart.dto";
 import { Cart, CartProduct } from "../../entities/cart.entity";
 import { DeleteCartItemReqDto } from "./dto/delete-cart.dto";
+import { AddCartReqDto } from "./dto/add-cart.dto";
+import { Product } from "../../entities/product.entity";
+import { isNotNil } from "../../ex/ex";
 
 @Injectable()
 export class CartService {
   constructor(private assetService: AssetService) {}
 
   async list(body: CartListReqDto, user: User) {
-    let cart: Cart;
-
-    if (isNil(user.cart)) {
-      // 첫 회원 가입한 유저는 장바구니가 없으니 만들어 준다.
-      const newCart = new Cart();
-      newCart.user = user;
-      try {
-        await newCart.save();
-        cart = newCart;
-      } catch (e) {
-        throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
-      }
-    } else {
-      cart = user.cart;
-    }
+    const cart = await this.findOrCreateCart(user);
 
     return {
       pk: cart.pk,
@@ -44,6 +33,32 @@ export class CartService {
         image: cartProduct.product.main_image,
       })),
     };
+  }
+
+  async add(body: AddCartReqDto, user: User) {
+    const product = await Product.findOne({ where: { pk: body.pk } });
+
+    if (isNil(product)) {
+      throw new BadRequestException(errorMessage.BAD_REQUEST);
+    }
+
+    const isExist = user.cart.cart_products.find((item) => item.product.pk === body.pk);
+    if (isNotNil(isExist)) {
+      throw new BadRequestException("장바구니에 이미 존재 합니다.");
+    }
+
+    const cart = await this.findOrCreateCart(user);
+    const cartProduct = new CartProduct();
+    cartProduct.product = product;
+    cartProduct.count = 1;
+    cartProduct.cart = cart;
+
+    try {
+      await cartProduct.save();
+      return { pk: cartProduct.pk };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
   }
 
   async editCartProductCount(body: EditCartProductCountReqDto) {
@@ -100,5 +115,21 @@ export class CartService {
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
+  }
+
+  async findOrCreateCart(user: User) {
+    if (isNil(user.cart)) {
+      // 첫 회원 가입한 유저는 장바구니가 없으니 만들어 준다.
+      const newCart = new Cart();
+      newCart.user = user;
+      try {
+        await newCart.save();
+        return newCart;
+      } catch (e) {
+        throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+      }
+    }
+
+    return user.cart;
   }
 }
