@@ -10,26 +10,38 @@ import { CartListReqDto } from "./dto/show-cart.dto";
 import { User } from "../../entities/user.entity";
 import errorMessage from "../../config/errorMessage";
 import { EditCartProductCountReqDto } from "./dto/edit-cart.dto";
-import { CartProduct } from "../../entities/cart.entity";
+import { Cart, CartProduct } from "../../entities/cart.entity";
 import { DeleteCartItemReqDto } from "./dto/delete-cart.dto";
 
 @Injectable()
 export class CartService {
   constructor(private assetService: AssetService) {}
 
-  list(body: CartListReqDto, user: User) {
+  async list(body: CartListReqDto, user: User) {
+    let cart: Cart;
+
     if (isNil(user.cart)) {
-      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+      // 첫 회원 가입한 유저는 장바구니가 없으니 만들어 준다.
+      const newCart = new Cart();
+      newCart.user = user;
+      try {
+        await newCart.save();
+        cart = newCart;
+      } catch (e) {
+        throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+      }
+    } else {
+      cart = user.cart;
     }
 
     return {
-      pk: user.cart.pk,
-      list: user.cart.cart_products.map((cart) => ({
-        pk: cart.pk,
-        name: cart.product.name,
-        price: cart.product.price,
-        count: cart.count,
-        image: cart.product.main_image,
+      pk: cart.pk,
+      list: cart.cart_products.map((cartProduct) => ({
+        pk: cartProduct.pk,
+        name: cartProduct.product.name,
+        price: cartProduct.product.price,
+        count: cartProduct.count,
+        image: cartProduct.product.main_image,
       })),
     };
   }
