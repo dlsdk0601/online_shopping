@@ -1,13 +1,37 @@
 import { UrlObject } from "url";
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useMutation } from "react-query";
+import { isNil } from "lodash";
+import { useRecoilValue } from "recoil";
 import { mf2 } from "../ex/numberEx";
-import { ProductListItem } from "../api/type.g";
+import { AddCartReq, ProductListItem } from "../api/type.g";
 import { Urls } from "../url/url.g";
+import { api } from "../api/url.g";
+import { tokenModel } from "../store/user";
 
 const ProductItemView = (props: { item: ProductListItem }) => {
   const router = useRouter();
+  const token = useRecoilValue(tokenModel);
   const [url, setUrl] = useState<UrlObject | null>(null);
+
+  const { mutate: onAddCartApi } = useMutation((req: AddCartReq) => api.addCart(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      alert("장바구니에 추가 되었습니다.");
+    },
+  });
+
+  const onAddCart = useCallback(() => {
+    if (isNil(token)) {
+      return alert("장바구니에 추가 하시려면\n 로그인을 해주세요.");
+    }
+
+    onAddCartApi({ pk: props.item.pk });
+  }, [props.item]);
 
   useEffect(() => {
     switch (props.item.category) {
@@ -42,7 +66,7 @@ const ProductItemView = (props: { item: ProductListItem }) => {
               </button>
             </li>
             <li>
-              <button type="button">
+              <button type="button" onClick={() => onAddCart()}>
                 <i className="fa fa-shopping-cart" />
               </button>
             </li>
