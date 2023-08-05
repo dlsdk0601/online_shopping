@@ -58,10 +58,12 @@ const menu: MenuItem[] = [
   },
   {
     name: "장바구니",
-    icon: "fa-cart-shopping-fast", // 장바구니 아이콘 찾기
-    pathname: "",
+    icon: "fa-cart-plus", // 장바구니 아이콘 찾기
+    pathname: Urls.cart.index.pathname,
+    url: Urls.cart.index.url(),
   },
 ];
+
 export default function LeftSideBarView() {
   const [isShow, setIsShow] = useState(false);
 
