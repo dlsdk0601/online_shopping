@@ -1,16 +1,14 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, PropsWithChildren } from "react";
 import { useRouter } from "next/router";
-import { isNil } from "lodash";
 import { preventDefaulted } from "../../ex/utils";
 
-function SearchBarView<T>(props: {
-  onSubmit: () => void;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  value: string;
-  onChangeType: (type: T) => void;
-  options: [T | null, string][];
-  searchType: T | null;
-}) {
+function SearchBarView(
+  props: PropsWithChildren<{
+    onSubmit: () => void;
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    value: string;
+  }>,
+) {
   const router = useRouter();
   return (
     <div className="flex justify-center">
@@ -19,31 +17,7 @@ function SearchBarView<T>(props: {
           className="relative mb-4 flex w-full flex-wrap items-stretch"
           onSubmit={preventDefaulted(() => props.onSubmit())}
         >
-          <select
-            className="rounded-l border border-solid border-neutral-300"
-            value={stringify(props.searchType)}
-            onChange={(e) => {
-              for (let i = 0; i < props.options.length; i++) {
-                if (isNil(props.options[i])) {
-                  continue;
-                }
-
-                // @ts-ignore
-                const [label, _] = props.options[i];
-
-                if (stringify(label) === e.target.value) {
-                  props.onChangeType(label);
-                  return;
-                }
-              }
-            }}
-          >
-            {props.options.map(([label, value], index) => (
-              <option key={index} value={stringify(label)}>
-                {value}
-              </option>
-            ))}
-          </select>
+          {props.children}
           <input
             type="text"
             className="focus:border-primary-600 focus:shadow-te-primary relative m-0 -mr-px block w-[1%] min-w-0 flex-auto bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out focus:text-neutral-700 focus:outline-none"
@@ -69,14 +43,6 @@ function SearchBarView<T>(props: {
       </div>
     </div>
   );
-}
-
-function stringify(value: any): string {
-  if (isNil(value)) {
-    return "";
-  }
-
-  return value.toString();
 }
 
 export default React.memo(SearchBarView);
