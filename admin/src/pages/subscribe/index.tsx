@@ -18,6 +18,7 @@ import SearchBarView from "../../components/table/searchBarView";
 import { PaginationTableView } from "../../components/table/Table";
 import { d2 } from "../../ex/dateEx";
 import { Urls } from "../../url/url.g";
+import SelectView from "../../view/SelectView";
 
 const SubscribeListPage = () => {
   const router = useRouter();
@@ -82,18 +83,21 @@ const SubscribeListPage = () => {
   return (
     <div className="mt-4">
       <div className="mb-12 w-full rounded px-4">
-        <SearchBarView<SubscribeSearchType>
+        <SearchBarView
           onSubmit={() => onSearch()}
-          searchType={searchType}
           value={search.value}
           onChange={(e) => setSearch.set(e.target.value)}
-          onChangeType={(type) => setSearchType(type)}
-          options={[
-            [null, "전체"],
-            [SubscribeSearchType.NAME, "이름"],
-            [SubscribeSearchType.EMAIL, "이메일"],
-          ]}
-        />
+        >
+          <SelectView<SubscribeSearchType>
+            searchType={searchType}
+            onChangeType={(type) => setSearchType(type)}
+            options={[
+              [null, "전체"],
+              [SubscribeSearchType.NAME, "이름"],
+              [SubscribeSearchType.EMAIL, "이메일"],
+            ]}
+          />
+        </SearchBarView>
         <PaginationTableView<SubscribeListResSubscribe>
           title="구독자 리스트"
           pagination={subscribeList ?? null}

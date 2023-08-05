@@ -15,6 +15,7 @@ import GoogleIcon from "../../components/icons/Google";
 import LocalIcon from "../../components/icons/LocalIcon";
 import { userSearchTypeEnumToLabel } from "../../api/enum";
 import { ignorePromise } from "../../ex/utils";
+import SelectView from "../../view/SelectView";
 
 const UserListPage = () => {
   const router = useRouter();
@@ -69,18 +70,21 @@ const UserListPage = () => {
   return (
     <div className="mt-4">
       <div className="mb-12 w-full rounded px-4">
-        <SearchBarView<UserSearchType>
+        <SearchBarView
           onSubmit={() => onSearch()}
-          searchType={searchType}
           value={search.value}
           onChange={(e) => setSearch.set(e.target.value)}
-          onChangeType={(type) => setSearchType(type)}
-          options={[
-            [null, "전체"],
-            [UserSearchType.NAME, "이름"],
-            [UserSearchType.PHONE, "휴대폰"],
-          ]}
-        />
+        >
+          <SelectView<UserSearchType>
+            searchType={searchType}
+            onChangeType={(type) => setSearchType(type)}
+            options={[
+              [null, "전체"],
+              [UserSearchType.NAME, "이름"],
+              [UserSearchType.PHONE, "휴대폰"],
+            ]}
+          />
+        </SearchBarView>
         <PaginationTableView<UserListResUser>
           title="User List"
           pagination={paginationUserList ?? null}

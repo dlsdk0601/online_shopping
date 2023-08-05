@@ -16,6 +16,7 @@ import { d2 } from "../../ex/dateEx";
 import { mf1 } from "../../ex/numberEx";
 import { CreateButtonView } from "../../components/tailwindEx/EditButtonView";
 import { NEWPK } from "../../lib/contants";
+import SelectView from "../../view/SelectView";
 
 const ProductListPage = () => {
   const router = useRouter();
@@ -63,20 +64,23 @@ const ProductListPage = () => {
   return (
     <div className="mt-4">
       <div className="mb-12 w-full rounded px-4">
-        <SearchBarView<ProductCategory>
+        <SearchBarView
           onSubmit={() => onSearch()}
-          searchType={category}
           value={search.value}
           onChange={(e) => setSearch.set(e.target.value)}
-          onChangeType={(type) => setCategory(type)}
-          options={[
-            [null, "전체"],
-            [ProductCategory.MEN, "남자"],
-            [ProductCategory.WOMEN, "여자"],
-            [ProductCategory.KIDS, "키즈"],
-            [ProductCategory.ACCESSORY, "악세서리"],
-          ]}
-        />
+        >
+          <SelectView<ProductCategory>
+            searchType={category}
+            onChangeType={(type) => setCategory(type)}
+            options={[
+              [null, "전체"],
+              [ProductCategory.MEN, "남자"],
+              [ProductCategory.WOMEN, "여자"],
+              [ProductCategory.KIDS, "키즈"],
+              [ProductCategory.ACCESSORY, "악세서리"],
+            ]}
+          />
+        </SearchBarView>
         <PaginationTableView<ProductListResProduct>
           title="상품 리스트"
           pagination={products ?? null}

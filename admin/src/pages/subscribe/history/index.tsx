@@ -19,6 +19,7 @@ import useIsReady from "../../../hooks/useIsReady";
 import { subscribeHistorySearchTypeEnumToLabel } from "../../../api/enum";
 import { CreateButtonView } from "../../../components/tailwindEx/EditButtonView";
 import { NEWPK } from "../../../lib/contants";
+import SelectView from "../../../view/SelectView";
 
 const SubscribeHistoryListPage = () => {
   const router = useRouter();
@@ -62,18 +63,21 @@ const SubscribeHistoryListPage = () => {
   return (
     <div className="mt-4">
       <div className="mb-12 w-full rounded px-4">
-        <SearchBarView<SubscribeHistorySearchType>
+        <SearchBarView
           onSubmit={() => onSearch()}
-          searchType={searchType}
           value={search.value}
           onChange={(e) => setSearch.set(e.target.value)}
-          onChangeType={(type) => setSearchType(type)}
-          options={[
-            [null, "전체"],
-            [SubscribeHistorySearchType.ISSEND, "발송여부"],
-            [SubscribeHistorySearchType.TITLE, "제목"],
-          ]}
-        />
+        >
+          <SelectView<SubscribeHistorySearchType>
+            searchType={searchType}
+            onChangeType={(type) => setSearchType(type)}
+            options={[
+              [null, "전체"],
+              [SubscribeHistorySearchType.ISSEND, "발송여부"],
+              [SubscribeHistorySearchType.TITLE, "제목"],
+            ]}
+          />
+        </SearchBarView>
         <PaginationTableView<SubscribeHistoryListResSubscribeHistory>
           title="구독자 리스트"
           pagination={historyList ?? null}
