@@ -9,6 +9,12 @@ import { getDeviceInfo } from "../ex/ex";
 
 export async function middle(req: Request, res: Response, next: NextFunction) {
   if (!req.path.includes("admin")) {
+    // front
+    return next();
+  }
+
+  if (req.path.includes("sign-in")) {
+    // admin login
     return next();
   }
 
