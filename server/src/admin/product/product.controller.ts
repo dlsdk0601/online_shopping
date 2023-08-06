@@ -11,7 +11,7 @@ import {
 import { DeleteProductReqDto, DeleteProductResDto } from "./dto/delete-product.dto";
 
 @Controller("admin")
-@ApiTags("admin-product")
+@ApiTags("어드민 - 상품")
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
