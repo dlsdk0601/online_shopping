@@ -1,11 +1,15 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Like } from "typeorm";
-import { CartListReqDto, CartListResDto } from "./dto/show-cart.dto";
+import { isNil } from "lodash";
+import { CartListReqDto, CartListResDto, ShowCartReqDto } from "./dto/show-cart.dto";
 import { Cart } from "../../entities/cart.entity";
 import { LIMIT } from "../../type/pagination.dto";
+import errorMessage from "../../config/errorMessage";
+import { AssetService } from "../../asset/asset.service";
 
 @Injectable()
 export class CartService {
+  constructor(private assetService: AssetService) {}
   async list(body: CartListReqDto) {
     const [carts, count] = await Cart.findAndCount({
       take: LIMIT,
@@ -32,5 +36,38 @@ export class CartService {
     }));
 
     return new CartListResDto(cartList, count, body.page);
+  }
+
+  async show(body: ShowCartReqDto) {
+    const cart = await Cart.findOne({
+      where: {
+        pk: body.pk,
+      },
+      relations: {
+        user: true,
+        cart_products: {
+          product: {
+            main_image: true,
+          },
+        },
+      },
+    });
+
+    if (isNil(cart)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    return {
+      pk: cart.pk,
+      name: cart.user.name,
+      phone: cart.user.phone,
+      list: cart.cart_products.map((product) => ({
+        pk: product.pk,
+        name: product.product.name,
+        price: product.product.price,
+        count: product.count,
+        image: this.assetService.getFileSet(product.product.main_image),
+      })),
+    };
   }
 }
