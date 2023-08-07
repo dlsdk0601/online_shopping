@@ -6,6 +6,7 @@ export const queryKeys = {
   subscribe: "subscribe",
   product: "product",
   banner: "banner",
+  cart: "cart",
 };
 
 export const CONSTANT = {
