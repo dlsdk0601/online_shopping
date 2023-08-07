@@ -66,6 +66,7 @@ const CartListPage = () => {
             ["유저 휴대폰", item.phone],
             ["상품 갯수", item.count],
           ]}
+          links={(carts?.rows ?? []).map((cart) => Urls.cart.edit["[pk]"].url({ pk: cart.pk }))}
         />
       </div>
     </div>
