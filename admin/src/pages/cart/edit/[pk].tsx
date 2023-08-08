@@ -10,6 +10,7 @@ import { CartProductListItem, ShowCartRes } from "../../../api/type.g";
 import useValueField from "../../../hooks/useValueField";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
 import { TextFieldView } from "../../../components/field/field";
+import { mf2 } from "../../../ex/numberEx";
 
 const CartEditPage = () => {
   const router = useRouter();
@@ -53,18 +54,43 @@ const CartEditView = memo((props: { res?: ShowCartRes }) => {
 
   return (
     <CardFormView title="장바구니 정보">
-      <TextFieldView value={name} onChange={(value) => setName.set(value)} isShowingLabel />
-      <TextFieldView value={phone} onChange={(value) => setPhone.set(value)} isShowingLabel />
-      <ul>
+      <TextFieldView
+        value={name}
+        onChange={(value) => setName.set(value)}
+        isShowingLabel
+        disabled
+      />
+      <TextFieldView
+        value={phone}
+        onChange={(value) => setPhone.set(value)}
+        isShowingLabel
+        disabled
+      />
+      <div className="mt-2  flex w-11/12 justify-between">
+        <p className="text-m font-bold uppercase text-blueGray-600">상품 리스트</p>
+        <p className="text-m pr-2 text-end font-bold uppercase text-blueGray-600">총 합: $ {0}</p>
+      </div>
+      <ul className="w-11/12">
+        <li className="mb-1 flex items-center justify-between rounded border-2 p-5 text-center">
+          <p className="w-1/12">이미지</p>
+          <p className="w-1/12">상품이름</p>
+          <p className="w-1/12">가격</p>
+          <p className="w-1/12">갯수</p>
+          <p className="w-1/12">가격</p>
+        </li>
         {list.map((product) => {
           return (
-            <li key={product.pk}>
-              <div>
-                <img src={product.image.url} alt="product" />
+            <li
+              key={product.pk}
+              className="mb-3 flex items-center justify-between rounded border p-5 text-center"
+            >
+              <div className="w-1/12">
+                <img src={product.image.url} alt="product" className="w-full" />
               </div>
-              <p>{product.name}</p>
-              <p>{product.price}</p>
-              <p>{product.count}</p>
+              <p className="w-1/12">{product.name}</p>
+              <p className="w-1/12">{mf2(product.price)}</p>
+              <p className="w-1/12">{product.count}</p>
+              <p className="w-1/12">$ {mf2(product.price * product.count)}</p>
             </li>
           );
         })}
