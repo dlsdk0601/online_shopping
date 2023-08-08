@@ -57,10 +57,17 @@ export class CartService {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
     }
 
+    let totalPrice = 0;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const cartProduct of cart.cart_products) {
+      totalPrice += cartProduct.count * cartProduct.product.price;
+    }
+
     return {
       pk: cart.pk,
       name: cart.user.name,
       phone: cart.user.phone,
+      totalPrice,
       list: cart.cart_products.map((product) => ({
         pk: product.pk,
         name: product.product.name,
