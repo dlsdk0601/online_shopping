@@ -37,9 +37,9 @@ const CartEditPage = () => {
 };
 
 const CartEditView = memo((props: { res?: ShowCartRes }) => {
-  const router = useRouter();
   const [name, setName] = useValueField("", "유저 이름");
   const [phone, setPhone] = useValueField("", "유저 휴대폰");
+  const [totalPrice, setTotalPrice] = useState(0);
   const [list, setList] = useState<CartProductListItem[]>([]);
 
   useEffect(() => {
@@ -49,6 +49,7 @@ const CartEditView = memo((props: { res?: ShowCartRes }) => {
 
     setName.set(props.res.name);
     setPhone.set(props.res.phone);
+    setTotalPrice(props.res.totalPrice);
     setList([...props.res.list]);
   }, [props.res]);
 
@@ -68,7 +69,9 @@ const CartEditView = memo((props: { res?: ShowCartRes }) => {
       />
       <div className="mt-2  flex w-11/12 justify-between">
         <p className="text-m font-bold uppercase text-blueGray-600">상품 리스트</p>
-        <p className="text-m pr-2 text-end font-bold uppercase text-blueGray-600">총 합: $ {0}</p>
+        <p className="text-m pr-2 text-end font-bold uppercase text-blueGray-600">
+          총 합: $ {mf2(totalPrice)}
+        </p>
       </div>
       <ul className="w-11/12">
         <li className="mb-1 flex items-center justify-between rounded border-2 p-5 text-center">
@@ -91,6 +94,7 @@ const CartEditView = memo((props: { res?: ShowCartRes }) => {
               <p className="w-1/12">{mf2(product.price)}</p>
               <p className="w-1/12">{product.count}</p>
               <p className="w-1/12">$ {mf2(product.price * product.count)}</p>
+              {/* TODO ::  장바구니에서 상품 삭제 시키는 버튼 생성 */}
             </li>
           );
         })}
