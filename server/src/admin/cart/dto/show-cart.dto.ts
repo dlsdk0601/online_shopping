@@ -108,6 +108,11 @@ export class ShowCartResDto {
   @IsNotEmpty()
   phone: string | null;
 
+  @ApiProperty({ description: "장바구니 총 가격", nullable: false, type: "number" })
+  @IsNumber()
+  @IsNotEmpty()
+  totalPrice: number;
+
   @ApiProperty({
     description: "장바구니 상품 리스트",
     nullable: false,
