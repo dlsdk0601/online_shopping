@@ -7,6 +7,7 @@ import {
   ShowCartReqDto,
   ShowCartResDto,
 } from "./dto/show-cart.dto";
+import { DeleteCartReqDto, DeleteCartResDto } from "./dto/delete-cart.dto";
 
 @Controller("/admin/cart")
 @ApiTags("어드민 - 장바구니")
@@ -23,5 +24,11 @@ export class CartController {
   @ApiCreatedResponse({ type: ShowCartResDto })
   async show(@Body() body: ShowCartReqDto) {
     return this.cartService.show(body);
+  }
+
+  @Post("delete-cart")
+  @ApiCreatedResponse({ type: DeleteCartResDto })
+  async delete(@Body() body: DeleteCartReqDto) {
+    return this.cartService.delete(body);
   }
 }

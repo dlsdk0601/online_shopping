@@ -1,11 +1,17 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { Like } from "typeorm";
 import { isNil } from "lodash";
 import { CartListReqDto, CartListResDto, ShowCartReqDto } from "./dto/show-cart.dto";
-import { Cart } from "../../entities/cart.entity";
+import { Cart, CartProduct } from "../../entities/cart.entity";
 import { LIMIT } from "../../type/pagination.dto";
 import errorMessage from "../../config/errorMessage";
 import { AssetService } from "../../asset/asset.service";
+import { DeleteCartReqDto } from "./dto/delete-cart.dto";
 
 @Injectable()
 export class CartService {
@@ -76,5 +82,24 @@ export class CartService {
         image: this.assetService.getFileSet(product.product.main_image),
       })),
     };
+  }
+
+  async delete(body: DeleteCartReqDto) {
+    const cartProduct = await CartProduct.findOne({
+      where: {
+        pk: body.pk,
+      },
+    });
+
+    if (isNil(cartProduct)) {
+      throw new BadRequestException(errorMessage.BAD_REQUEST);
+    }
+
+    try {
+      await cartProduct.remove();
+      return { pk: cartProduct.pk };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
   }
 }
