@@ -23,7 +23,10 @@ export class Purchase extends BaseEntity {
   create_at: Date;
 
   // 결제 기록은 남아야 하기 때문에 cascade 를 넣지 않는다.
-  @ManyToOne(() => User, (user) => user.purchases)
+  @ManyToOne(() => User, (user) => user.purchases, {
+    nullable: false,
+  })
+  @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
   user: User;
 
   @OneToMany(() => PurchaseItem, (purchaseItem) => purchaseItem.purchase, { nullable: false })
@@ -42,6 +45,7 @@ export class PurchaseItem extends BaseEntity {
   update_at: Date | null;
 
   @ManyToOne(() => Purchase, (purchase) => purchase.purchaseItems)
+  @JoinColumn({ name: "purchase_pk", referencedColumnName: "pk" })
   purchase: Purchase;
 
   @Column({ enum: PurchaseItemStatus, type: "enum", nullable: false })
