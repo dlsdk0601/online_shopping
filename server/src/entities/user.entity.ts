@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import TimeSet from "./timeSet.entity";
 import { UserType } from "../type/commonType";
 import { LocalUser } from "./local-user.entity";
@@ -11,6 +11,7 @@ import {
   LocalAuthentication,
   NaverAuthentication,
 } from "./user-authentication.entity";
+import { Purchase } from "./purchase.entity";
 import { Cart } from "./cart.entity";
 
 export type FrontUserAuth =
@@ -53,6 +54,9 @@ export class User extends TimeSet {
 
   @OneToOne(() => Cart, (cart) => cart.user)
   cart: Cart;
+
+  @OneToMany(() => Purchase, (purchase) => purchase.user)
+  purchases: Purchase[];
 
   userData() {
     const userType = `${this.type.toLowerCase()}User`;
