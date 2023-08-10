@@ -28,7 +28,7 @@ export enum ProductCategory {
   ACCESSORY = "ACCESSORY",
 }
 
-export enum PurchaseLogStatus {
+export enum PurchaseItemStatus {
   WAITING = "WAITING", // 결제 대기
   IN_PROGRESS = "IN_PROGRESS", // 결제 진행 중
   SUCCESS = "SUCCESS", // 결제 완료
