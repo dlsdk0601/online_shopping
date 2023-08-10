@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
-import { useQuery } from "react-query";
-import React, { memo, useEffect, useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
 import { Urls } from "../../../url/url.g";
-import { CartProductListItem, ShowCartRes } from "../../../api/type.g";
+import { CartProductListItem, DeleteCartReq, ShowCartRes } from "../../../api/type.g";
 import useValueField from "../../../hooks/useValueField";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
 import { TextFieldView } from "../../../components/field/field";
@@ -37,10 +37,22 @@ const CartEditPage = () => {
 };
 
 const CartEditView = memo((props: { res?: ShowCartRes }) => {
+  const router = useRouter();
   const [name, setName] = useValueField("", "유저 이름");
   const [phone, setPhone] = useValueField("", "유저 휴대폰");
   const [totalPrice, setTotalPrice] = useState(0);
   const [list, setList] = useState<CartProductListItem[]>([]);
+
+  const { mutate: onDeleteApi } = useMutation((req: DeleteCartReq) => api.deleteCart(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      alert("삭제 되었습니다.");
+      router.reload();
+    },
+  });
 
   useEffect(() => {
     if (isNil(props.res)) {
@@ -52,6 +64,14 @@ const CartEditView = memo((props: { res?: ShowCartRes }) => {
     setTotalPrice(props.res.totalPrice);
     setList([...props.res.list]);
   }, [props.res]);
+
+  const onDelete = useCallback((pk: number) => {
+    if (!confirm("정말로 삭제 하시겠습니까?")) {
+      return;
+    }
+
+    onDeleteApi({ pk });
+  }, []);
 
   return (
     <CardFormView title="장바구니 정보">
@@ -80,6 +100,7 @@ const CartEditView = memo((props: { res?: ShowCartRes }) => {
           <p className="w-1/12">가격</p>
           <p className="w-1/12">갯수</p>
           <p className="w-1/12">가격</p>
+          <p className="w-1/12">삭제</p>
         </li>
         {list.map((product) => {
           return (
@@ -94,7 +115,13 @@ const CartEditView = memo((props: { res?: ShowCartRes }) => {
               <p className="w-1/12">{mf2(product.price)}</p>
               <p className="w-1/12">{product.count}</p>
               <p className="w-1/12">$ {mf2(product.price * product.count)}</p>
-              {/* TODO ::  장바구니에서 상품 삭제 시키는 버튼 생성 */}
+              <button
+                type="button"
+                className="mr-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300"
+                onClick={() => onDelete(product.pk)}
+              >
+                삭제
+              </button>
             </li>
           );
         })}
