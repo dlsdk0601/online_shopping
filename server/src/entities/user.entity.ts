@@ -55,8 +55,8 @@ export class User extends TimeSet {
   @OneToOne(() => Cart, (cart) => cart.user)
   cart: Cart;
 
-  @OneToMany(() => Purchase, (purchase) => purchase.user, { lazy: true })
-  purchases: Promise<Purchase[]>;
+  @OneToMany(() => Purchase, (purchase) => purchase.user)
+  purchases: Purchase[];
 
   userData() {
     const userType = `${this.type.toLowerCase()}User`;
