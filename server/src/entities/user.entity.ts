@@ -11,8 +11,8 @@ import {
   LocalAuthentication,
   NaverAuthentication,
 } from "./user-authentication.entity";
-import { Purchase } from "./purchase.entity";
 import { Cart } from "./cart.entity";
+import { Purchase } from "./Purchase.entity";
 
 export type FrontUserAuth =
   | LocalAuthentication
@@ -55,8 +55,8 @@ export class User extends TimeSet {
   @OneToOne(() => Cart, (cart) => cart.user)
   cart: Cart;
 
-  @OneToMany(() => Purchase, (purchase) => purchase.user)
-  purchases: Purchase[];
+  @OneToMany(() => Purchase, (purchase) => purchase.user, { lazy: true })
+  purchases: Promise<Purchase[]>;
 
   userData() {
     const userType = `${this.type.toLowerCase()}User`;
