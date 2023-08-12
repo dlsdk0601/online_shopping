@@ -31,6 +31,7 @@ export class CartProduct extends BaseEntity {
   pk: number;
 
   @ManyToOne(() => Cart, (cart) => cart.cart_products)
+  @JoinColumn({ name: "cart_pk", referencedColumnName: "pk" })
   cart: Cart;
 
   @OneToOne(() => Product, (product) => product, {
