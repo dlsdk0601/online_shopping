@@ -29,8 +29,8 @@ export class Purchase extends BaseEntity {
   @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
   user: User;
 
-  @OneToMany(() => PurchaseItem, (purchaseItem) => purchaseItem.purchase, { nullable: false })
-  purchaseItems: PurchaseItem[];
+  @OneToMany(() => PurchaseItem, (purchaseItem) => purchaseItem.purchase)
+  purchase_items: PurchaseItem[];
 }
 
 @Entity("purchase_item")
@@ -44,7 +44,7 @@ export class PurchaseItem extends BaseEntity {
   @UpdateDateColumn({ comment: "수정 일자", nullable: true })
   update_at: Date | null;
 
-  @ManyToOne(() => Purchase, (purchase) => purchase.purchaseItems)
+  @ManyToOne(() => Purchase, (purchase) => purchase.purchase_items, { nullable: false })
   @JoinColumn({ name: "purchase_pk", referencedColumnName: "pk" })
   purchase: Purchase;
 
