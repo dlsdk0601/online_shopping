@@ -12,7 +12,7 @@ import { ManagerType } from "../../type/type";
 import { EditUserReqDto, EditUserResDto } from "./dto/edit-user.dto";
 import { SelectUserReqDto, SelectUserResDto } from "./dto/select-user.dto";
 
-@Controller("admin/user")
+@Controller("/admin/user")
 @ApiTags("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}

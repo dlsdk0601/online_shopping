@@ -13,7 +13,7 @@ import { AddManagerReqDto, AddManagerResDto } from "./dto/add-manager.dto";
 import { EditManagerReqDto, EditManagerResDto } from "./dto/edit-manager.dto";
 import { DeleteManagerReqDto, DeleteManagerResDto } from "./dto/delete-manager.dto";
 
-@ApiTags("manager")
+@ApiTags("/admin/manager")
 @Controller("admin")
 export class ManagerController {
   constructor(private readonly managerService: ManagerService) {}

@@ -9,7 +9,7 @@ import { AuthManagerResDto, AuthReqDto } from "./dto/auth.dto";
 import { SignOutReqDto, SignOutResDto } from "./dto/sign-out.dto";
 
 @ApiTags("admin-auth")
-@Controller("admin")
+@Controller("/admin")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

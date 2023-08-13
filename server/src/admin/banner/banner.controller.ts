@@ -10,7 +10,7 @@ import {
 import { EditBannerReqDto, EditBannerResDto } from "./dto/edit-banner.dto";
 import { DeleteBannerReqDto, DeleteBannerResDto } from "./dto/delete-banner.dto";
 
-@Controller("admin")
+@Controller("/admin/banner")
 @ApiTags("admin-banner")
 export class BannerController {
   constructor(private readonly bannerService: BannerService) {}

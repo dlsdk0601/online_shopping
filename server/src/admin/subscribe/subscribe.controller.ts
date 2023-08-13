@@ -22,7 +22,7 @@ import {
   DeleteSubscribeHistoryResDto,
 } from "./dto/delete-subscribe-history.dto";
 
-@Controller("admin")
+@Controller("/admin/subscribe")
 @ApiTags("admin-subscribe")
 export class SubscribeController {
   constructor(private readonly subscribeService: SubscribeService) {}
