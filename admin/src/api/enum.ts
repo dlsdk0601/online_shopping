@@ -1,5 +1,6 @@
 import {
   ProductCategory,
+  PurchaseSearchType,
   SubscribeHistorySearchType,
   SubscribeSearchType,
   UserSearchType,
@@ -63,5 +64,17 @@ export const categoryEnumToLabel = (label: "MEN" | "WOMEN" | "KIDS" | "ACCESSORY
       return "키즈";
     default: // ProductCategory.ACCESSORY
       return "악세서리";
+  }
+};
+
+export const labelToPurchaseSearchType = (
+  label: string | undefined,
+): PurchaseSearchType | undefined => {
+  switch (label) {
+    case PurchaseSearchType.NAME:
+    case PurchaseSearchType.PHONE:
+    case PurchaseSearchType.ORDER_CODE:
+      return label;
+    default:
   }
 };
