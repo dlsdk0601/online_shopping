@@ -29,7 +29,7 @@ export enum ProductCategory {
 }
 
 export enum PurchaseItemStatus {
-  WAITING = "WAITING", // 결제 대기
+  WAITING = "WAITING", // 결제 대기 (결제 화면으로 들어와도 모두 결제 대기, 결제 안하고 화면 탈출해도 결제 대기로 기록을 항상 남긴다.)
   IN_PROGRESS = "IN_PROGRESS", // 결제 진행 중
   SUCCESS = "SUCCESS", // 결제 완료
   CANCEL = "CANCEL", // 결제 취소
