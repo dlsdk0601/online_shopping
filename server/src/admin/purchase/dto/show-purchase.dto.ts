@@ -11,7 +11,7 @@ export class PurchaseListReqDto {
   @ApiProperty({ description: "search", nullable: true, type: "string" })
   @IsOptional()
   @IsString()
-  search: string;
+  search: string | null;
 }
 
 export class PurchaseListResPurchaseDto {
