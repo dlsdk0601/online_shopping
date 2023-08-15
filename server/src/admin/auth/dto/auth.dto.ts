@@ -1,27 +1,32 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { ManagerType } from "../../../entities/manager.entity";
 
 export class AuthReqDto {}
 
 export class AuthManagerResDto {
-  @ApiProperty({ description: "token" })
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
   @IsNumber()
   pk: number;
 
-  @ApiProperty({ description: "id" })
+  @ApiProperty({ description: "아이디", nullable: false, type: "string" })
   @IsNotEmpty()
+  @IsString()
   id: string;
 
-  @ApiProperty({ description: "type" })
+  @ApiProperty({ description: "타입", nullable: false, type: "number" })
+  @IsNotEmpty()
   @IsEnum(ManagerType)
   type: ManagerType;
 
-  @ApiProperty({ description: "name" })
+  @ApiProperty({ description: "이름", nullable: false, type: "string" })
   @IsNotEmpty()
+  @IsString()
   name: string;
 
-  @ApiProperty({ description: "email" })
+  @ApiProperty({ description: "이메일", nullable: false, type: "string" })
   @IsEmail()
+  @IsString()
   email: string;
 }
