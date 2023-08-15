@@ -84,3 +84,18 @@ export const getLastAuth = (authList: any[]) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   return (authList ?? []).find((item) => moment(item.expired_at).isAfter(new Date()));
 };
+
+export const makeOrderCode = (index = 7): string => {
+  // 대문자 영문
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZ";
+  // timestamp
+  const timeStamp = Date.now().toString();
+
+  let randomstring = "";
+  for (let i = 0; i < index; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    randomstring += chars.substring(randomIndex, randomIndex + 1);
+  }
+
+  return randomstring + timeStamp;
+};
