@@ -38,3 +38,9 @@ export enum PurchaseItemStatus {
   REFUND_FAIL = "REFUND_FAIL", // 환불 실패
   FAIL = "FAIL", // 결제 실패
 }
+
+export enum PurchaseSearchType {
+  NAME = "NAME",
+  PHONE = "PHONE",
+  ORDER_CODE = "ORDER_CODE",
+}
