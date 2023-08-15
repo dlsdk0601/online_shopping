@@ -2,6 +2,7 @@ import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
 import {
   IsArray,
   IsDate,
+  IsEmpty,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -13,19 +14,19 @@ import { PurchaseSearchType } from "../../../type/commonType";
 
 export class PurchaseListReqDto {
   @ApiProperty({ description: "page number", nullable: false, type: "number" })
-  @IsNumber()
   @IsNotEmpty()
+  @IsNumber()
   page: number;
 
   @ApiProperty({ description: "검색 타입", nullable: true, type: "enum", enum: PurchaseSearchType })
-  @IsNotEmpty()
-  @IsEnum(PurchaseSearchType)
-  searchType: PurchaseSearchType;
-
-  @ApiProperty({ description: "search", nullable: true, type: "string" })
   @IsOptional()
+  @IsEnum(PurchaseSearchType)
+  searchType: PurchaseSearchType | null;
+
+  @ApiProperty({ description: "search", nullable: false, type: "string" })
+  @IsEmpty()
   @IsString()
-  search: string | null;
+  search: string;
 }
 
 export class PurchaseListResPurchaseDto {
