@@ -62,6 +62,12 @@ const menu: MenuItem[] = [
     pathname: Urls.cart.index.pathname,
     url: Urls.cart.index.url(),
   },
+  {
+    name: "구매",
+    icon: "fa-credit-card",
+    pathname: Urls.purchase.index.pathname,
+    url: Urls.purchase.index.url(),
+  },
 ];
 
 export default function LeftSideBarView() {
