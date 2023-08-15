@@ -22,6 +22,9 @@ export class Purchase extends BaseEntity {
   @CreateDateColumn({ comment: "생성 일자", nullable: false })
   create_at: Date;
 
+  @Column({ comment: "주문 번호", nullable: false, type: "varchar", length: 64 })
+  order_code: string;
+
   // 결제 기록은 남아야 하기 때문에 cascade 를 넣지 않는다.
   @ManyToOne(() => User, (user) => user.purchases, {
     nullable: false,
