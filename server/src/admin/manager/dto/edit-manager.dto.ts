@@ -1,39 +1,42 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { ManagerType } from "../../../entities/manager.entity";
 
 export class EditManagerReqDto {
-  @ApiProperty({ description: "pk" })
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
   @IsNumber()
   pk: number;
 
-  @ApiProperty({ description: "uuid" })
+  @ApiProperty({ description: "아이디", nullable: false, type: "string" })
   @IsNotEmpty()
+  @IsString()
   id: string;
 
-  @ApiProperty({ description: "password hash" })
+  @ApiProperty({ description: "비밀번호", nullable: false, type: "string" })
   @IsNotEmpty()
+  @IsString()
   password: string;
 
-  @ApiProperty({ description: "name" })
+  @ApiProperty({ description: "이름", nullable: false, type: "string" })
   @IsNotEmpty()
+  @IsString()
   name: string;
 
-  @ApiProperty({ description: "email" })
+  @ApiProperty({ description: "이메일", nullable: false, type: "string" })
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @ApiProperty({
-    description: "manager - type",
-    nullable: false,
-    enum: [ManagerType.MANAGER, ManagerType.SUPER],
-  })
+  @ApiProperty({ description: "타입", nullable: false, enum: ManagerType })
+  @IsNotEmpty()
   @IsEnum(ManagerType)
   type: ManagerType;
 }
 
 export class EditManagerResDto {
-  @ApiProperty({ description: "pk" })
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
   @IsNumber()
   pk: number;
 }

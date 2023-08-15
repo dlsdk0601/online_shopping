@@ -4,55 +4,64 @@ import { PaginationDto } from "../../../type/pagination.dto";
 import { ManagerType } from "../../../entities/manager.entity";
 
 export class ShowManagerReqDto {
-  @ApiProperty({ description: "pk" })
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
   @IsNumber()
   pk: number;
 }
 
 export class ShowManagerResDto {
-  @ApiProperty({ description: "pk" })
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
   @IsNumber()
   pk: number;
 
-  @ApiProperty({ description: "uuid" })
+  @ApiProperty({ description: "아이디", nullable: false, type: "string" })
   @IsNotEmpty()
+  @IsString()
   id: string;
 
-  @ApiProperty({ description: "name" })
+  @ApiProperty({ description: "이름", nullable: false, type: "string" })
   @IsNotEmpty()
+  @IsString()
   name: string;
 
-  @ApiProperty({ description: "password hash" })
+  @ApiProperty({ description: "이메일", nullable: false, type: "string" })
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @ApiProperty({ description: "password hash" })
+  @ApiProperty({ description: "타입", nullable: false, type: "enum", enum: ManagerType })
+  @IsNotEmpty()
   @IsEnum(ManagerType)
-  type = ManagerType;
+  type: ManagerType;
 }
 
 export class ManagerListReqDto {
-  @ApiProperty({ description: "페이지" })
+  @ApiProperty({ description: "페이지", nullable: false, type: "number" })
+  @IsNotEmpty()
   @IsNumber()
   page: number;
 }
 
 export class ManagerListResManagerDto {
-  @ApiProperty({ description: "pk" })
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
   @IsNumber()
   pk: number;
 
-  @ApiProperty({ description: "id" })
-  @IsString()
+  @ApiProperty({ description: "아이디", nullable: false, type: "string" })
   @IsNotEmpty()
+  @IsString()
   id: string;
 
-  @ApiProperty({ description: "name" })
-  @IsString()
+  @ApiProperty({ description: "이름", nullable: false, type: "string" })
   @IsNotEmpty()
+  @IsString()
   name: string;
 
-  @ApiProperty({ description: "create at", type: "string", format: "date-time" })
+  @ApiProperty({ description: "생성 일자", type: "string", format: "date-time" })
+  @IsNotEmpty()
   @IsDate()
   create_at: Date;
 }
