@@ -23,6 +23,7 @@ export class PurchaseService {
       name: item.user.name,
       phone: item.user.phone ?? "",
       count: item.purchase_items.length,
+      orderCode: item.order_code,
       createAt: item.create_at,
     }));
 
