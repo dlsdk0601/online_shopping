@@ -10,7 +10,7 @@ import {
   IsString,
 } from "class-validator";
 import { PaginationDto } from "../../../type/pagination.dto";
-import { PurchaseSearchType } from "../../../type/commonType";
+import { PurchaseItemStatus, PurchaseSearchType } from "../../../type/commonType";
 
 export class PurchaseListReqDto {
   @ApiProperty({ description: "page number", nullable: false, type: "number" })
@@ -75,4 +75,81 @@ export class PurchaseListResDto extends PaginationDto {
     super(count, page);
     this.rows = data;
   }
+}
+
+export class ShowPurchaseReqDto {
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
+  @IsNumber()
+  pk: number;
+}
+
+export class PurchaseItem {
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
+  @IsNumber()
+  pk: number;
+
+  @ApiProperty({ description: "상품 이름", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ description: "상품 가격", nullable: false, type: "number" })
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+
+  @ApiProperty({ description: "상품 갯수", nullable: false, type: "number" })
+  @IsNotEmpty()
+  @IsNumber()
+  count: number;
+
+  @ApiProperty({
+    description: "구매 상태",
+    nullable: false,
+    type: "enum",
+    enum: PurchaseItemStatus,
+  })
+  @IsNotEmpty()
+  @IsEnum(PurchaseItemStatus)
+  status: PurchaseItemStatus;
+}
+
+@ApiExtraModels(PurchaseItem)
+export class ShowPurchaseResDto {
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
+  @IsNumber()
+  pk: number;
+
+  @ApiProperty({ description: "유저 이름", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ description: "유저 연락처", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
+  phone: string;
+
+  @ApiProperty({ description: "주문 번호", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
+  orderCode: string;
+
+  @ApiProperty({
+    description: "상품 리스트",
+    nullable: false,
+    type: "array",
+    items: { $ref: getSchemaPath(PurchaseItem) },
+  })
+  @IsNotEmpty()
+  @IsArray()
+  purchaseItems: PurchaseItem[];
+
+  @ApiProperty({ description: "생성 일자", nullable: false, format: "date-time", type: "string" })
+  @IsDate()
+  @IsNotEmpty()
+  createAt: Date;
 }
