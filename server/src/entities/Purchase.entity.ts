@@ -47,14 +47,17 @@ export class PurchaseItem extends BaseEntity {
   @UpdateDateColumn({ comment: "수정 일자", nullable: true })
   update_at: Date | null;
 
+  @Column({ enum: PurchaseItemStatus, type: "enum", nullable: false })
+  status: PurchaseItemStatus;
+
+  @Column({ comment: "수량", type: "int", nullable: false })
+  count: number;
+
   @ManyToOne(() => Purchase, (purchase) => purchase.purchase_items, { nullable: false })
   @JoinColumn({ name: "purchase_pk", referencedColumnName: "pk" })
   purchase: Purchase;
 
-  @Column({ enum: PurchaseItemStatus, type: "enum", nullable: false })
-  status: PurchaseItemStatus;
-
-  @OneToOne(() => Product, (product) => product)
+  @OneToOne(() => Product, (product) => product, { eager: true })
   @JoinColumn({ name: "product_pk", referencedColumnName: "pk" })
   product: Product;
 }
