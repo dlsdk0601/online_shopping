@@ -5,7 +5,7 @@ import { isNil } from "lodash";
 import Manager, { ManagerType } from "../../entities/manager.entity";
 import { getHash } from "../../ex/bcryptEx";
 import { User } from "../../entities/user.entity";
-import { ProductCategory, UserType } from "../../type/commonType";
+import { ProductCategory, PurchaseItemStatus, UserType } from "../../type/commonType";
 import { LocalUser } from "../../entities/local-user.entity";
 import Authentication from "../../entities/manager-authentication.entity";
 import {
@@ -19,6 +19,8 @@ import { Product } from "../../entities/product.entity";
 import { Asset } from "../../entities/asset.entity";
 import { MainBanner } from "../../entities/main-banner.entity";
 import { Cart, CartProduct } from "../../entities/cart.entity";
+import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
+import { makeOrderCode } from "../../ex/ex";
 
 export default class TypeOrmSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<any> {
@@ -26,11 +28,12 @@ export default class TypeOrmSeeder implements Seeder {
 
     faker.locale = "ko";
     return Promise.all([
-      this.onAddManager(faker, dataSource),
-      this.onAddUser(faker, dataSource),
-      this.onAddProduct(faker),
-      this.onAddBanner(faker),
-      this.onAddCart(faker),
+      // this.onAddManager(faker, dataSource),
+      // this.onAddUser(faker, dataSource),
+      // this.onAddProduct(faker),
+      // this.onAddBanner(faker),
+      // this.onAddCart(faker),
+      this.onAddPurchase(faker),
     ]).then(() => console.log("success"));
   }
 
@@ -114,6 +117,26 @@ export default class TypeOrmSeeder implements Seeder {
     cart.user = user;
     cart.cart_products = cartProduct;
     await cart.save();
+  }
+
+  async onAddPurchase(faker: Faker) {
+    const purchases: Purchase[] = [];
+
+    for (let i = 0; i < 5; i++) {
+      const purchase = new Purchase();
+      purchase.order_code = makeOrderCode();
+      const userPk = faker.datatype.number({ min: 4091, max: 4209 });
+      // eslint-disable-next-line no-await-in-loop
+      purchase.user = (await User.findOneBy({
+        pk: userPk,
+      })) as User;
+      // eslint-disable-next-line no-await-in-loop
+      const purchaseItemList = await this.purchaseItems(faker);
+      purchase.purchase_items = purchaseItemList;
+      purchases.push(purchase);
+    }
+
+    await Purchase.insert(purchases);
   }
 
   async managerList(faker: Faker) {
@@ -280,6 +303,23 @@ export default class TypeOrmSeeder implements Seeder {
     }
 
     return carts;
+  }
+
+  async purchaseItems(faker: Faker) {
+    const purchaseList: PurchaseItem[] = [];
+
+    for (let i = 0; i < 6; i++) {
+      const purchase = new PurchaseItem();
+      purchase.status = PurchaseItemStatus.WAITING;
+      purchase.count = faker.datatype.number({ min: 1, max: 3 });
+      // eslint-disable-next-line no-await-in-loop
+      purchase.product = (await Product.findOneBy({
+        pk: faker.datatype.number({ min: 86, max: 165 }),
+      })) as Product;
+      purchaseList.push(purchase);
+    }
+
+    return purchaseList;
   }
 
   makeFakerPhone(faker: Faker) {
