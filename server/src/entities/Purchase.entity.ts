@@ -32,7 +32,7 @@ export class Purchase extends BaseEntity {
   @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
   user: User;
 
-  @OneToMany(() => PurchaseItem, (purchaseItem) => purchaseItem.purchase)
+  @OneToMany(() => PurchaseItem, (purchaseItem) => purchaseItem.purchase, { cascade: ["insert"] })
   purchase_items: PurchaseItem[];
 }
 
@@ -53,7 +53,10 @@ export class PurchaseItem extends BaseEntity {
   @Column({ comment: "수량", type: "int", nullable: false })
   count: number;
 
-  @ManyToOne(() => Purchase, (purchase) => purchase.purchase_items, { nullable: false })
+  @ManyToOne(() => Purchase, (purchase) => purchase.purchase_items, {
+    nullable: false,
+    cascade: ["insert"],
+  })
   @JoinColumn({ name: "purchase_pk", referencedColumnName: "pk" })
   purchase: Purchase;
 
