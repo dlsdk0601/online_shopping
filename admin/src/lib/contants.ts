@@ -7,6 +7,7 @@ export const queryKeys = {
   product: "product",
   banner: "banner",
   cart: "cart",
+  purchase: "purchase",
 };
 
 export const CONSTANT = {
