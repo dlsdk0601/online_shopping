@@ -88,13 +88,10 @@ const PurchaseListPage = () => {
             ["주문 번호", value.orderCode],
             ["생성 일자", d2(value.createAt)],
           ]}
-          // links={(purchaseList?.rows ?? []).map((product) =>
-          //   Urls.product.edit["[pk]"].url({ pk: product.pk }),
-          // )}
+          links={(purchaseList?.rows ?? []).map((purchase) =>
+            Urls.purchase.edit["[pk]"].url({ pk: purchase.pk }),
+          )}
         />
-        {/* <CreateButtonView */}
-        {/* // onClick={() => router.push(Urls.product.edit["[pk]"].url({ pk: NEWPK }))} */}
-        {/* /> */}
       </div>
     </div>
   );
