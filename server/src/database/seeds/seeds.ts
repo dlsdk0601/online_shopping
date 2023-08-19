@@ -131,12 +131,11 @@ export default class TypeOrmSeeder implements Seeder {
         pk: userPk,
       })) as User;
       // eslint-disable-next-line no-await-in-loop
-      const purchaseItemList = await this.purchaseItems(faker);
-      purchase.purchase_items = purchaseItemList;
+      purchase.purchase_items = await this.purchaseItems(faker);
       purchases.push(purchase);
     }
 
-    await Purchase.insert(purchases);
+    await Purchase.save(purchases);
   }
 
   async managerList(faker: Faker) {
