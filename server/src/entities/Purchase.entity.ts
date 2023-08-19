@@ -32,7 +32,10 @@ export class Purchase extends BaseEntity {
   @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
   user: User;
 
-  @OneToMany(() => PurchaseItem, (purchaseItem) => purchaseItem.purchase, { cascade: ["insert"] })
+  @OneToMany(() => PurchaseItem, (purchaseItem) => purchaseItem.purchase, {
+    eager: true,
+    cascade: true,
+  })
   purchase_items: PurchaseItem[];
 }
 
@@ -55,12 +58,14 @@ export class PurchaseItem extends BaseEntity {
 
   @ManyToOne(() => Purchase, (purchase) => purchase.purchase_items, {
     nullable: false,
-    cascade: ["insert"],
   })
   @JoinColumn({ name: "purchase_pk", referencedColumnName: "pk" })
   purchase: Purchase;
 
-  @OneToOne(() => Product, (product) => product, { eager: true })
+  @OneToOne(() => Product, (product) => product, {
+    eager: true,
+    createForeignKeyConstraints: false, // constraint 유니크 해제
+  })
   @JoinColumn({ name: "product_pk", referencedColumnName: "pk" })
   product: Product;
 }
