@@ -38,7 +38,6 @@ const PurchaseEditPage = () => {
 };
 
 const PurchaseEditView = memo((props: { res?: ShowPurchaseRes }) => {
-  const router = useRouter();
   const [name, setName] = useValueField("", "유저 이름");
   const [phone, setPhone] = useValueField("", "유저 휴대폰");
   const [list, setList] = useState<PurchaseItem[]>([]);
