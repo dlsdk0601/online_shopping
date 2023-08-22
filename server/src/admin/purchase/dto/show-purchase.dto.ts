@@ -11,6 +11,7 @@ import {
 } from "class-validator";
 import { PaginationDto } from "../../../type/pagination.dto";
 import { PurchaseItemStatus, PurchaseSearchType } from "../../../type/commonType";
+import { FileSetDto } from "../../../asset/dto/fileSet.dto";
 
 export class PurchaseListReqDto {
   @ApiProperty({ description: "page number", nullable: false, type: "number" })
@@ -84,6 +85,7 @@ export class ShowPurchaseReqDto {
   pk: number;
 }
 
+@ApiExtraModels(FileSetDto)
 export class PurchaseItem {
   @ApiProperty({ description: "pk", nullable: false, type: "number" })
   @IsNotEmpty()
@@ -104,6 +106,14 @@ export class PurchaseItem {
   @IsNotEmpty()
   @IsNumber()
   count: number;
+
+  @ApiProperty({
+    description: "이미지",
+    nullable: false,
+    items: { $ref: getSchemaPath(FileSetDto) },
+  })
+  @IsNotEmpty()
+  image: FileSetDto;
 
   @ApiProperty({
     description: "구매 상태",
