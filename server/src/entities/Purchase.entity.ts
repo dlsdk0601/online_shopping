@@ -63,7 +63,6 @@ export class PurchaseItem extends BaseEntity {
   purchase: Purchase;
 
   @OneToOne(() => Product, (product) => product, {
-    eager: true,
     createForeignKeyConstraints: false, // constraint 유니크 해제
   })
   @JoinColumn({ name: "product_pk", referencedColumnName: "pk" })
