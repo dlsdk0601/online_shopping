@@ -89,7 +89,7 @@ const PurchaseEditView = memo((props: { res?: ShowPurchaseRes }) => {
               className="mb-3 flex items-center justify-between rounded border p-5 text-center"
             >
               <div className="w-1/12">
-                {/* <img src={product.image.url} alt="product" className="w-full" /> */}
+                <img src={product.image.url} alt="product" className="w-full" />
               </div>
               <p className="w-1/12">{product.name}</p>
               <p className="w-1/12">{mf2(product.price)}</p>
