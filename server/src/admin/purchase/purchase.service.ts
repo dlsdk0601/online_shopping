@@ -63,6 +63,7 @@ export class PurchaseService {
         price: item.product.price,
         count: item.count,
         status: item.status,
+        image: this.assetService.getFileSet(item.product.main_image),
       })),
     };
   }
