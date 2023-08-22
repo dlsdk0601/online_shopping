@@ -28,7 +28,7 @@ export default class TypeOrmSeeder implements Seeder {
 
     faker.locale = "ko";
     return Promise.all([
-      this.onAddManager(faker, dataSource),
+      this.onAddManager(faker),
       this.onAddUser(faker, dataSource),
       this.onAddProduct(faker),
       this.onAddBanner(faker),
@@ -37,15 +37,14 @@ export default class TypeOrmSeeder implements Seeder {
     ]).then(() => console.log("success"));
   }
 
-  async onAddManager(faker: Faker, dataSource: DataSource) {
-    const manager = dataSource.getRepository(Manager);
-    const oldManagers = await manager.find();
-    await manager.remove([...oldManagers]);
+  async onAddManager(faker: Faker) {
+    const oldManagers = await Manager.find();
+    await Manager.remove(oldManagers);
     const oldAuths = await Authentication.find();
-    await Authentication.remove([...oldAuths]);
+    await Authentication.remove(oldAuths);
 
     const managers = await this.managerList(faker);
-    await manager.insert([...managers]);
+    await Manager.save(managers);
   }
 
   async onAddUser(faker: Faker, dataSource: DataSource) {
@@ -142,26 +141,17 @@ export default class TypeOrmSeeder implements Seeder {
   }
 
   async managerList(faker: Faker) {
-    const managers: {
-      id: string;
-      name: string;
-      email: string;
-      password_hash: string;
-      type: ManagerType;
-    }[] = [];
+    const managers: Manager[] = [];
 
     for (let i = 0; i < 10; i++) {
+      const manager = new Manager();
       // eslint-disable-next-line no-await-in-loop
-      const password_hash = await getHash(this.randomPassword(faker));
-      const newManager = {
-        id: faker.datatype.uuid(),
-        name: faker.name.fullName(),
-        email: faker.internet.email(),
-        password_hash,
-        type: ManagerType.MANAGER,
-      };
-
-      managers.push(newManager);
+      manager.password_hash = await getHash(this.randomPassword(faker));
+      manager.id = faker.datatype.uuid();
+      manager.name = faker.name.fullName();
+      manager.email = faker.internet.email();
+      manager.type = ManagerType.MANAGER;
+      managers.push(manager);
     }
 
     managers[0].id = "manager";
