@@ -28,11 +28,11 @@ export default class TypeOrmSeeder implements Seeder {
 
     faker.locale = "ko";
     return Promise.all([
-      // this.onAddManager(faker, dataSource),
-      // this.onAddUser(faker, dataSource),
-      // this.onAddProduct(faker),
-      // this.onAddBanner(faker),
-      // this.onAddCart(faker),
+      this.onAddManager(faker, dataSource),
+      this.onAddUser(faker, dataSource),
+      this.onAddProduct(faker),
+      this.onAddBanner(faker),
+      this.onAddCart(faker),
       this.onAddPurchase(faker),
     ]).then(() => console.log("success"));
   }
@@ -92,6 +92,9 @@ export default class TypeOrmSeeder implements Seeder {
   }
 
   async onAddCart(faker: Faker) {
+    const oldCart = await Cart.find();
+    await Cart.remove(oldCart);
+
     const carts = this.cartList(faker);
     const cartProduct: CartProduct[] = [];
 
@@ -105,7 +108,7 @@ export default class TypeOrmSeeder implements Seeder {
       cartProduct.push(cartProductEntity);
     }
 
-    await CartProduct.insert(cartProduct);
+    await CartProduct.save(cartProduct);
 
     const user = await User.findOne({ where: { pk: 4090 } });
     const cart = new Cart();
