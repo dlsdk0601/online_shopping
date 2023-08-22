@@ -122,6 +122,11 @@ export default class TypeOrmSeeder implements Seeder {
   }
 
   async onAddPurchase(faker: Faker) {
+    // const oldPurchase = await Purchase.find();
+    // const oldPurchaseItems = await PurchaseItem.find();
+    // await Purchase.remove(oldPurchase);
+    // await PurchaseItem.remove(oldPurchaseItems);
+
     const purchases: Purchase[] = [];
 
     for (let i = 0; i < 5; i++) {
@@ -299,14 +304,21 @@ export default class TypeOrmSeeder implements Seeder {
 
   async purchaseItems(faker: Faker) {
     const purchaseList: PurchaseItem[] = [];
+    const maxPkProduct = await Product.find({
+      order: {
+        pk: "desc",
+      },
+    });
+
+    const maxPk = maxPkProduct[0].pk;
 
     for (let i = 0; i < 6; i++) {
       const purchase = new PurchaseItem();
       purchase.status = PurchaseItemStatus.WAITING;
       purchase.count = faker.datatype.number({ min: 1, max: 3 });
       // eslint-disable-next-line no-await-in-loop
-      purchase.product = (await Product.findOneBy({
-        pk: faker.datatype.number({ min: 86, max: 165 }),
+      purchase.product = (await Product.findOne({
+        where: { pk: faker.datatype.number({ min: maxPk - 80, max: maxPk }) },
       })) as Product;
       purchaseList.push(purchase);
     }
