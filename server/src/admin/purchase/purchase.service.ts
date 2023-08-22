@@ -42,7 +42,11 @@ export class PurchaseService {
         pk: body.pk,
       },
       relations: {
-        purchase_items: true,
+        purchase_items: {
+          product: {
+            main_image: true,
+          },
+        },
         user: true,
       },
     });
