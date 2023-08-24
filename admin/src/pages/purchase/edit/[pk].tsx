@@ -12,6 +12,7 @@ import { ReadOnlyTextView, TextFieldView } from "../../../components/field/field
 import useValueField from "../../../hooks/useValueField";
 import { d1 } from "../../../ex/dateEx";
 import { mf2 } from "../../../ex/numberEx";
+import { purchaseEnumToLabel } from "../../../api/enum";
 
 const PurchaseEditPage = () => {
   const router = useRouter();
@@ -81,6 +82,15 @@ const PurchaseEditView = memo((props: { res?: ShowPurchaseRes }) => {
           <p className="w-1/12">가격</p>
           <p className="w-1/12">갯수</p>
           <p className="w-1/12">가격</p>
+          <p className="w-1/12">상태</p>
+          <p className="w-1/12">
+            <button
+              type="button"
+              className="rounded border border-red-500 p-2 text-red-500 transition-all hover:bg-red-500 hover:text-white"
+            >
+              전체 환불
+            </button>
+          </p>
         </li>
         {list.map((product) => {
           return (
@@ -95,6 +105,15 @@ const PurchaseEditView = memo((props: { res?: ShowPurchaseRes }) => {
               <p className="w-1/12">{mf2(product.price)}</p>
               <p className="w-1/12">{product.count}</p>
               <p className="w-1/12">$ {mf2(product.price * product.count)}</p>
+              <p className="w-1/12">{purchaseEnumToLabel(product.status)}</p>
+              <p className="w-1/12">
+                <button
+                  type="button"
+                  className="rounded border border-red-500 p-2 text-red-500 transition-all hover:bg-red-500 hover:text-white"
+                >
+                  환불
+                </button>
+              </p>
             </li>
           );
         })}
