@@ -90,7 +90,7 @@ const IndexSkeletonView = () => {
             >
               {[1, 2, 3].map((item) => {
                 return (
-                  <li className="item">
+                  <li key={`index-skeleton-${item}`} className="item">
                     <div className="thumb skeleton">
                       <Skeleton width="100%" height="100%" />
                     </div>
@@ -151,7 +151,7 @@ const IndexSkeletonView = () => {
             >
               {[1, 2, 3].map((item) => {
                 return (
-                  <li className="item">
+                  <li key={`index-skeleton-${item}`} className="item">
                     <div className="thumb skeleton">
                       <Skeleton width="100%" height="100%" />
                     </div>
@@ -212,7 +212,7 @@ const IndexSkeletonView = () => {
             >
               {[1, 2, 3].map((item) => {
                 return (
-                  <li className="item">
+                  <li key={`index-skeleton-${item}`} className="item">
                     <div className="thumb skeleton">
                       <Skeleton width="100%" height="100%" />
                     </div>
