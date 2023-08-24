@@ -7,7 +7,6 @@ import SliderView from "../view/home/SliderView";
 import { api } from "../api/url.g";
 import { queryKeys } from "../lib/contants";
 import IndexSkeleton from "../view/skeleton/IndexSkeleton";
-import { Replace } from "../layout/App";
 
 export default function Home() {
   const router = useRouter();
@@ -21,7 +20,7 @@ export default function Home() {
   }
 
   if (isNil(home)) {
-    return <Replace url="_error" />;
+    return <IndexSkeleton />;
   }
 
   return (
