@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Urls } from "../../url/url.g";
 import { Banner } from "../../api/type.g";
 
 const MainBannerView = (props: { banner: Banner }) => {
+  const router = useRouter();
   return (
     <div className="main-banner" id="top">
       <div className="container-fluid">
@@ -13,7 +15,7 @@ const MainBannerView = (props: { banner: Banner }) => {
                 <div className="inner-content">
                   <h4>{props.banner.mainBannerMain.title}</h4>
                   <span>{props.banner.mainBannerMain.subTitle}</span>
-                  <div className="main-border-button">
+                  <div className="main-white-button">
                     <Link href={Urls.womens.index.url()}>Purchase Now!</Link>
                   </div>
                 </div>
