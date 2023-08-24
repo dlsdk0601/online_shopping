@@ -12,7 +12,6 @@ import { google } from "googleapis";
 import { isNil } from "lodash";
 import { TokenPayload } from "google-auth-library/build/src/auth/loginticket";
 import moment from "moment";
-import axios from "axios";
 import { GoogleUser } from "src/entities/google-user.entity";
 import { getHash } from "../../ex/bcryptEx";
 import errorMessage from "../../config/errorMessage";
@@ -25,7 +24,7 @@ import {
   NaverAuthentication,
 } from "../../entities/user-authentication.entity";
 import { getDeviceInfo, getLastAuth } from "../../ex/ex";
-import { NaverCodeVerifyReqDto } from "./dto/naver-auth.dto";
+import { NaverCodeVerifyReqDto, NaverCodeVerifyRes, NaverGetUserData } from "./dto/naver-auth.dto";
 import { SignUpReqDto, SnsSignUpReqDto } from "./dto/sign-up.dto";
 import { KakaoUser } from "../../entities/kakao-user.entity";
 import { NaverUser } from "../../entities/naver-user.entity";
@@ -33,10 +32,16 @@ import { LocalUser } from "../../entities/local-user.entity";
 import { FrontUserAuth, User } from "../../entities/user.entity";
 import { EditUserReqDto } from "./dto/edit-user.dto";
 import { EditPasswordReqDto } from "./dto/edit-password.dto";
+import { HttpService } from "../http/http.service";
+import { KakaoCodeVerifyRes, KakaoGetUserRes } from "./dto/kakao-auth.dto";
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService, private readonly configService: ConfigService) {}
+  constructor(
+    private jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly httpService: HttpService
+  ) {}
 
   oauth2Client = new google.auth.OAuth2(
     this.configService.get("GOOGLE_ID"),
@@ -114,41 +119,40 @@ export class AuthService {
   async validateKakaoToken(code: string, req: CustomRequest) {
     const url = this.configService.get<string>("KAKAO_CODE_VERIFY_URI") ?? "";
     const kakaoId = this.configService.get("KAKAO_ID") ?? "";
-    const contentType = "application/x-www-form-urlencoded;charset=utf-8";
+    const config = {
+      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=utf-8" },
+    };
 
-    const codeValid = await axios.post(
-      url,
-      {
-        grant_type: "authorization_code",
-        client_id: kakaoId,
-        redirect_uri: this.configService.get<string>("KAKAO_FRONT_REDIRECT") ?? "",
-        code,
-      },
-      {
-        headers: { "Content-Type": contentType },
-      }
-    );
+    const codeValid = await this.httpService.post<KakaoCodeVerifyRes>(url, config, {
+      grant_type: "authorization_code",
+      client_id: kakaoId,
+      redirect_uri: this.configService.get<string>("KAKAO_FRONT_REDIRECT") ?? "",
+      code,
+    });
 
     if (isNil(codeValid)) {
       throw new ConflictException(errorMessage.KAKAO_GET_USER_FAILED);
     }
 
-    const accessToken: string = codeValid.data.access_token;
-    const userData = await axios.get(this.configService.get("KAKAO_GET_USER_URI") ?? "", {
+    const accessToken: string = codeValid.access_token;
+
+    const getUserDataUrl = this.configService.get<string>("KAKAO_GET_USER_URI") ?? "";
+    const getUserDataConfig = {
       headers: {
         "Authorization": `Bearer ${accessToken}`,
-        "Content-Type": contentType,
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
       },
-    });
+    };
+    const userData = await this.httpService.get<KakaoGetUserRes>(getUserDataUrl, getUserDataConfig);
 
     if (isNil(userData)) {
       throw new ConflictException(errorMessage.KAKAO_GET_USER_FAILED);
     }
 
-    const id: number = userData.data.id;
-    const is_email_valid: boolean | undefined = userData.data.kakao_account.is_email_valid;
-    const email: string | undefined = userData.data.kakao_account.email;
-    const nickname: string = userData.data.kakao_account.profile.nickname;
+    const id = userData.id;
+    const is_email_valid = userData?.kakao_account?.is_email_valid;
+    const email = userData?.kakao_account?.email;
+    const nickname = userData?.kakao_account?.profile?.nickname ?? "";
 
     if (!is_email_valid || isNil(email)) {
       throw new NotFoundException(errorMessage.KAKAO_GET_USER_FAILED);
@@ -178,41 +182,46 @@ export class AuthService {
   }
 
   async validateNaverCode(body: NaverCodeVerifyReqDto, req: CustomRequest) {
-    const url = this.configService.get<string>("NAVER_CODE_VERIFY_URI") ?? "";
+    const baseUrl = this.configService.get<string>("NAVER_CODE_VERIFY_URI") ?? "";
     const naverId = this.configService.get<string>("NAVER_CLIENT_ID") ?? "";
     const redirectUri = this.configService.get<string>("NAVER_GET_USER_URI") ?? "";
     const naverSecretKey = this.configService.get<string>("NAVER_CLIENT_SECRET_KEY") ?? "";
 
-    const codeValid = await axios.get(
-      `${url}&client_id=${naverId}&client_secret=${naverSecretKey}&redirect_uri=${redirectUri}&code=${body.code}&state=${body.state}`,
-      {
-        headers: {
-          "X-Naver-Client-Id": naverId,
-          "X-Naver-Client-Secret": naverSecretKey,
-        },
-      }
-    );
+    const url = `${baseUrl}&client_id=${naverId}&client_secret=${naverSecretKey}&redirect_uri=${redirectUri}&code=${body.code}&state=${body.state}`;
+    const config = {
+      headers: {
+        "X-Naver-Client-Id": naverId,
+        "X-Naver-Client-Secret": naverSecretKey,
+      },
+    };
+    const codeValid = await this.httpService.get<NaverCodeVerifyRes>(url, config);
 
     if (isNil(codeValid)) {
       throw new ConflictException(errorMessage.NAVER_GET_USER_FAILED);
     }
 
-    const accessToken: string = codeValid.data.access_token;
+    const accessToken = codeValid.access_token;
+
     const getUserDataUrl = this.configService.get<string>("NAVER_GET_USER_URI") ?? "";
-    const userData = await axios.get(getUserDataUrl, {
+    const getUserDataConfig = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    });
+    };
 
-    if (isNil(userData) || userData.data.resultcode !== "00") {
+    const userData = await this.httpService.get<NaverGetUserData>(
+      getUserDataUrl,
+      getUserDataConfig
+    );
+
+    if (isNil(userData) || userData.resultcode !== "00") {
       throw new ConflictException(errorMessage.NAVER_GET_USER_FAILED);
     }
 
-    const id: string = userData.data.response.id;
-    const email: string = userData.data.response.email;
-    const phone: string = userData.data.response.mobile;
-    const name: string = userData.data.response.name;
+    const id = userData.response.id;
+    const email = userData.response.email;
+    const phone = userData.response.mobile;
+    const name = userData.response.name;
 
     const user = await this.validateNaverUser(id, email, phone, name);
 

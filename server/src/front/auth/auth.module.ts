@@ -18,6 +18,7 @@ import { GoogleUser } from "../../entities/google-user.entity";
 import { KakaoUser } from "../../entities/kakao-user.entity";
 import { NaverUser } from "../../entities/naver-user.entity";
 import { LocalUser } from "../../entities/local-user.entity";
+import { HttpService } from "../http/http.service";
 
 @Module({
   imports: [
@@ -44,6 +45,6 @@ import { LocalUser } from "../../entities/local-user.entity";
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, HttpService],
 })
 export class AuthModule {}
