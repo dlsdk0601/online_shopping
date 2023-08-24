@@ -6,7 +6,7 @@ import { CartListReqDto, CartListResDto } from "./dto/show-cart.dto";
 import { GetUser } from "../../decorator/user.decorator";
 import { User } from "../../entities/user.entity";
 import { EditCartProductCountReqDto, EditCartProductCountResDto } from "./dto/edit-cart.dto";
-import { DeleteCartItemReqDto, DeleteCartItemResDto } from "./dto/delete-cart.dto";
+import { DeleteCartReqDto, DeleteCartResDto } from "./dto/delete-cart.dto";
 import { AddCartReqDto, AddCartResDto } from "./dto/add-cart.dto";
 
 @Controller("/cart")
@@ -37,8 +37,8 @@ export class CartController {
 
   @Post("/delete-cart")
   @UseGuards(AuthGuard("jwt"))
-  @ApiCreatedResponse({ type: DeleteCartItemResDto })
-  async deleteCartItem(@Body() body: DeleteCartItemReqDto, @GetUser() user: User) {
+  @ApiCreatedResponse({ type: DeleteCartResDto })
+  async deleteCartItem(@Body() body: DeleteCartReqDto, @GetUser() user: User) {
     return this.cartService.deleteCartItem(body, user);
   }
 }

@@ -11,7 +11,7 @@ import { User } from "../../entities/user.entity";
 import errorMessage from "../../config/errorMessage";
 import { EditCartProductCountReqDto } from "./dto/edit-cart.dto";
 import { Cart, CartProduct } from "../../entities/cart.entity";
-import { DeleteCartItemReqDto } from "./dto/delete-cart.dto";
+import { DeleteCartReqDto } from "./dto/delete-cart.dto";
 import { AddCartReqDto } from "./dto/add-cart.dto";
 import { Product } from "../../entities/product.entity";
 import { isNotNil } from "../../ex/ex";
@@ -97,7 +97,7 @@ export class CartService {
     }
   }
 
-  async deleteCartItem(body: DeleteCartItemReqDto, user: User) {
+  async deleteCartItem(body: DeleteCartReqDto, user: User) {
     const userCartProductPks = user.cart.cart_products.map((product) => product.pk);
     const isInclude = body.cartProductPks.every((pk) => userCartProductPks.includes(pk));
 
