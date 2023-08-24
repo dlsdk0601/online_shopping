@@ -3,7 +3,7 @@ import { compact, isEmpty, isNil } from "lodash";
 import { useMutation } from "react-query";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useRouter } from "next/router";
-import { CartListItem, DeleteCartItemReq, EditCartProductCountReq } from "../../api/type.g";
+import { CartListItem, DeleteCartReq, EditCartProductCountReq } from "../../api/type.g";
 import { mf1 } from "../../ex/numberEx";
 import { api } from "../../api/url.g";
 import { cartTotalPrice } from "../../store/cart";
@@ -15,7 +15,7 @@ const CartListView = (props: { list: CartListItem[] }) => {
   const [totalPrice, setTotalPrice] = useRecoilState(cartTotalPrice);
   const [checkList, setCheckList] = useState<boolean[]>([...checkArray]);
 
-  const { mutate: onDeleteApi } = useMutation((req: DeleteCartItemReq) => api.deleteCart(req), {
+  const { mutate: onDeleteApi } = useMutation((req: DeleteCartReq) => api.deleteCart(req), {
     onSuccess: (res) => {
       if (isNil(res)) {
         return;
@@ -65,6 +65,10 @@ const CartListView = (props: { list: CartListItem[] }) => {
         return cart.pk;
       }),
     );
+
+    if (isEmpty(cartProductPks)) {
+      return;
+    }
 
     onDeleteApi({ cartProductPks });
   }, [checkList, props.list]);
