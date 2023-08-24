@@ -1,5 +1,6 @@
 import {
   ProductCategory,
+  PurchaseItemStatus,
   PurchaseSearchType,
   SubscribeHistorySearchType,
   SubscribeSearchType,
@@ -76,5 +77,37 @@ export const labelToPurchaseSearchType = (
     case PurchaseSearchType.ORDER_CODE:
       return label;
     default:
+  }
+};
+
+export const purchaseEnumToLabel = (
+  label:
+    | "WAITING"
+    | "IN_PROGRESS"
+    | "SUCCESS"
+    | "CANCEL"
+    | "REFUND_WAITING"
+    | "REFUND_SUCCESS"
+    | "REFUND_FAIL"
+    | "FAIL",
+) => {
+  switch (label) {
+    case PurchaseItemStatus.CANCEL:
+      return "결제 취소";
+    case PurchaseItemStatus.FAIL:
+      return "결제 실패";
+    case PurchaseItemStatus.IN_PROGRESS:
+      return "결제 진행 중";
+    case PurchaseItemStatus.SUCCESS:
+      return "결제 완료";
+    case PurchaseItemStatus.REFUND_SUCCESS:
+      return "환불 완료";
+    case PurchaseItemStatus.REFUND_FAIL:
+      return "환불 실패";
+    case PurchaseItemStatus.REFUND_WAITING:
+      return "환불 대기";
+    case PurchaseItemStatus.WAITING:
+    default:
+      return "결제 대기";
   }
 };
