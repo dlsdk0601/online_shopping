@@ -29,7 +29,7 @@ export default class TypeOrmSeeder implements Seeder {
     faker.locale = "ko";
     return Promise.all([
       this.onAddManager(faker),
-      this.onAddUser(faker, dataSource),
+      this.onAddUser(faker),
       this.onAddProduct(faker),
       this.onAddBanner(faker),
       this.onAddCart(faker),
@@ -47,8 +47,7 @@ export default class TypeOrmSeeder implements Seeder {
     await Manager.save(managers);
   }
 
-  async onAddUser(faker: Faker, dataSource: DataSource) {
-    const localUser = dataSource.getRepository(LocalUser);
+  async onAddUser(faker: Faker) {
     const oldLocalAuths = await LocalAuthentication.find();
     await LocalAuthentication.remove([...oldLocalAuths]);
     const oldGoogleAuths = await GoogleAuthentication.find();
@@ -58,11 +57,11 @@ export default class TypeOrmSeeder implements Seeder {
     const oldNaverAuths = await NaverAuthentication.find();
     await NaverAuthentication.remove([...oldNaverAuths]);
 
-    const oldLocalUsers = await localUser.find();
-    await localUser.remove([...oldLocalUsers]);
+    const oldLocalUsers = await LocalUser.find();
+    await LocalUser.remove(oldLocalUsers);
 
-    const users = await this.userList(faker, dataSource);
-    await localUser.insert([...users]);
+    const users = await this.userList(faker);
+    await LocalUser.save(users);
   }
 
   async onAddBanner(faker: Faker) {
@@ -209,28 +208,24 @@ export default class TypeOrmSeeder implements Seeder {
     return products;
   }
 
-  async userList(faker: Faker, dataSource: DataSource) {
-    const localUsers: {
-      id: string;
-      email: string;
-      password_hash: string;
-      pk: number;
-    }[] = [];
+  async userList(faker: Faker) {
+    const localUsers: LocalUser[] = [];
 
-    const userRepository = dataSource.getRepository(User);
-    const oldUsers = await userRepository.find();
-    await userRepository.remove([...oldUsers]);
+    const oldUsers = await User.find();
+    await User.remove(oldUsers);
 
     for (let i = 0; i < 120; i++) {
       const user = new User();
+      const localUser = new LocalUser();
       const subscribe = new Subscribe();
 
       user.name = faker.name.fullName();
       user.phone = this.makeFakerPhone(faker);
       user.type = UserType.LOCAL;
       // eslint-disable-next-line no-await-in-loop
-      const savedUser = await userRepository.save(user);
-      subscribe.user = savedUser;
+      await user.save();
+
+      subscribe.user = user;
       subscribe.email = faker.internet.email();
       subscribe.name = faker.name.fullName();
       // eslint-disable-next-line no-await-in-loop
@@ -238,12 +233,11 @@ export default class TypeOrmSeeder implements Seeder {
 
       // eslint-disable-next-line no-await-in-loop
       const password_hash = await getHash(this.randomPassword(faker));
-      const localUser = {
-        id: i === 0 ? "test" : faker.datatype.uuid(),
-        email: faker.internet.email(),
-        password_hash,
-        pk: savedUser.pk,
-      };
+      localUser.id = faker.datatype.uuid();
+      localUser.email = faker.internet.email();
+      localUser.password_hash = password_hash;
+      localUser.user = user;
+
       localUsers.push(localUser);
     }
 
