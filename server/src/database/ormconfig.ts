@@ -15,11 +15,11 @@ const dataSourceOptions: DataSourceOptions = {
   username: configService.get<string>("POSTGRES_USERNAME"),
   password: configService.get<string>("POSTGRES_PASSWORD"),
   database: configService.get<string>("POSTGRES_DATABASE"),
-  synchronize: configService.get<boolean>("POSTGRES_SYNCHRONIZE"),
+  synchronize: Boolean(configService.get<boolean>("POSTGRES_SYNCHRONIZE")),
   migrationsTableName: "migrations",
   migrations: ["migrations/*.ts"],
   entities: ["src/**/*.entity.ts"],
-  logging: configService.get<boolean>("DB_LOGGING"),
+  logging: Boolean(configService.get<boolean>("POSTGRES_LOGGING")),
 };
 
 export const typeOrmModuleOptions: TypeOrmModuleOptions = {
