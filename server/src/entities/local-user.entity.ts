@@ -27,7 +27,7 @@ export class LocalUser extends BaseEntity {
   @PrimaryColumn()
   pk: number;
 
-  @OneToOne(() => User, (user) => user.localUser, { onDelete: "CASCADE" })
+  @OneToOne(() => User, (user) => user.localUser, { cascade: true })
   @JoinColumn({ name: "pk", referencedColumnName: "pk" })
   user: User;
 }
