@@ -70,6 +70,7 @@ export class PurchaseService {
       const cartProduct = cartProducts.find((item) => item.pk === body.pks[i]);
       if (isNotNil(cartProduct)) {
         purchaseItem.product = cartProduct.product;
+        purchaseItem.count = cartProduct.count;
       }
 
       purchaseItems.push(purchaseItem);
