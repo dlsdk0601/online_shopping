@@ -10,6 +10,7 @@ import { envValidation } from "../lib/envValidation";
 import { AssetModule } from "../asset/asset.module";
 import { CartModule } from "./cart/cart.module";
 import { HttpModule } from './http/http.module';
+import { PurchaseModule } from './purchase/purchase.module';
 
 // 전역 변수 설정 및 orm 설정을 front / admin 따로 해준다.
 // 다른 설정이 들어 갈 수도 있기 때문에
@@ -28,6 +29,7 @@ import { HttpModule } from './http/http.module';
     AuthModule,
     CartModule,
     HttpModule,
+    PurchaseModule,
   ],
 })
 export class FrontAppModule {}
