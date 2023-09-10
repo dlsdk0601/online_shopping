@@ -10,7 +10,6 @@ import { Urls } from "../../../url/url.g";
 import CartListView from "../../../view/myPage/CartListView";
 
 const CartPage = () => {
-  // TODO :: 전체 선택, 전체 삭제, 체크 박스 넣기
   const router = useRouter();
 
   const { data: cartList, isLoading } = useQuery([queryKeys.cart], () => api.cartList({}), {
