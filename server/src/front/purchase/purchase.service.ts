@@ -59,6 +59,9 @@ export class PurchaseService {
       where: {
         pk: In(body.pks),
       },
+      relations: {
+        product: true,
+      },
     });
 
     const purchaseItems: PurchaseItem[] = [];
@@ -80,7 +83,7 @@ export class PurchaseService {
 
     try {
       await purchase.save();
-      return { pk: purchase.purchase_items };
+      return { pk: purchase.pk };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
