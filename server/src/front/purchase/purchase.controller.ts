@@ -13,14 +13,14 @@ export class PurchaseController {
   constructor(private readonly purchaseService: PurchaseService) {}
 
   // 회원 관련 API 는 보안 때문에 post 로 한다.
-  @Post("show")
+  @Post("show-purchase")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: ShowPurchaseResDto })
   async show(@Body() body: ShowPurchaseReqDto) {
     return this.purchaseService.show(body.pk);
   }
 
-  @Post("add")
+  @Post("add-purchase")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: AddPurchaseResDto })
   async add(@Body() body: AddPurchaseReqDto, @GetUser() user: User) {
