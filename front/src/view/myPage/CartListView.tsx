@@ -3,11 +3,17 @@ import { compact, isEmpty, isNil } from "lodash";
 import { useMutation } from "react-query";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useRouter } from "next/router";
-import { CartListItem, DeleteCartReq, EditCartProductCountReq } from "../../api/type.g";
+import {
+  AddPurchaseReq,
+  CartListItem,
+  DeleteCartReq,
+  EditCartProductCountReq,
+} from "../../api/type.g";
 import { mf1 } from "../../ex/numberEx";
 import { api } from "../../api/url.g";
 import { cartTotalPrice } from "../../store/cart";
-import { isNotNil } from "../../ex/utils";
+import { ignorePromise, isNotNil } from "../../ex/utils";
+import { Urls } from "../../url/url.g";
 
 const CartListView = (props: { list: CartListItem[] }) => {
   const router = useRouter();
@@ -23,6 +29,16 @@ const CartListView = (props: { list: CartListItem[] }) => {
 
       alert("삭제 되었습니다.");
       router.reload();
+    },
+  });
+
+  const { mutate: onAddApi } = useMutation((req: AddPurchaseReq) => api.addPurchase(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      ignorePromise(() => router.push(Urls.purchase["[pk]"].url({ pk: res.pk })));
     },
   });
 
@@ -73,6 +89,14 @@ const CartListView = (props: { list: CartListItem[] }) => {
     onDeleteApi({ cartProductPks });
   }, [checkList, props.list]);
 
+  const onAddPurchase = useCallback(() => {
+    const products = props.list.filter((_, index) => checkList[index]);
+
+    onAddApi({
+      pks: products.map((item) => item.pk),
+    });
+  }, [checkList]);
+
   return (
     <section className="section mt-4" id="products">
       <div className="container sign-container">
@@ -90,7 +114,7 @@ const CartListView = (props: { list: CartListItem[] }) => {
                 <button type="button" className="count-button" onClick={() => onDeleteCart()}>
                   선택 삭제
                 </button>
-                <button type="button" className="count-button">
+                <button type="button" className="count-button" onClick={() => onAddPurchase()}>
                   구매 하기
                 </button>
               </div>
