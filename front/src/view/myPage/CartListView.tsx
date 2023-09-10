@@ -76,7 +76,7 @@ const CartListView = (props: { list: CartListItem[] }) => {
   return (
     <section className="section mt-4" id="products">
       <div className="container sign-container">
-        <div className="d-flex">
+        <div className="row">
           <ul className="cart-item-wrapper">
             <li className="rounded">
               <div>
@@ -94,6 +94,7 @@ const CartListView = (props: { list: CartListItem[] }) => {
                   구매 하기
                 </button>
               </div>
+              <p className="total-price">Total: ${mf1(totalPrice)}</p>
             </li>
             {isEmpty(props.list) && (
               <li>
@@ -112,16 +113,6 @@ const CartListView = (props: { list: CartListItem[] }) => {
                 );
               })}
           </ul>
-          <div className="cart-purchase-wrapper">
-            <div className="purchase-box rounded">
-              <h4>Total: {mf1(totalPrice)}</h4>
-              <div className="main-border-button">
-                <button type="button" className="buy-button">
-                  Buy
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
