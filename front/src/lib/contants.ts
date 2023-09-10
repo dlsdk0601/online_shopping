@@ -6,6 +6,7 @@ export const queryKeys = {
   home: "HOME",
   product: "PRODUCT",
   cart: "CART",
+  purchase: "PURCHASE",
 };
 
 export const ATOM_KEY = {
