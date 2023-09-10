@@ -8,7 +8,7 @@ import { AddPurchaseReqDto } from "./dto/add-purchase.dto";
 import { isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
 import { PurchaseItemStatus } from "../../type/commonType";
-import { Product } from "../../entities/product.entity";
+import { CartProduct } from "../../entities/cart.entity";
 
 @Injectable()
 export class PurchaseService {
@@ -55,21 +55,21 @@ export class PurchaseService {
     purchase.order_code = makeOrderCode();
     purchase.user = user;
 
-    const products: Product[] = await Product.find({
+    const cartProducts: CartProduct[] = await CartProduct.find({
       where: {
-        pk: In(body.list.map((item) => item.pk)),
+        pk: In(body.pks),
       },
     });
 
     const purchaseItems: PurchaseItem[] = [];
 
-    for (let i = 0; i < body.list.length; i++) {
+    for (let i = 0; i < body.pks.length; i++) {
       const purchaseItem = new PurchaseItem();
       purchaseItem.status = PurchaseItemStatus.WAITING;
 
-      const product = products.find((item) => item.pk === body.list[i].pk);
-      if (isNotNil(product)) {
-        purchaseItem.product = product;
+      const cartProduct = cartProducts.find((item) => item.pk === body.pks[i]);
+      if (isNotNil(cartProduct)) {
+        purchaseItem.product = cartProduct.product;
       }
 
       purchaseItems.push(purchaseItem);
