@@ -21,7 +21,10 @@ export class Cart extends TimeSet {
   @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
   user: User;
 
-  @OneToMany(() => CartProduct, (cartProduct) => cartProduct.cart, { nullable: true })
+  @OneToMany(() => CartProduct, (cartProduct) => cartProduct.cart, {
+    nullable: true,
+    eager: true,
+  })
   cart_products: CartProduct[];
 }
 
@@ -36,6 +39,7 @@ export class CartProduct extends BaseEntity {
 
   @OneToOne(() => Product, (product) => product, {
     nullable: false,
+    eager: true,
     createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: "product_pk", referencedColumnName: "pk" })
