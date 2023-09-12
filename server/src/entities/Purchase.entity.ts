@@ -33,6 +33,7 @@ export class Purchase extends BaseEntity {
   user: User;
 
   @OneToMany(() => PurchaseItem, (purchaseItem) => purchaseItem.purchase, {
+    nullable: false,
     eager: true,
     cascade: true,
   })
@@ -63,6 +64,7 @@ export class PurchaseItem extends BaseEntity {
   purchase: Purchase;
 
   @OneToOne(() => Product, (product) => product, {
+    nullable: false,
     createForeignKeyConstraints: false, // constraint 유니크 해제
     eager: true,
   })
