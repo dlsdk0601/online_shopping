@@ -28,7 +28,11 @@ export class Product extends TimeSet {
   @Column({ type: "int", nullable: false, comment: "상품 가격" })
   price: number;
 
-  @OneToOne(() => Asset, (asset) => asset, { nullable: false, createForeignKeyConstraints: false })
+  @OneToOne(() => Asset, (asset) => asset, {
+    nullable: false,
+    createForeignKeyConstraints: false,
+    eager: true,
+  })
   @JoinColumn({ name: "main_image_pk", referencedColumnName: "pk" })
   main_image: Asset;
 
