@@ -52,11 +52,6 @@ export class PurchaseService {
       where: {
         pk: In(body.pks),
       },
-      relations: {
-        product: {
-          main_image: true,
-        },
-      },
     });
 
     const purchaseItems: PurchaseItem[] = [];
