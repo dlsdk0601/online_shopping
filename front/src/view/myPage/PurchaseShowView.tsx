@@ -2,7 +2,6 @@ import { ShowPurchaseRes } from "../../api/type.g";
 import { mf2 } from "../../ex/numberEx";
 
 const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
-  console.log(props.purchase);
   return (
     <>
       <div className="page-heading" id="top">
@@ -20,15 +19,19 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
       <section className="section" id="product">
         <div className="container">
           <div className="row">
-            <div className="col-lg-8">
+            <div className="col-lg-6 border-right">
               <div className="left-images">
                 {props.purchase.list.map((product) => {
                   return (
-                    <div>
-                      <p>{product.pk}</p>
-                      <p>{product.name}</p>
-                      <p>{product.price}</p>
-                      {/* <img src={product.image.thumbnail} alt="product" /> */}
+                    <div className="border rounded py-2 px-3 d-flex justify-content-start align-items-center mb-2">
+                      <div className="w-25 mr-3">
+                        <img className="my-auto" src={product.image.url} alt="상품 이미지" />
+                      </div>
+                      <div>
+                        <h3 className="mb-2">{product.name}</h3>
+                        <p>price: ${mf2(product.price)}</p>
+                        <p>count: {product.count}</p>
+                      </div>
                     </div>
                   );
                 })}
@@ -37,9 +40,9 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
             <div className="col-lg-4">
               <div className="right-content">
                 <div className="total">
-                  <h4>Total: {mf2(props.purchase.totalPrice)}</h4>
+                  <h4>Total: ${mf2(props.purchase.totalPrice)}</h4>
                   <div className="main-border-button">
-                    <button type="button" onClick={() => {}}>
+                    <button className="rounded" type="button" onClick={() => {}}>
                       Buy
                     </button>
                   </div>
