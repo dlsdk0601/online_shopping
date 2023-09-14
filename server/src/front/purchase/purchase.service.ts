@@ -15,16 +15,8 @@ export class PurchaseService {
   constructor(private assetService: AssetService) {}
 
   async show(pk: number) {
-    // TODO :: 아니 main_image 를 relations 에 걸었는데 왜 안나오지???
     const purchase = await Purchase.findOne({
       where: { pk },
-      relations: {
-        purchase_items: {
-          product: {
-            main_image: true,
-          },
-        },
-      },
     });
 
     if (isNil(purchase)) {
@@ -40,7 +32,7 @@ export class PurchaseService {
         name: item.product.name,
         price: item.product.price,
         count: item.count,
-        image: item.product.main_image,
+        image: this.assetService.getFileSet(item.product.main_image),
       };
     });
 
@@ -61,7 +53,9 @@ export class PurchaseService {
         pk: In(body.pks),
       },
       relations: {
-        product: true,
+        product: {
+          main_image: true,
+        },
       },
     });
 
