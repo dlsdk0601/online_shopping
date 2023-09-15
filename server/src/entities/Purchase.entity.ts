@@ -38,6 +38,15 @@ export class Purchase extends BaseEntity {
     cascade: true,
   })
   purchase_items: PurchaseItem[];
+
+  get totalPrice(): number {
+    let total = 0;
+    this.purchase_items.forEach((item) => {
+      total += item.product.price * item.count;
+    });
+
+    return total;
+  }
 }
 
 @Entity("purchase_item")

@@ -23,23 +23,16 @@ export class PurchaseService {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
     }
 
-    let totalPrice = 0;
-    const list = purchase.purchase_items.map((item) => {
-      totalPrice += item.product.price * item.count;
-
-      return {
+    return {
+      pk: purchase.pk,
+      list: purchase.purchase_items.map((item) => ({
         pk: item.pk,
         name: item.product.name,
         price: item.product.price,
         count: item.count,
         image: this.assetService.getFileSet(item.product.main_image),
-      };
-    });
-
-    return {
-      pk: purchase.pk,
-      list,
-      totalPrice,
+      })),
+      totalPrice: purchase.totalPrice,
     };
   }
 
