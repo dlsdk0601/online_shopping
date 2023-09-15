@@ -30,7 +30,7 @@ export class TossPayment extends TimeSet {
     length: 128,
     comment: "거래를 구분할 수 있는 토스 고유 값",
   })
-  payToken: string;
+  pay_token: string;
 
   @Column({ enum: PaymentStatus, type: "enum", nullable: false })
   status: PaymentStatus;
