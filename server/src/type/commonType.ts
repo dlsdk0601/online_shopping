@@ -44,3 +44,13 @@ export enum PurchaseSearchType {
   PHONE = "PHONE",
   ORDER_CODE = "ORDER_CODE",
 }
+
+export enum PaymentType {
+  TOSS = "TOSS",
+  KAKAO = "KAKAO",
+}
+
+export enum PaymentStatus {
+  SUCCESS = "SUCCESS",
+  FAIL = "FAIL",
+}
