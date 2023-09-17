@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
 import { In } from "typeorm";
+import { ConfigService } from "@nestjs/config";
 import { AssetService } from "../../asset/asset.service";
 import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
 import errorMessage from "../../config/errorMessage";
@@ -12,7 +13,14 @@ import { CartProduct } from "../../entities/cart.entity";
 
 @Injectable()
 export class PurchaseService {
-  constructor(private assetService: AssetService) {}
+  private readonly tossClientKey: string;
+  private readonly tossSecretKey: string;
+  private readonly addTossPayPurchaseEndPoint = "https://pay.toss.im/api/v2/payments";
+
+  constructor(private assetService: AssetService, private configService: ConfigService) {
+    this.tossClientKey = this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "";
+    this.tossSecretKey = this.configService.get<string>("TOSS_PAYMENT_SECRET_KEY") ?? "";
+  }
 
   async show(pk: number) {
     const purchase = await Purchase.findOne({
@@ -71,4 +79,7 @@ export class PurchaseService {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
   }
+
+  // 토스 페이 결제 생성
+  async addTossPayPurchase() {}
 }
