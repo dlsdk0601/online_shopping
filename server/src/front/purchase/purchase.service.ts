@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { isNil } from "lodash";
 import { In } from "typeorm";
 import { ConfigService } from "@nestjs/config";
@@ -10,6 +15,8 @@ import { isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
 import { PurchaseItemStatus } from "../../type/commonType";
 import { CartProduct } from "../../entities/cart.entity";
+import { AddTossPayPurchaseReqDto, makeTossPayPurchaseResDto } from "./dto/toss-payment.dto";
+import { HttpService } from "../http/http.service";
 
 @Injectable()
 export class PurchaseService {
@@ -17,7 +24,11 @@ export class PurchaseService {
   private readonly tossSecretKey: string;
   private readonly addTossPayPurchaseEndPoint = "https://pay.toss.im/api/v2/payments";
 
-  constructor(private assetService: AssetService, private configService: ConfigService) {
+  constructor(
+    private assetService: AssetService,
+    private configService: ConfigService,
+    private httpService: HttpService
+  ) {
     this.tossClientKey = this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "";
     this.tossSecretKey = this.configService.get<string>("TOSS_PAYMENT_SECRET_KEY") ?? "";
   }
@@ -81,5 +92,40 @@ export class PurchaseService {
   }
 
   // 토스 페이 결제 생성
-  async addTossPayPurchase() {}
+  async addTossPayPurchase(body: AddTossPayPurchaseReqDto, user: User) {
+    const purchase = user.purchases.find((item) => item.pk === body.pk);
+
+    if (isNil(purchase)) {
+      throw new BadRequestException(errorMessage.BAD_REQUEST);
+    }
+
+    try {
+      const res = await this.httpService.post<makeTossPayPurchaseResDto>(
+        this.addTossPayPurchaseEndPoint,
+        {},
+        {
+          orderNo: purchase.order_code,
+          amount: body.amount,
+          amountTaxFree: 0,
+          productDesc: body.productDesc,
+          apiKey: this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "",
+          autoExecute: true,
+          resultCallback: "",
+          retUrl: "",
+          retCancelUrl: "",
+        }
+      );
+
+      console.log("요기");
+      console.log(res);
+
+      if (isNil(res)) {
+        return new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+      }
+
+      return { checkoutPage: "" };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
 }
