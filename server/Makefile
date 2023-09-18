@@ -1,11 +1,8 @@
-open:
-	webstorm .
+open: setup
+	nix-shell --run 'webstorm .'
 
-install:
-	npm i
-
-setUp: install
-	open
+setup:
+	nix-shell --run 'npm i'
 
 revision:
 	npm run typeorm:generate

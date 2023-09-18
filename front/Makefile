@@ -1,11 +1,8 @@
-install:
-	npm i
+open: setup
+	nix-shell --run 'webstorm .'
 
-open:
-	webstorm .
-
-setup: install
-	open
+setup:
+	nix-shell --run 'npm i'
 
 cypress-open:
 	npx cypress open
