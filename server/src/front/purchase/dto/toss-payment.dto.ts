@@ -2,6 +2,11 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class AddTossPayPurchaseReqDto {
+  @ApiProperty({ type: "number", nullable: false, description: "purchase pk" })
+  @IsNumber()
+  @IsNotEmpty()
+  pk: number;
+
   @ApiProperty({ type: "string", nullable: false, description: "상품 설명" })
   @IsString()
   @IsNotEmpty()
