@@ -50,7 +50,25 @@ export enum PaymentType {
   KAKAO = "KAKAO",
 }
 
-export enum PaymentStatus {
-  SUCCESS = "SUCCESS",
-  FAIL = "FAIL",
+export enum TossPaymentMethod {
+  TOSS_MONEY = "TOSS_MONEY", //	토스머니
+  CARD = "CARD", //	카드
+}
+
+export enum TossPaymentCartType {
+  CREDIT = "CREDIT", //	신용카드
+  CHECK = "CHECK", //	체크카드
+  PREPAYMENT = "PREPAYMENT", //	선불카드
+}
+
+export enum TossPaymentStatus {
+  PAY_STANDBY = "PAY_STANDBY", //	결제 대기 중
+  PAY_APPROVED = "PAY_APPROVED", //	구매자 인증 완료
+  PAY_CANCEL = "PAY_CANCEL", //	결제 취소
+  PAY_PROGRESS = "PAY_PROGRESS", //	결제 진행 중
+  PAY_COMPLETE = "PAY_COMPLETE", //	결제 완료
+  REFUND_PROGRESS = "REFUND_PROGRESS", //	환불 진행 중
+  REFUND_SUCCESS = "REFUND_SUCCESS", //	환불 성공
+  SETTLEMENT_COMPLETE = "SETTLEMENT_COMPLETE", //	정산 완료
+  SETTLEMENT_REFUND_COMPLETE = "SETTLEMENT_REFUND_COMPLETE", //	환불 정산 완료
 }
