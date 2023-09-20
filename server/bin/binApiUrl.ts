@@ -12,7 +12,7 @@ export interface ApiItem {
 
 type OriginType = "FRONT" | "ADMIN";
 
-const exceptApiList = ["_", ":fileName"];
+const exceptApiList = ["_", ":fileName", "callback"];
 
 export function getApiList(router) {
   const adminRoutes: ApiItem[] = [];
