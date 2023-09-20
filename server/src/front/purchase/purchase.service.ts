@@ -13,10 +13,11 @@ import errorMessage from "../../config/errorMessage";
 import { AddPurchaseReqDto } from "./dto/add-purchase.dto";
 import { isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
-import { PurchaseItemStatus } from "../../type/commonType";
+import { PaymentType, PurchaseItemStatus } from "../../type/commonType";
 import { CartProduct } from "../../entities/cart.entity";
 import { AddTossPayPurchaseReqDto, makeTossPayPurchaseResDto } from "./dto/toss-payment.dto";
 import { HttpService } from "../http/http.service";
+import { Payment, TossPayment } from "../../entities/payment.entity";
 
 @Injectable()
 export class PurchaseService {
@@ -105,14 +106,16 @@ export class PurchaseService {
         {},
         {
           orderNo: purchase.order_code,
-          amount: body.amount,
+          amount: purchase.totalPrice,
           amountTaxFree: 0,
           productDesc: body.productDesc,
-          apiKey: this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "",
+          // apiKey: this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "",
+          apiKey: "sk_test_w5lNQylNqa5lNQe013Nq",
           autoExecute: true,
-          resultCallback: "",
-          retUrl: "",
-          retCancelUrl: "",
+          callbackVersion: "V2",
+          resultCallback: this.configService.get<string>("TOSS_PAYMENT_CALLBACK_URL") ?? "",
+          retUrl: this.configService.get<string>("TOSS_PAYMENT_RESULT_URL") ?? "",
+          retCancelUrl: this.configService.get<string>("TOSS_PAYMENT_FAIL_URL") ?? "",
         }
       );
 
@@ -122,6 +125,24 @@ export class PurchaseService {
       if (isNil(res)) {
         return new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
       }
+
+      const payment = new Payment();
+      payment.purchase = purchase;
+      payment.type = PaymentType.TOSS;
+      console.log("왜 저장이 안됨?");
+      await payment.save();
+      console.log("저장!");
+
+      const tossPayment = new TossPayment();
+
+      tossPayment.code = res.code;
+      tossPayment.checkout_page = res.checkoutPage;
+      tossPayment.pay_token = res.payToken;
+      tossPayment.msg = res.msg;
+      tossPayment.error_code = res.errorCode;
+      tossPayment.payment = payment;
+
+      await tossPayment.save();
 
       return { checkoutPage: "" };
     } catch (e) {
