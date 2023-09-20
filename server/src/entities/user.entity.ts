@@ -55,7 +55,9 @@ export class User extends TimeSet {
   @OneToOne(() => Cart, (cart) => cart.user)
   cart: Cart;
 
-  @OneToMany(() => Purchase, (purchase) => purchase.user)
+  @OneToMany(() => Purchase, (purchase) => purchase.user, {
+    eager: true,
+  })
   purchases: Purchase[];
 
   userData() {
