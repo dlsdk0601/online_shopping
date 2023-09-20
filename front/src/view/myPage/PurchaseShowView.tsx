@@ -7,6 +7,7 @@ import { mf2 } from "../../ex/numberEx";
 import { api } from "../../api/url.g";
 import { ignorePromise } from "../../ex/utils";
 import { PaymentType } from "../../api/enum.g";
+import PaymentSelectView from "./PaymentSelectView";
 
 const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
   const router = useRouter();
@@ -72,6 +73,7 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
               </div>
             </div>
             <div className="col-lg-4">
+              <PaymentSelectView onChange={(value) => setType(value)} />
               <div className="right-content">
                 <div className="total">
                   <h4>Total: ${mf2(props.purchase.totalPrice)}</h4>
