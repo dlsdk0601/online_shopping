@@ -13,9 +13,8 @@ export class Payment extends TimeSet {
   @PrimaryGeneratedColumn({ comment: "pk" })
   pk: number;
 
-  @OneToOne(() => Purchase, (purchase) => purchase, {
+  @OneToOne(() => Purchase, {
     nullable: false,
-    eager: true,
   })
   @JoinColumn({ name: "purchase_pk", referencedColumnName: "pk" })
   purchase: Purchase;
@@ -38,7 +37,7 @@ export class TossPayment extends TimeSet {
     length: 256,
     comment: "결제를 진행할 수 있는 토스페이 웹페이지 URL",
   })
-  checkoutPage: string;
+  checkout_page: string;
 
   @Column({
     type: "varchar",
@@ -62,7 +61,13 @@ export class TossPayment extends TimeSet {
     length: 64,
     comment: "에러 코드",
   })
-  errorCode: string;
+  error_code: string;
+
+  @OneToOne(() => Payment, (payment) => payment, {
+    nullable: false,
+  })
+  @JoinColumn({ name: "purchase_pk", referencedColumnName: "pk" })
+  payment: Payment;
 }
 
 @Entity("toss_payment_callback")
