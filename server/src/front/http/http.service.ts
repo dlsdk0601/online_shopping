@@ -37,7 +37,7 @@ export class HttpService {
     const log = new HttpServiceLog();
 
     log.request_url = url;
-    log.request_method = HttpMethod.GET;
+    log.request_method = HttpMethod.POST;
     log.request_body = JSON.stringify(data);
     log.request_headers = config?.headers ?? {};
 
