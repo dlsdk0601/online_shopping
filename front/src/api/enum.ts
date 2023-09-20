@@ -1,4 +1,4 @@
-import { UserType } from "./enum.g";
+import { PaymentType, UserType } from "./enum.g";
 
 export const userTypeLabelToEnum = (str: string | null | undefined): UserType => {
   switch (str) {
@@ -13,5 +13,16 @@ export const userTypeLabelToEnum = (str: string | null | undefined): UserType =>
     case "LOCAL":
     default:
       return UserType.LOCAL;
+  }
+};
+
+export const paymentEnumToLabel = (value: PaymentType): string => {
+  switch (value) {
+    case PaymentType.KAKAO:
+      return "카카오페이";
+    case PaymentType.TOSS:
+      return "토스페이";
+    default:
+      return "";
   }
 };
