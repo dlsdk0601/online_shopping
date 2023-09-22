@@ -17,8 +17,8 @@ export class PurchaseController {
   @Post("show-purchase")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: ShowPurchaseResDto })
-  async show(@Body() body: ShowPurchaseReqDto) {
-    return this.purchaseService.show(body.pk);
+  show(@Body() body: ShowPurchaseReqDto, @GetUser() user: User) {
+    return this.purchaseService.show(body.pk, user);
   }
 
   @Post("add-purchase")
