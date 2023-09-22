@@ -8,6 +8,7 @@ import { api } from "../../api/url.g";
 import { ignorePromise } from "../../ex/utils";
 import { PaymentType } from "../../api/enum.g";
 import PaymentSelectView from "./PaymentSelectView";
+import errorMessageG from "../../api/errorMessage.g";
 
 const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
   const router = useRouter();
@@ -19,6 +20,13 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
       onSuccess: (res) => {
         if (isNil(res)) {
           return;
+        }
+
+        // TODO :: 서버에서 try ~ catch 문에서 exception 을 return 하면
+        // errhandle 에 잡히지 않는다.
+        if (isNil(res.checkoutPage)) {
+          alert(errorMessageG.INTERNAL_FAILED);
+          return router.back();
         }
 
         ignorePromise(() => router.replace(res.checkoutPage));
