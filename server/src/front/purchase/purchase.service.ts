@@ -35,10 +35,8 @@ export class PurchaseService {
     this.tossSecretKey = this.configService.get<string>("TOSS_PAYMENT_SECRET_KEY") ?? "";
   }
 
-  async show(pk: number) {
-    const purchase = await Purchase.findOne({
-      where: { pk },
-    });
+  show(pk: number, user: User) {
+    const purchase = user.purchases.find((item) => item.pk === pk);
 
     if (isNil(purchase)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
@@ -102,9 +100,16 @@ export class PurchaseService {
     }
 
     try {
+      const secretKey = this.configService.get<string>("TOSS_PAYMENT_SECRET_KEY") ?? "";
+      const base64SecretKey = Buffer.from(`${secretKey}:`).toString("base64");
+
       const res = await this.httpService.post<makeTossPayPurchaseResDto>(
         this.addTossPayPurchaseEndPoint,
-        {},
+        {
+          headers: {
+            Authorization: `Basic ${base64SecretKey}`,
+          },
+        },
         {
           orderNo: purchase.order_code,
           amount: purchase.totalPrice,
