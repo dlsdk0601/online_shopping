@@ -14,7 +14,7 @@ const ErrorMessage = {
   ACCESS_TOKEN_EXPIRED: "인증이 만료되었습니다.",
   NOT_TOKEN_USER: "비로그인 유저 입니다.",
   UPDATE_FAILED: "수정에 실패하였습니다.",
-  INTERNAL_FAILED: "서버 통신에 실패하였습니다.",
+  INTERNAL_FAILED: "서버가 원활하지 않습니다. 잠시후 다시 이용해주세요.",
   NOT_FOUND_DATA: "데이터 조회에 실패하였습니다.",
   ALREADY_USER_EXIST: "이미 회원가입된 유저입니다.",
   NOT_FOUND_SNS: "sns로 부터 정보를 가져오지 못했습니다.",
