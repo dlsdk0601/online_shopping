@@ -11,7 +11,7 @@ import { AssetService } from "../../asset/asset.service";
 import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
 import errorMessage from "../../config/errorMessage";
 import { AddPurchaseReqDto } from "./dto/add-purchase.dto";
-import { isNotNil, makeOrderCode } from "../../ex/ex";
+import { isBlank, isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
 import { PaymentType, PurchaseItemStatus } from "../../type/commonType";
 import { CartProduct } from "../../entities/cart.entity";
@@ -24,6 +24,7 @@ export class PurchaseService {
   private readonly tossClientKey: string;
   private readonly tossSecretKey: string;
   private readonly addTossPayPurchaseEndPoint = "https://pay.toss.im/api/v2/payments";
+  private readonly TOSS_CALLBACK_VERSION = "V2";
 
   constructor(
     private assetService: AssetService,
@@ -109,18 +110,14 @@ export class PurchaseService {
           amount: purchase.totalPrice,
           amountTaxFree: 0,
           productDesc: body.productDesc,
-          // apiKey: this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "",
-          apiKey: "sk_test_w5lNQylNqa5lNQe013Nq",
+          apiKey: this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "",
           autoExecute: true,
-          callbackVersion: "V2",
+          callbackVersion: this.TOSS_CALLBACK_VERSION,
           resultCallback: this.configService.get<string>("TOSS_PAYMENT_CALLBACK_URL") ?? "",
           retUrl: this.configService.get<string>("TOSS_PAYMENT_RESULT_URL") ?? "",
           retCancelUrl: this.configService.get<string>("TOSS_PAYMENT_FAIL_URL") ?? "",
         }
       );
-
-      console.log("요기");
-      console.log(res);
 
       if (isNil(res)) {
         return new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
@@ -129,22 +126,24 @@ export class PurchaseService {
       const payment = new Payment();
       payment.purchase = purchase;
       payment.type = PaymentType.TOSS;
-      console.log("왜 저장이 안됨?");
       await payment.save();
-      console.log("저장!");
 
       const tossPayment = new TossPayment();
 
       tossPayment.code = res.code;
-      tossPayment.checkout_page = res.checkoutPage;
-      tossPayment.pay_token = res.payToken;
+      tossPayment.checkout_page = res?.checkoutPage ?? "";
+      tossPayment.pay_token = res?.payToken ?? "";
       tossPayment.msg = res.msg;
       tossPayment.error_code = res.errorCode;
       tossPayment.payment = payment;
 
       await tossPayment.save();
 
-      return { checkoutPage: "" };
+      if (res.code !== 0 || isBlank(res.checkoutPage)) {
+        return new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+      }
+
+      return { checkoutPage: res.checkoutPage };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
