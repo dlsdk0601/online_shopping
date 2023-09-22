@@ -105,7 +105,7 @@ export class makeTossPayPurchaseResDto {
   })
   @IsString()
   @IsNotEmpty()
-  checkoutPage: string;
+  checkoutPage?: string;
 
   @ApiProperty({
     type: "string",
@@ -114,7 +114,7 @@ export class makeTossPayPurchaseResDto {
   })
   @IsString()
   @IsNotEmpty()
-  payToken: string;
+  payToken?: string;
 
   @ApiProperty({
     type: "string",
