@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class KakaoCodeVerifyReqDto {
   @ApiProperty({ description: "token", type: "string", nullable: false })
@@ -25,13 +25,62 @@ export class KakaoCodeVerifyResDto {
   email: string | null;
 }
 
-export interface KakaoCodeVerifyRes {
+export class HttpKakaoCodeVerifyReqDto {
+  @ApiProperty({ type: "string", nullable: true })
+  @IsNotEmpty()
+  @IsString()
+  grant_type: string;
+
+  @ApiProperty({ type: "string", nullable: true })
+  @IsNotEmpty()
+  @IsString()
+  client_id: string;
+
+  @ApiProperty({ type: "string", nullable: true })
+  @IsNotEmpty()
+  @IsString()
+  redirect_uri: string;
+
+  @ApiProperty({ type: "string", nullable: true })
+  @IsNotEmpty()
+  @IsString()
+  code: string;
+}
+
+export class HtttpKakaoCodeVerifyResDto {
+  @ApiProperty({ type: "string", nullable: true })
+  @IsNotEmpty()
+  @IsString()
   token_type: string;
+
+  @ApiProperty({ type: "string", nullable: true })
+  @IsNotEmpty()
+  @IsString()
   access_token: string;
+
+  @ApiProperty({ type: "string", nullable: true })
+  @IsOptional()
+  @IsString()
   id_token?: string;
+
+  @ApiProperty({ type: "number", nullable: true })
+  @IsNotEmpty()
+  @IsNumber()
   expires_in: number;
+
+  @ApiProperty({ type: "string", nullable: true })
+  @IsNotEmpty()
+  @IsString()
   refresh_token: string;
+
+  @ApiProperty({ type: "number", nullable: true })
+  @IsNotEmpty()
+  @IsNumber()
   refresh_token_expires_in: number;
+
+  @ApiProperty({ type: "string", nullable: true })
+  @IsOptional()
+  @IsString()
   scope?: string;
 }
 
