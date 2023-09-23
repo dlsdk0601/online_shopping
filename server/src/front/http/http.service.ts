@@ -32,8 +32,7 @@ export class HttpService {
     }
   }
 
-  // TODO :: data 도 제네릭으로 추가 하기
-  async post<T>(url: string, config: AxiosRequestConfig, data: any): Promise<T | null> {
+  async post<T, U>(url: string, config: AxiosRequestConfig, data: U): Promise<T | null> {
     const startAt = Date.now();
     const log = new HttpServiceLog();
 
