@@ -15,7 +15,11 @@ import { isBlank, isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
 import { PaymentType, PurchaseItemStatus } from "../../type/commonType";
 import { CartProduct } from "../../entities/cart.entity";
-import { AddTossPayPurchaseReqDto, makeTossPayPurchaseResDto } from "./dto/toss-payment.dto";
+import {
+  AddTossPayPurchaseReqDto,
+  makeTossPayPurchaseReqDto,
+  makeTossPayPurchaseResDto,
+} from "./dto/toss-payment.dto";
 import { HttpService } from "../http/http.service";
 import { Payment, TossPayment } from "../../entities/payment.entity";
 
@@ -103,7 +107,7 @@ export class PurchaseService {
       const secretKey = this.configService.get<string>("TOSS_PAYMENT_SECRET_KEY") ?? "";
       const base64SecretKey = Buffer.from(`${secretKey}:`).toString("base64");
 
-      const res = await this.httpService.post<makeTossPayPurchaseResDto>(
+      const res = await this.httpService.post<makeTossPayPurchaseResDto, makeTossPayPurchaseReqDto>(
         this.addTossPayPurchaseEndPoint,
         {
           headers: {
