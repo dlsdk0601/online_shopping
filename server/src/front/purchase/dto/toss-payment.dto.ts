@@ -60,6 +60,11 @@ export class makeTossPayPurchaseReqDto {
   @IsNotEmpty()
   autoExecute: boolean;
 
+  @ApiProperty({ type: "string", nullable: false, description: "API version" })
+  @IsString()
+  @IsNotEmpty()
+  callbackVersion: "V2";
+
   @ApiProperty({
     type: "string",
     nullable: false,
