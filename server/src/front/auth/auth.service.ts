@@ -33,7 +33,11 @@ import { FrontUserAuth, User } from "../../entities/user.entity";
 import { EditUserReqDto } from "./dto/edit-user.dto";
 import { EditPasswordReqDto } from "./dto/edit-password.dto";
 import { HttpService } from "../http/http.service";
-import { KakaoCodeVerifyRes, KakaoGetUserRes } from "./dto/kakao-auth.dto";
+import {
+  HttpKakaoCodeVerifyReqDto,
+  HtttpKakaoCodeVerifyResDto,
+  KakaoGetUserRes,
+} from "./dto/kakao-auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -123,7 +127,10 @@ export class AuthService {
       headers: { "Content-Type": "application/x-www-form-urlencoded;charset=utf-8" },
     };
 
-    const codeValid = await this.httpService.post<KakaoCodeVerifyRes>(url, config, {
+    const codeValid = await this.httpService.post<
+      HtttpKakaoCodeVerifyResDto,
+      HttpKakaoCodeVerifyReqDto
+    >(url, config, {
       grant_type: "authorization_code",
       client_id: kakaoId,
       redirect_uri: this.configService.get<string>("KAKAO_FRONT_REDIRECT") ?? "",
