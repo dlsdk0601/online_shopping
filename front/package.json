@@ -10,6 +10,7 @@
     "watch": "nodemon --watch pages -e tsx bin/generateUrl.ts"
   },
   "dependencies": {
+    "@tosspayments/payment-widget-sdk": "^0.9.3",
     "@types/node": "18.15.11",
     "@types/react": "18.0.35",
     "@types/react-dom": "18.0.11",
