@@ -14,6 +14,7 @@ class Config {
     process.env.NEXT_PUBLIC_TOSS_PAYMENT_CLIENT_KEY ?? "test_ck_DpexMgkW36m7oJewMgw8GbR5ozO0";
   toss_secret_key: string =
     process.env.NEXT_PUBLIC_TOSS_PAYMENT_SECRET_KEY ?? "test_sk_LkKEypNArWQ1Lv9aaPe3lmeaxYG5";
+  font_awesome: string = process.env.NEXT_PUBLIC_FONT_AWESOME ?? "";
 }
 
 export const baseConfig = new Config();
