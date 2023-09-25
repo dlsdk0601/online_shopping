@@ -47,14 +47,7 @@ export class PurchaseService {
     }
 
     return {
-      pk: purchase.pk,
-      list: purchase.purchase_items.map((item) => ({
-        pk: item.pk,
-        name: item.product.name,
-        price: item.product.price,
-        count: item.count,
-        image: this.assetService.getFileSet(item.product.main_image),
-      })),
+      title: purchase.title,
       totalPrice: purchase.totalPrice,
     };
   }
