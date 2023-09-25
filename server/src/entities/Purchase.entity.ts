@@ -47,6 +47,16 @@ export class Purchase extends BaseEntity {
 
     return total;
   }
+
+  get title(): string {
+    const name = this.purchase_items[0].product.name;
+    const length = this.purchase_items.length;
+    if (length <= 1) {
+      return name;
+    }
+
+    return `${name} 외 ${length - 1}`;
+  }
 }
 
 @Entity("purchase_item")
