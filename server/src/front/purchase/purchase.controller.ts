@@ -6,7 +6,7 @@ import { ShowPurchaseReqDto, ShowPurchaseResDto } from "./dto/show-purchase.dto"
 import { AddPurchaseReqDto, AddPurchaseResDto } from "./dto/add-purchase.dto";
 import { GetUser } from "../../decorator/user.decorator";
 import { User } from "../../entities/user.entity";
-import { AddTossPayPurchaseReqDto, AddTossPayPurchaseResDto } from "./dto/toss-payment.dto";
+import { TossPaymentApproveReqDto, TossPaymentApproveResDto } from "./dto/toss-payment.dto";
 
 @Controller("/purchase")
 @ApiTags("구매")
@@ -28,16 +28,16 @@ export class PurchaseController {
     return this.purchaseService.add(body, user);
   }
 
-  @Post("add-toss-pay-purchase")
+  @Post("toss-payment-approve")
   @UseGuards(AuthGuard("jwt"))
-  @ApiCreatedResponse({ type: AddTossPayPurchaseResDto })
-  async addTossPay(@Body() body: AddTossPayPurchaseReqDto, @GetUser() user: User) {
-    return this.purchaseService.addTossPayPurchase(body, user);
+  @ApiCreatedResponse({ type: TossPaymentApproveResDto })
+  async tossPaymentApprove(@Body() body: TossPaymentApproveReqDto, @GetUser() user: User) {
+    return this.purchaseService.tossPaymentApprove(body, user);
   }
 
   @Post("toss-pay/callback")
   @ApiCreatedResponse({})
   async tossPayCallback(@Body() body) {
-    return "";
+    return this.purchaseService.tossPayCallback(body);
   }
 }
