@@ -72,3 +72,9 @@ export enum TossPaymentStatus {
   SETTLEMENT_COMPLETE = "SETTLEMENT_COMPLETE", //	정산 완료
   SETTLEMENT_REFUND_COMPLETE = "SETTLEMENT_REFUND_COMPLETE", //	환불 정산 완료
 }
+
+export enum TossPaymentType {
+  NORMAL = "NORMAL", // 일반 결제입니다.
+  BRANDPAY = "BRANDPAY", // 브랜드페이 결제입니다.
+  KEYIN = "KEYIN", // 키인 결제입니다.
+}
