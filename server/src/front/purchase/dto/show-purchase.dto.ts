@@ -18,4 +18,9 @@ export class ShowPurchaseResDto {
   @IsString()
   @IsNotEmpty()
   title: string;
+
+  @ApiProperty({ description: "주문 번호", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
+  orderId: string;
 }
