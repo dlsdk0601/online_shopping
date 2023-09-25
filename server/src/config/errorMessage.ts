@@ -28,6 +28,8 @@ const ErrorMessage = {
   SIGN_IN_FAILED: "로그인에 실패하였습니다.",
   SUBSCRIBE_ADD_FAILED: "구독 서비스 등록에 실패하였습니다.",
   BAD_PRODUCT_COUNT: "상품 재고가 없습니다.",
+  ALREADY_PAID: "이미 결제된 상품입니다.",
+  NOT_EQUAL_PRICE: "결제 금액이 다릅니다.",
 } as const;
 
 export default ErrorMessage;
