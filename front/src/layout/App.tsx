@@ -12,6 +12,8 @@ import { DefaultLayoutView, LayoutView } from "./Layout";
 import { tokenModel } from "../store/user";
 import { CONSTANT } from "../lib/contants";
 import { useUser } from "../hooks/useUser";
+import { baseConfig } from "../lib/config";
+import { Urls } from "../url/url.g";
 
 export const App = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient({
@@ -33,7 +35,7 @@ export const App = ({ Component, pageProps }: AppProps) => {
     <>
       <Head>
         <script
-          src={`https://kit.fontawesome.com/${process.env.NEXT_PUBLIC_FONT_AWESOME}.js`}
+          src={`https://kit.fontawesome.com/${baseConfig.font_awesome}.js`}
           crossOrigin="anonymous"
         />
         <title>online</title>
@@ -54,7 +56,9 @@ const LayoutSelector = (props: PropsWithChildren) => {
   const router = useRouter();
 
   // 예외 URL
-  const isSpecialUrl = some(["/_"], (prefix) => router.pathname.startsWith(prefix));
+  const isSpecialUrl = some(["/_", Urls.purchase.bridge.pathname], (prefix) =>
+    router.pathname.startsWith(prefix),
+  );
 
   if (isSpecialUrl) {
     return <>{props.children}</>;
