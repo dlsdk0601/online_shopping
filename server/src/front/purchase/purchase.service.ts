@@ -149,13 +149,11 @@ export class PurchaseService {
 
     // 결제 실패
     // TODO :: 결제 실패 로직 추가
-    if (isNil(res.failure)) {
-      throw new InternalServerErrorException(errorMessage.FAIL_PAYMENT);
+    if (isNotNil(res.failure)) {
+      throw new InternalServerErrorException(res.failure.message);
     }
 
     // TODO :: 카드, 무통장입금, 간편결제 테이블 만들어 지면 성공 후 저장 로직 추가
     return { result: true };
   }
-
-  async tossPayCallback(body) {}
 }

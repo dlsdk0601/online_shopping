@@ -34,10 +34,4 @@ export class PurchaseController {
   async tossPaymentApprove(@Body() body: TossPaymentApproveReqDto, @GetUser() user: User) {
     return this.purchaseService.tossPaymentApprove(body, user);
   }
-
-  @Post("toss-pay/callback")
-  @ApiCreatedResponse({})
-  async tossPayCallback(@Body() body) {
-    return this.purchaseService.tossPayCallback(body);
-  }
 }
