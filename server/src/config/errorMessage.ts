@@ -30,6 +30,7 @@ const ErrorMessage = {
   BAD_PRODUCT_COUNT: "상품 재고가 없습니다.",
   ALREADY_PAID: "이미 결제된 상품입니다.",
   NOT_EQUAL_PRICE: "결제 금액이 다릅니다.",
+  FAIL_PAYMENT: "결제에 실패하였습니다.",
 } as const;
 
 export default ErrorMessage;
