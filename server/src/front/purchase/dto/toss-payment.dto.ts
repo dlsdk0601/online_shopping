@@ -215,8 +215,8 @@ export class TossPaymentHttpApproveResDto {
   @ApiProperty({
     type: "enum",
     enum: TossPaymentType,
-    nullable: true,
-    description: "가상계좌 웹훅이 정상적인 요청인지 검증하는 값",
+    nullable: false,
+    description: "결제 타입 정보",
   })
   @IsEnum(TossPaymentType)
   @IsNotEmpty()
@@ -236,7 +236,7 @@ export class TossPaymentHttpApproveResDto {
   country: string;
 
   @ApiProperty({
-    description: "간편결제 정보",
+    description: "결제 승인에 실패하면 응답",
     nullable: true,
     items: { $ref: getSchemaPath(TossPaymentErrorDto) },
   })
