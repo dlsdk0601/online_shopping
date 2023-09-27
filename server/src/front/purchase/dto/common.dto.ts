@@ -1,5 +1,14 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
-import { IsBoolean, IsISO8601, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsEnum,
+  IsISO8601,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
+import { TossPaymentCardAcquireStatus } from "../../../type/type";
 
 export class TossPaymentErrorDto {
   @ApiProperty({ type: "string", nullable: false, description: "에러코드" })
@@ -67,18 +76,15 @@ export class TossPaymentCartDto {
   @IsNotEmpty()
   ownerType: string;
 
-  @ApiProperty({ type: "string", nullable: false, description: "카드 결제의 매입 상태" })
-  @IsString()
+  @ApiProperty({
+    type: "enum",
+    enum: TossPaymentCardAcquireStatus,
+    nullable: false,
+    description: "카드 결제의 매입 상태",
+  })
+  @IsEnum(TossPaymentCardAcquireStatus)
   @IsNotEmpty()
-  acquireStatus: string;
-  /*
-  카드 결제의 매입 상태입니다. 아래와 같은 상태 값을 가질 수 있습니다.
-  - READY: 아직 매입 요청이 안 된 상태입니다.
-  - REQUESTED: 매입이 요청된 상태입니다.
-  - COMPLETED: 요청된 매입이 완료된 상태입니다.
-  - CANCEL_REQUESTED: 매입 취소가 요청된 상태입니다.
-  - CANCELED: 요청된 매입 취소가 완료된 상태입니다.
-   */
+  acquireStatus: TossPaymentCardAcquireStatus;
 
   @ApiProperty({ type: "boolean", nullable: false, description: "무이자 할부의 적용 여부" })
   @IsBoolean()
