@@ -15,7 +15,11 @@ import { isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
 import { PurchaseItemStatus } from "../../type/commonType";
 import { CartProduct } from "../../entities/cart.entity";
-import { TossPaymentApproveReqDto } from "./dto/toss-payment.dto";
+import {
+  TossPaymentApproveReqDto,
+  TossPaymentHttpApproveReqDto,
+  TossPaymentHttpApproveResDto,
+} from "./dto/toss-payment.dto";
 import { HttpService } from "../http/http.service";
 import { Payment } from "../../entities/payment.entity";
 
@@ -23,8 +27,7 @@ import { Payment } from "../../entities/payment.entity";
 export class PurchaseService {
   private readonly tossClientKey: string;
   private readonly tossSecretKey: string;
-  private readonly addTossPayPurchaseEndPoint = "https://pay.toss.im/api/v2/payments";
-  private readonly TOSS_CALLBACK_VERSION = "V2";
+  private readonly tossPaymentApproveUrl = "https://api.tosspayments.com/v1/payments/confirm";
 
   constructor(
     private assetService: AssetService,
@@ -93,6 +96,7 @@ export class PurchaseService {
       throw new BadRequestException(errorMessage.BAD_REQUEST);
     }
 
+    // 상품 결제 상태가 하나라도 waiting 이 아니면 막는다.
     const isAllWaiting = purchase.purchase_items
       .map((item) => item.status)
       .every((item) => item === PurchaseItemStatus.WAITING);
@@ -100,6 +104,7 @@ export class PurchaseService {
       throw new BadRequestException(errorMessage.ALREADY_PAID);
     }
 
+    // 가격이 서로 맞지 않으면 막는다.
     if (body.amount !== purchase.totalPrice) {
       throw new BadRequestException(errorMessage.NOT_EQUAL_PRICE);
     }
@@ -109,27 +114,47 @@ export class PurchaseService {
     try {
       const payment = new Payment();
       payment.purchase = purchase;
+      payment.payment_key = body.paymentKey;
+      payment.payment_type = body.paymentType;
       await payment.save();
-
-      // const tossPayment = new TossPayment();
-      //
-      // tossPayment.code = res.code;
-      // tossPayment.checkout_page = res?.checkoutPage ?? "";
-      // tossPayment.pay_token = res?.payToken ?? "";
-      // tossPayment.msg = res.msg;
-      // tossPayment.error_code = res.errorCode;
-      // tossPayment.payment = payment;
-
-      // await tossPayment.save();
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
 
-    // if (res.code !== 0 || isBlank(res.checkoutPage)) {
-    //   throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
-    // }
+    const res = await this.httpService.post<
+      TossPaymentHttpApproveResDto,
+      TossPaymentHttpApproveReqDto
+    >(
+      this.tossPaymentApproveUrl,
+      {
+        headers: {
+          "Authorization": `Basic ${base64SecretKey}`,
+          "Content-Type": "application/json",
+        },
+      },
+      {
+        paymentKey: body.paymentKey,
+        orderId: body.orderCode,
+        amount: body.amount,
+      }
+    );
 
-    return { checkoutPage: "" };
+    console.log("요기");
+    console.log(res);
+
+    // 서버 통신 실패
+    if (isNil(res)) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+
+    // 결제 실패
+    // TODO :: 결제 실패 로직 추가
+    if (isNil(res.failure)) {
+      throw new InternalServerErrorException(errorMessage.FAIL_PAYMENT);
+    }
+
+    // TODO :: 카드, 무통장입금, 간편결제 테이블 만들어 지면 성공 후 저장 로직 추가
+    return { result: true };
   }
 
   async tossPayCallback(body) {}
