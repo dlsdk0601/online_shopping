@@ -62,15 +62,14 @@ export enum TossPaymentCartType {
 }
 
 export enum TossPaymentStatus {
-  PAY_STANDBY = "PAY_STANDBY", //	결제 대기 중
-  PAY_APPROVED = "PAY_APPROVED", //	구매자 인증 완료
-  PAY_CANCEL = "PAY_CANCEL", //	결제 취소
-  PAY_PROGRESS = "PAY_PROGRESS", //	결제 진행 중
-  PAY_COMPLETE = "PAY_COMPLETE", //	결제 완료
-  REFUND_PROGRESS = "REFUND_PROGRESS", //	환불 진행 중
-  REFUND_SUCCESS = "REFUND_SUCCESS", //	환불 성공
-  SETTLEMENT_COMPLETE = "SETTLEMENT_COMPLETE", //	정산 완료
-  SETTLEMENT_REFUND_COMPLETE = "SETTLEMENT_REFUND_COMPLETE", //	환불 정산 완료
+  READY = "READY", // 결제를 생성하면 가지게 되는 초기 상태 입니다. 인증 전까지는 READY 상태를 유지합니다.
+  IN_PROGRESS = "IN_PROGRESS", // 결제수단 정보와 해당 결제수단의 소유자가 맞는지 인증을 마친 상태입니다. 결제 승인 API를 호출하면 결제가 완료됩니다.
+  WAITING_FOR_DEPOSIT = "WAITING_FOR_DEPOSIT", // 가상계좌 결제 흐름에만 있는 상태로, 결제 고객이 발급된 가상계좌에 입금하는 것을 기다리고 있는 상태입니다.
+  DONE = "DONE", // 인증된 결제수단 정보, 고객 정보로 요청한 결제가 승인된 상태입니다.
+  CANCELED = "CANCELED", // 승인된 결제가 취소된 상태입니다.
+  PARTIAL_CANCELED = "PARTIAL_CANCELED", // 승인된 결제가 부분 취소된 상태입니다.
+  ABORTED = "ABORTED", // 결제 승인이 실패한 상태입니다.
+  EXPIRED = "EXPIRED", // 결제 유효 시간 30분이 지나 거래가 취소된 상태입니다. IN_PROGRESS 상태에서 결제 승인 API를 호출하지 않으면 EXPIRED가 됩니다.
 }
 
 export enum TossPaymentType {
