@@ -43,6 +43,7 @@ export class TossPaymentApproveReqDto {
   paymentType: TossPaymentType;
 }
 
+@ApiExtraModels(TossPaymentErrorDto)
 export class TossPaymentApproveResDto {
   @ApiProperty({
     type: "boolean",
@@ -52,6 +53,18 @@ export class TossPaymentApproveResDto {
   @IsBoolean()
   @IsNotEmpty()
   result: boolean;
+
+  @ApiProperty({ type: "number", nullable: false, description: "approvePk" })
+  @IsNumber()
+  @IsNotEmpty()
+  pk: number;
+
+  @ApiProperty({
+    nullable: true,
+    description: "에러 코드",
+    items: { $ref: getSchemaPath(TossPaymentErrorDto) },
+  })
+  error: TossPaymentErrorDto | null;
 }
 
 export class TossPaymentHttpApproveReqDto {
