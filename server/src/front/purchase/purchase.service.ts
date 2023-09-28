@@ -22,6 +22,8 @@ import {
 } from "./dto/toss-payment.dto";
 import { HttpService } from "../http/http.service";
 import { Payment } from "../../entities/payment.entity";
+import { TossPaymentApprove, TossPaymentFailure } from "../../entities/payment-approve.entity";
+import { TossPaymentErrorDto } from "./dto/common.dto";
 
 @Injectable()
 export class PurchaseService {
@@ -109,18 +111,13 @@ export class PurchaseService {
       throw new BadRequestException(errorMessage.NOT_EQUAL_PRICE);
     }
 
-    const base64SecretKey = Buffer.from(`${this.tossSecretKey}:`).toString("base64");
+    const payment = await this.savePayment(body, purchase);
 
-    try {
-      const payment = new Payment();
-      payment.purchase = purchase;
-      payment.payment_key = body.paymentKey;
-      payment.payment_type = body.paymentType;
-      await payment.save();
-    } catch (e) {
+    if (isNil(payment)) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
 
+    const base64SecretKey = Buffer.from(`${this.tossSecretKey}:`).toString("base64");
     const res = await this.httpService.post<
       TossPaymentHttpApproveResDto,
       TossPaymentHttpApproveReqDto
@@ -147,13 +144,95 @@ export class PurchaseService {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
 
+    const approve = await this.saveApprove(res, payment);
+
+    if (isNil(approve)) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+
     // 결제 실패
-    // TODO :: 결제 실패 로직 추가
     if (isNotNil(res.failure)) {
-      throw new InternalServerErrorException(res.failure.message);
+      const fail = await this.saveFailure(res.failure, approve);
+
+      if (isNil(fail)) {
+        throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+      }
+
+      return { result: false };
     }
 
     // TODO :: 카드, 무통장입금, 간편결제 테이블 만들어 지면 성공 후 저장 로직 추가
     return { result: true };
+  }
+
+  async savePayment(body: TossPaymentApproveReqDto, purchase: Purchase): Promise<Payment | null> {
+    const payment = new Payment();
+    payment.purchase = purchase;
+    payment.payment_key = body.paymentKey;
+    payment.payment_type = body.paymentType;
+
+    try {
+      await payment.save();
+      return payment;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async saveApprove(
+    res: TossPaymentHttpApproveResDto,
+    payment: Payment
+  ): Promise<TossPaymentApprove | null> {
+    const approve = new TossPaymentApprove();
+    approve.payment = payment;
+    approve.mid = res.mId;
+    approve.version = res.version;
+    approve.payment_key = res.paymentKey;
+    approve.status = res.status;
+    approve.last_transaction_key = res.lastTransactionKey ?? "";
+    approve.order_id = res.orderId;
+    approve.order_name = res.orderName;
+    approve.requested_at = res.requestedAt;
+    approve.approvedAt = res.approvedAt;
+    approve.use_escrow = res.useEscrow;
+    approve.culture_expense = res.cultureExpense;
+    approve.discount = res.discount?.amount ?? null;
+    approve.secret = res.secret ?? "";
+    approve.type = res.type;
+    approve.country = res.country;
+    approve.is_partial_cancelable = res.isPartialCancelable;
+    approve.receipt = res.receipt.url;
+    approve.checkout = res.checkout.url;
+    approve.currency = res.currency;
+    approve.total_amount = res.totalAmount;
+    approve.balance_amount = res.balanceAmount;
+    approve.supplied_amount = res.suppliedAmount;
+    approve.vat = res.vat;
+    approve.tax_free_amount = res.taxFreeAmount;
+    approve.method = res.method;
+
+    try {
+      await approve.save();
+      return approve;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async saveFailure(
+    err: TossPaymentErrorDto,
+    approve: TossPaymentApprove
+  ): Promise<TossPaymentFailure | null> {
+    const fail = new TossPaymentFailure();
+    fail.approve = approve;
+    fail.code = err.code;
+    fail.message = err.message;
+
+    try {
+      await fail.save();
+      return fail;
+    } catch (e) {
+      return null;
+    }
   }
 }
