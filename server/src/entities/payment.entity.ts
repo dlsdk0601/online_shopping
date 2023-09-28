@@ -9,6 +9,8 @@ import {
 } from "typeorm";
 import { Purchase } from "./Purchase.entity";
 import { TossPaymentType } from "../type/commonType";
+import { TossPaymentApprove } from "./payment-approve.entity";
+import { isNotNil } from "../ex/ex";
 
 // sdk 에서 결제가 생성된 구매 내역 테이블
 @Entity("payment")
@@ -22,6 +24,9 @@ export class Payment extends BaseEntity {
   @JoinColumn({ name: "purchase_pk", referencedColumnName: "pk" })
   purchase: Purchase;
 
+  @OneToOne(() => TossPaymentApprove, (approve) => approve.payment, { nullable: true })
+  payment_approve: TossPaymentApprove | null;
+
   @Column({ type: "varchar", nullable: false, length: 256, comment: "결제 키" })
   payment_key: string;
 
@@ -30,4 +35,8 @@ export class Payment extends BaseEntity {
 
   @CreateDateColumn({ comment: "생성 일자", nullable: false })
   create_at: Date;
+
+  get isSuccess() {
+    return isNotNil(this.payment_approve);
+  }
 }
