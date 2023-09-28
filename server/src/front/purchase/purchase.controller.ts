@@ -17,21 +17,24 @@ export class PurchaseController {
   @Post("show-purchase")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: ShowPurchaseResDto })
-  show(@Body() body: ShowPurchaseReqDto, @GetUser() user: User) {
+  show(@Body() body: ShowPurchaseReqDto, @GetUser() user: User): ShowPurchaseResDto {
     return this.purchaseService.show(body.pk, user);
   }
 
   @Post("add-purchase")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: AddPurchaseResDto })
-  async add(@Body() body: AddPurchaseReqDto, @GetUser() user: User) {
+  async add(@Body() body: AddPurchaseReqDto, @GetUser() user: User): Promise<AddPurchaseResDto> {
     return this.purchaseService.add(body, user);
   }
 
   @Post("toss-payment-approve")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: TossPaymentApproveResDto })
-  async tossPaymentApprove(@Body() body: TossPaymentApproveReqDto, @GetUser() user: User) {
+  async tossPaymentApprove(
+    @Body() body: TossPaymentApproveReqDto,
+    @GetUser() user: User
+  ): Promise<TossPaymentApproveResDto> {
     return this.purchaseService.tossPaymentApprove(body, user);
   }
 }
