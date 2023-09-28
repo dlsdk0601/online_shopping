@@ -25,11 +25,13 @@ import { Payment } from "../../entities/payment.entity";
 import {
   TossPaymentApprove,
   TossPaymentApproveCard,
+  TossPaymentEasypay,
   TossPaymentFailure,
   TossPaymentVirtualAccount,
 } from "../../entities/payment-approve.entity";
 import {
   TossPaymentCardDto,
+  TossPaymentEasyPayDto,
   TossPaymentErrorDto,
   TossPaymentVirtualAccountDto,
 } from "./dto/common.dto";
@@ -154,23 +156,25 @@ export class PurchaseService {
     // 결제 실패
     if (isNotNil(res.failure)) {
       await this.saveFailure(res.failure, approve);
-      return { result: false };
+      return { result: false, pk: approve.pk, error: res.failure };
     }
 
     // 카드 결제
     if (isNotNil(res.card)) {
       await this.saveCard(res.card, approve);
-      return { result: true };
     }
 
     // 무통장 입금
     if (isNotNil(res.virtualAccount)) {
       await this.saveVirtualAccount(res.virtualAccount, approve);
-      return { result: true };
     }
 
-    // TODO :: 카드, 무통장입금, 간편결제 테이블 만들어 지면 성공 후 저장 로직 추가
-    return { result: true };
+    // 간편결제
+    if (isNotNil(res.easyPay)) {
+      await this.saveEasypay(res.easyPay, approve);
+    }
+
+    return { result: true, pk: approve.pk, error: null };
   }
 
   async savePayment(body: TossPaymentApproveReqDto, purchase: Purchase): Promise<Payment> {
@@ -289,6 +293,24 @@ export class PurchaseService {
     try {
       await virtualApprove.save();
       return virtualApprove;
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
+
+  async saveEasypay(
+    dto: TossPaymentEasyPayDto,
+    approve: TossPaymentApprove
+  ): Promise<TossPaymentEasypay> {
+    const paymentEasypay = new TossPaymentEasypay();
+    paymentEasypay.approve = approve;
+    paymentEasypay.provider = dto.provider;
+    paymentEasypay.amount = dto.amount;
+    paymentEasypay.discount_amount = dto.discountAmount;
+
+    try {
+      await paymentEasypay.save();
+      return paymentEasypay;
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
