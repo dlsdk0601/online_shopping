@@ -7,7 +7,14 @@ import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
 import { AssetService } from "../../asset/asset.service";
 import { HttpService } from "../http/http.service";
 import { Payment } from "../../entities/payment.entity";
-import { TossPaymentApprove, TossPaymentApproveCard } from "../../entities/payment-approve.entity";
+import {
+  PaymentCancelHistory,
+  TossPaymentApprove,
+  TossPaymentApproveCard,
+  TossPaymentEasypay,
+  TossPaymentFailure,
+  TossPaymentVirtualAccount,
+} from "../../entities/payment-approve.entity";
 
 @Module({
   imports: [
@@ -17,6 +24,10 @@ import { TossPaymentApprove, TossPaymentApproveCard } from "../../entities/payme
       Payment,
       TossPaymentApprove,
       TossPaymentApproveCard,
+      PaymentCancelHistory,
+      TossPaymentEasypay,
+      TossPaymentVirtualAccount,
+      TossPaymentFailure,
     ]),
   ],
   controllers: [PurchaseController],
