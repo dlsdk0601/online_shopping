@@ -177,7 +177,7 @@ export class TossPaymentVirtualAccountDto {
   };
 }
 
-export class TossPaymentCashReceipt {
+export class TossPaymentCashReceiptDto {
   @ApiProperty({ type: "string", nullable: false, description: "현금영수증의 종류" })
   @IsString()
   @IsNotEmpty()
@@ -214,7 +214,7 @@ export class TossPaymentCashReceipt {
 }
 
 @ApiExtraModels(TossPaymentErrorDto)
-export class TossPaymentCashReceipts extends TossPaymentCashReceipt {
+export class TossPaymentCashReceiptsDto extends TossPaymentCashReceiptDto {
   @ApiProperty({
     type: "string",
     nullable: false,
@@ -289,7 +289,7 @@ export class TossPaymentCashReceipts extends TossPaymentCashReceipt {
   requestedAt: Date;
 }
 
-export class TossPaymentCancel {
+export class TossPaymentCancelDto {
   @ApiProperty({ type: "number", nullable: false, description: "결제를 취소한 금액" })
   @IsNumber()
   @IsNotEmpty()
@@ -348,7 +348,7 @@ export class TossPaymentCancel {
   receiptKey: string;
 }
 
-export class TossPaymentEasyPay {
+export class TossPaymentEasyPayDto {
   @ApiProperty({ type: "string", nullable: false, description: "선택한 간편결제사 코드" })
   @IsString()
   @IsNotEmpty()

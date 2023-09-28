@@ -12,11 +12,11 @@ import {
 } from "class-validator";
 import { TossPaymentStatus, TossPaymentType } from "../../../type/commonType";
 import {
-  TossPaymentCancel,
+  TossPaymentCancelDto,
   TossPaymentCardDto,
-  TossPaymentCashReceipt,
-  TossPaymentCashReceipts,
-  TossPaymentEasyPay,
+  TossPaymentCashReceiptDto,
+  TossPaymentCashReceiptsDto,
+  TossPaymentEasyPayDto,
   TossPaymentErrorDto,
   TossPaymentVirtualAccountDto,
 } from "./common.dto";
@@ -78,10 +78,10 @@ export class TossPaymentHttpApproveReqDto {
 @ApiExtraModels(
   TossPaymentCardDto,
   TossPaymentVirtualAccountDto,
-  TossPaymentCancel,
-  TossPaymentCashReceipt,
-  TossPaymentCashReceipts,
-  TossPaymentEasyPay,
+  TossPaymentCancelDto,
+  TossPaymentCashReceiptDto,
+  TossPaymentCashReceiptsDto,
+  TossPaymentEasyPayDto,
   TossPaymentErrorDto
 )
 export class TossPaymentHttpApproveResDto {
@@ -175,19 +175,19 @@ export class TossPaymentHttpApproveResDto {
   @ApiProperty({
     description: "현금영수증 정보",
     nullable: true,
-    items: { $ref: getSchemaPath(TossPaymentCashReceipt) },
+    items: { $ref: getSchemaPath(TossPaymentCashReceiptDto) },
   })
   @IsOptional()
-  cashReceipt: TossPaymentCashReceipt | null;
+  cashReceipt: TossPaymentCashReceiptDto | null;
 
   @ApiProperty({
     type: "array",
     description: "현금영수증 정보",
     nullable: true,
-    items: { $ref: getSchemaPath(TossPaymentCashReceipts) },
+    items: { $ref: getSchemaPath(TossPaymentCashReceiptsDto) },
   })
   @IsOptional()
-  cashReceipts: TossPaymentCashReceipts[] | null;
+  cashReceipts: TossPaymentCashReceiptsDto[] | null;
 
   @ApiProperty({ nullable: true, description: "카드사의 즉시 할인 프로모션 정보" })
   @IsObject()
@@ -197,11 +197,11 @@ export class TossPaymentHttpApproveResDto {
   @ApiProperty({
     nullable: true,
     description: "결제 취소 이력이 담기는 배열",
-    items: { $ref: getSchemaPath(TossPaymentCancel) },
+    items: { $ref: getSchemaPath(TossPaymentCancelDto) },
   })
   @IsArray()
   @IsOptional()
-  cancels: TossPaymentCancel[] | null;
+  cancels: TossPaymentCancelDto[] | null;
 
   @ApiProperty({
     type: "string",
@@ -225,10 +225,10 @@ export class TossPaymentHttpApproveResDto {
   @ApiProperty({
     description: "간편결제 정보",
     nullable: true,
-    items: { $ref: getSchemaPath(TossPaymentEasyPay) },
+    items: { $ref: getSchemaPath(TossPaymentEasyPayDto) },
   })
   @IsOptional()
-  easyPay: TossPaymentEasyPay | null;
+  easyPay: TossPaymentEasyPayDto | null;
 
   @ApiProperty({ type: "string", nullable: false, description: "결제한 국가" })
   @IsString()
