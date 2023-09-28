@@ -165,6 +165,8 @@ export class PurchaseService {
 
     // 무통장 입금
     if (isNotNil(res.virtualAccount)) {
+      await this.saveVirtualAccount(res.virtualAccount, approve);
+      return { result: true };
     }
 
     // TODO :: 카드, 무통장입금, 간편결제 테이블 만들어 지면 성공 후 저장 로직 추가
@@ -272,5 +274,23 @@ export class PurchaseService {
   async saveVirtualAccount(
     virtualAccount: TossPaymentVirtualAccountDto,
     approve: TossPaymentApprove
-  ): Promise<TossPaymentVirtualAccount> {}
+  ): Promise<TossPaymentVirtualAccount> {
+    const virtualApprove = new TossPaymentVirtualAccount();
+    virtualApprove.approve = approve;
+    virtualApprove.account_type = virtualAccount.accountType;
+    virtualApprove.account_number = virtualAccount.accountNumber;
+    virtualApprove.bank_code = virtualAccount.bankCode;
+    virtualApprove.customer_name = virtualAccount.customerName;
+    virtualApprove.due_date = virtualAccount.dueDate;
+    virtualApprove.refund_status = virtualAccount.refundStatus;
+    virtualApprove.expired = virtualAccount.expired;
+    virtualApprove.settlement_status = virtualAccount.settlementStatus;
+
+    try {
+      await virtualApprove.save();
+      return virtualApprove;
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
 }
