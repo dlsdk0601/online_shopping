@@ -1,6 +1,11 @@
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import TimeSet from "./timeSet.entity";
-import { TossPaymentStatus, TossPaymentType } from "../type/commonType";
+import {
+  TossPaymentStatus,
+  TossPaymentType,
+  VirtualAccountRefundStatus,
+  VirtualAccountSettlementStatus,
+} from "../type/commonType";
 import { TossPaymentCardAcquireStatus } from "../type/type";
 import { Payment } from "./payment.entity";
 
@@ -12,6 +17,18 @@ export class TossPaymentApprove extends TimeSet {
   @OneToOne(() => Payment, { nullable: false })
   @JoinColumn({ name: "payment_pk", referencedColumnName: "pk" })
   payment: Payment;
+
+  @OneToOne(() => TossPaymentApproveCard, (card) => card.approve, { nullable: true })
+  card_approve: TossPaymentApproveCard | null;
+
+  @OneToOne(() => TossPaymentVirtualAccount, (virtual) => virtual.approve, { nullable: true })
+  virtual_account_approve: TossPaymentVirtualAccount | null;
+
+  @OneToOne(() => TossPaymentEasypay, (easy) => easy.approve, { nullable: true })
+  easypay: TossPaymentEasypay | null;
+
+  @OneToOne(() => TossPaymentFailure, (fail) => fail.approve, { nullable: true })
+  failue: TossPaymentFailure | null;
 
   @Column({ type: "varchar", nullable: false, length: 16, comment: "상점 코드" })
   mid: string;
@@ -103,6 +120,7 @@ export class TossPaymentApprove extends TimeSet {
   method: string;
 }
 
+// 카드 결제
 @Entity("toss_payment_approve_card")
 export class TossPaymentApproveCard extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: "pk" })
@@ -110,7 +128,7 @@ export class TossPaymentApproveCard extends BaseEntity {
 
   @OneToOne(() => TossPaymentApprove, { nullable: false })
   @JoinColumn({ name: "toss_payment_approve_pk", referencedColumnName: "pk" })
-  toss_payment_approve: TossPaymentApprove;
+  approve: TossPaymentApprove;
 
   @Column({
     type: "int",
@@ -174,6 +192,7 @@ export class TossPaymentApproveCard extends BaseEntity {
   })
   interest_payer: string;
   /*
+  enum 까지 빼야할 데이터는 아니라서 string 처리 한다.
   할부가 적용된 결제에서 할부 수수료를 부담하는 주체입니다. BUYER, CARD_COMPANY, MERCHANT 중 하나입니다.
   - BUYER: 상품을 구매한 고객이 할부 수수료를 부담합니다. 일반적인 할부 결제입니다.
   - CARD_COMPANY: 카드사에서 할부 수수료를 부담합니다. 무이자 할부 결제입니다.
@@ -181,44 +200,144 @@ export class TossPaymentApproveCard extends BaseEntity {
    */
 }
 
-// TODO :: 취소 history 테이블
-// @ApiProperty({
-//   nullable: true,
-//   description: "결제 취소 이력이 담기는 배열",
-//   items: { $ref: getSchemaPath(TossPaymentCancel) },
-// })
-// cancels: TossPaymentCancel[] | null;
+// 취소 내역
+@Entity("payment_cancel_history")
+export class PaymentCancelHistory extends BaseEntity {
+  @PrimaryGeneratedColumn({ comment: "pk" })
+  pk: number;
 
-// TODO :: 간편결제 테이블
-// @ApiProperty({
-//   description: "간편결제 정보",
-//   nullable: true,
-//   items: { $ref: getSchemaPath(TossPaymentEasyPay) },
-// })
-// easyPay: TossPaymentEasyPay | null;
+  @OneToOne(() => TossPaymentApprove, { nullable: false })
+  @JoinColumn({ name: "toss_payment_approve_pk", referencedColumnName: "pk" })
+  approve: TossPaymentApprove;
 
-// TODO :: 결제 실패 테이블
-// @ApiProperty({
-//   description: "결제 승인에 실패하면 응답",
-//   nullable: true,
-//   items: { $ref: getSchemaPath(TossPaymentErrorDto) },
-// })
-// failure: TossPaymentErrorDto | null;
+  @Column({ type: "int", nullable: false, comment: "결제를 취소한 금액" })
+  cancel_amount: number;
 
-// TODO :: 가상계좌 테이블
-// @ApiProperty({
-//   nullable: true,
-//   description: "가상계좌로 결제하면 제공되는 가상계좌 관련 정보",
-//   items: { $ref: getSchemaPath(TossPaymentVirtualAccountDto) },
-// })
-// virtualAccount: TossPaymentVirtualAccountDto | null;
+  @Column({ type: "varchar", nullable: false, length: 256, comment: "결제를 취소한 이유" })
+  cancel_reason: string;
 
-// TODO :: 현금 영수증 history 테이블
-// @ApiProperty({
-//   type: "array",
-//   description: "현금영수증 정보",
-//   nullable: true,
-//   items: { $ref: getSchemaPath(TossPaymentCashReceipts) },
-// })
-// @IsOptional()
-// cashReceipts: TossPaymentCashReceipts[] | null;
+  @Column({ type: "int", nullable: false, comment: "취소된 금액 중 면세 금액" })
+  tax_free_amount: number;
+
+  @Column({ type: "int", nullable: false, comment: "취소된 금액 중 과세 제외 금액(컵 보증금 등)" })
+  tax_exemption_amount: number;
+
+  @Column({ type: "int", nullable: false, comment: "결제 취소 후 환불 가능한 잔액" })
+  refundable_amount: number;
+
+  @Column({
+    type: "int",
+    nullable: false,
+    comment: "간편결제 서비스의 포인트, 쿠폰, 즉시할인과 같은 적립식 결제수단에서 취소된 금액",
+  })
+  easy_pay_discount_amount: number;
+
+  @Column({ type: "timestamptz", nullable: false, comment: "결제 취소가 일어난 날짜와 시간 정보" })
+  canceled_at: Date;
+
+  @Column({ type: "varchar", nullable: false, length: 64, comment: "취소 건의 키 값" })
+  transaction_key: string;
+
+  @Column({ type: "varchar", nullable: false, length: 256, comment: "취소 건의 현금영수증 키 값" })
+  receipt_key: string;
+}
+
+// 간편 결제
+@Entity("toss_payment_easypay")
+export class TossPaymentEasypay extends BaseEntity {
+  @PrimaryGeneratedColumn({ comment: "pk" })
+  pk: number;
+
+  @OneToOne(() => TossPaymentApprove, { nullable: false })
+  @JoinColumn({ name: "toss_payment_approve_pk", referencedColumnName: "pk" })
+  approve: TossPaymentApprove;
+
+  @Column({ type: "varchar", nullable: false, length: 32, comment: "선택한 간편결제사 코드" })
+  provider: string;
+
+  @Column({
+    type: "int",
+    nullable: false,
+    comment: "간편결제 서비스에 등록된 계좌 혹은 현금성 포인트로 결제한 금액",
+  })
+  amount: number;
+
+  @Column({
+    type: "int",
+    nullable: false,
+    comment: "간편결제 서비스의 적립 포인트나 쿠폰 등으로 즉시 할인된 금액",
+  })
+  discount_amount: number;
+}
+
+// 가상계좌 결제
+@Entity("toss_payment_virtual_account")
+export class TossPaymentVirtualAccount {
+  @PrimaryGeneratedColumn({ comment: "pk" })
+  pk: number;
+
+  @OneToOne(() => TossPaymentApprove, { nullable: false })
+  @JoinColumn({ name: "toss_payment_approve_pk", referencedColumnName: "pk" })
+  approve: TossPaymentApprove;
+
+  @Column({
+    type: "varchar",
+    nullable: false,
+    length: 16,
+    comment: "가상계좌 타입(일반, 고정 중 하나)",
+  })
+  account_type: string;
+
+  @Column({ type: "varchar", nullable: false, length: 32, comment: "발급된 계좌번호" })
+  accountN_number: string;
+
+  @Column({ type: "varchar", nullable: false, length: 4, comment: "가상계좌 은행 숫자 코드" })
+  bank_code: string;
+
+  @Column({ type: "varchar", nullable: false, length: 124, comment: "가상계좌를 발급한 고객 이름" })
+  customer_name: string;
+
+  @Column({ type: "timestamptz", nullable: false, comment: "입금 기한" })
+  due_date: string;
+
+  @Column({
+    type: "enum",
+    enum: VirtualAccountRefundStatus,
+    nullable: false,
+    comment: "환불 처리 상태",
+  })
+  refund_status: VirtualAccountRefundStatus;
+
+  @Column({ type: "boolean", nullable: false, comment: "가상계좌가 만료되었는지 여부" })
+  expired: boolean;
+
+  @Column({
+    type: "enum",
+    enum: VirtualAccountSettlementStatus,
+    nullable: false,
+    comment: "정산 상태",
+  })
+  settlement_status: VirtualAccountSettlementStatus;
+
+  // TODO :: 환불 계좌를 추가해야할지 환불쪽 진행할때 테이블 수정
+}
+
+// 결제 실패
+@Entity("toss_payment_failure")
+export class TossPaymentFailure extends BaseEntity {
+  @PrimaryGeneratedColumn({ comment: "pk" })
+  pk: number;
+
+  @OneToOne(() => TossPaymentApprove, { nullable: false })
+  @JoinColumn({ name: "toss_payment_approve_pk", referencedColumnName: "pk" })
+  approve: TossPaymentApprove;
+
+  @Column({ type: "varchar", nullable: false, length: 64, comment: "에러 코드" })
+  code: string;
+
+  @Column({ type: "varchar", nullable: false, length: 512, comment: "에러 코드" })
+  message: string;
+}
+
+// TODO :: 현금 영수증 history 테이블, 가상 계좌 개발할때 같이 진행
+// TossPaymentCashReceipts;
