@@ -77,3 +77,16 @@ export enum TossPaymentType {
   BRANDPAY = "BRANDPAY", // 브랜드페이 결제입니다.
   KEYIN = "KEYIN", // 키인 결제입니다.
 }
+
+export enum VirtualAccountRefundStatus {
+  NONE = "NONE", // 환불 요청이 없는 상태입니다.
+  PENDING = "PENDING", // 환불을 처리 중인 상태입니다.
+  FAILED = "FAILED", // 환불에 실패한 상태입니다.
+  PARTIAL_FAILED = "PARTIAL_FAILED", // 부분 환불에 실패한 상태입니다.
+  COMPLETED = "COMPLETED", // 환불이 완료된 상태입니다.
+}
+
+export enum VirtualAccountSettlementStatus {
+  INCOMPLETED = "INCOMPLETED", // 정산이 아직 되지 않았다면
+  COMPLETED = "COMPLETED", // 정산이 완료됐다면
+}
