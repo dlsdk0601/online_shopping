@@ -26,8 +26,13 @@ import {
   TossPaymentApprove,
   TossPaymentApproveCard,
   TossPaymentFailure,
+  TossPaymentVirtualAccount,
 } from "../../entities/payment-approve.entity";
-import { TossPaymentCardDto, TossPaymentErrorDto } from "./dto/common.dto";
+import {
+  TossPaymentCardDto,
+  TossPaymentErrorDto,
+  TossPaymentVirtualAccountDto,
+} from "./dto/common.dto";
 
 @Injectable()
 export class PurchaseService {
@@ -117,10 +122,6 @@ export class PurchaseService {
 
     const payment = await this.savePayment(body, purchase);
 
-    if (isNil(payment)) {
-      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
-    }
-
     const base64SecretKey = Buffer.from(`${this.tossSecretKey}:`).toString("base64");
     const res = await this.httpService.post<
       TossPaymentHttpApproveResDto,
@@ -150,30 +151,27 @@ export class PurchaseService {
 
     const approve = await this.saveApprove(res, payment);
 
-    if (isNil(approve)) {
-      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
-    }
-
     // 결제 실패
     if (isNotNil(res.failure)) {
-      const fail = await this.saveFailure(res.failure, approve);
-
-      if (isNil(fail)) {
-        throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
-      }
-
+      await this.saveFailure(res.failure, approve);
       return { result: false };
     }
 
     // 카드 결제
     if (isNotNil(res.card)) {
+      await this.saveCard(res.card, approve);
+      return { result: true };
+    }
+
+    // 무통장 입금
+    if (isNotNil(res.virtualAccount)) {
     }
 
     // TODO :: 카드, 무통장입금, 간편결제 테이블 만들어 지면 성공 후 저장 로직 추가
     return { result: true };
   }
 
-  async savePayment(body: TossPaymentApproveReqDto, purchase: Purchase): Promise<Payment | null> {
+  async savePayment(body: TossPaymentApproveReqDto, purchase: Purchase): Promise<Payment> {
     const payment = new Payment();
     payment.purchase = purchase;
     payment.payment_key = body.paymentKey;
@@ -183,14 +181,14 @@ export class PurchaseService {
       await payment.save();
       return payment;
     } catch (e) {
-      return null;
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
   }
 
   async saveApprove(
     res: TossPaymentHttpApproveResDto,
     payment: Payment
-  ): Promise<TossPaymentApprove | null> {
+  ): Promise<TossPaymentApprove> {
     const approve = new TossPaymentApprove();
     approve.payment = payment;
     approve.mid = res.mId;
@@ -223,14 +221,14 @@ export class PurchaseService {
       await approve.save();
       return approve;
     } catch (e) {
-      return null;
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
   }
 
   async saveFailure(
     err: TossPaymentErrorDto,
     approve: TossPaymentApprove
-  ): Promise<TossPaymentFailure | null> {
+  ): Promise<TossPaymentFailure> {
     const fail = new TossPaymentFailure();
     fail.approve = approve;
     fail.code = err.code;
@@ -240,12 +238,39 @@ export class PurchaseService {
       await fail.save();
       return fail;
     } catch (e) {
-      return null;
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
   }
 
   async saveCard(
     card: TossPaymentCardDto,
     approve: TossPaymentApprove
-  ): Promise<TossPaymentApproveCard | null> {}
+  ): Promise<TossPaymentApproveCard> {
+    const cardApprove = new TossPaymentApproveCard();
+    cardApprove.approve = approve;
+    cardApprove.amount = card.amount;
+    cardApprove.issuer_code = card.issuerCode;
+    cardApprove.acquirer_code = card.acquirerCode ?? "";
+    cardApprove.number = card.number;
+    cardApprove.installment_plan_months = card.installmentPlanMonths;
+    cardApprove.approve_no = card.approveNo;
+    cardApprove.use_card_point = card.useCardPoint;
+    cardApprove.card_type = card.cardType;
+    cardApprove.owner_type = card.ownerType;
+    cardApprove.acquire_status = card.acquireStatus;
+    cardApprove.is_interest_free = card.isInterestFree;
+    cardApprove.interest_payer = card.interestPayer ?? "";
+
+    try {
+      await cardApprove.save();
+      return cardApprove;
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
+
+  async saveVirtualAccount(
+    virtualAccount: TossPaymentVirtualAccountDto,
+    approve: TossPaymentApprove
+  ): Promise<TossPaymentVirtualAccount> {}
 }
