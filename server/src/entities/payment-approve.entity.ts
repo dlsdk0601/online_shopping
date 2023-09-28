@@ -289,7 +289,7 @@ export class TossPaymentVirtualAccount {
   account_type: string;
 
   @Column({ type: "varchar", nullable: false, length: 32, comment: "발급된 계좌번호" })
-  accountN_number: string;
+  account_number: string;
 
   @Column({ type: "varchar", nullable: false, length: 4, comment: "가상계좌 은행 숫자 코드" })
   bank_code: string;
