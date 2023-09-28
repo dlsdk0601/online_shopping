@@ -272,7 +272,7 @@ export class TossPaymentEasypay extends BaseEntity {
 
 // 가상계좌 결제
 @Entity("toss_payment_virtual_account")
-export class TossPaymentVirtualAccount {
+export class TossPaymentVirtualAccount extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: "pk" })
   pk: number;
 
