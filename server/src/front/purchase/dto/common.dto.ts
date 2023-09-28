@@ -9,6 +9,10 @@ import {
   IsString,
 } from "class-validator";
 import { TossPaymentCardAcquireStatus } from "../../../type/type";
+import {
+  VirtualAccountRefundStatus,
+  VirtualAccountSettlementStatus,
+} from "../../../type/commonType";
 
 export class TossPaymentErrorDto {
   @ApiProperty({ type: "string", nullable: false, description: "에러코드" })
@@ -138,28 +142,30 @@ export class TossPaymentVirtualAccountDto {
   dueDate: string;
   // yyyy-MM-dd'T'HH:mm:ss ISO 8601 형식을 사용합니다.
 
-  @ApiProperty({ type: "string", nullable: false, description: "환불 처리 상태" })
-  @IsString()
+  @ApiProperty({
+    type: "enum",
+    enum: VirtualAccountRefundStatus,
+    nullable: false,
+    description: "환불 처리 상태",
+  })
+  @IsEnum(VirtualAccountRefundStatus)
   @IsNotEmpty()
-  refundStatus: string;
-  /*
-    - NONE: 환불 요청이 없는 상태입니다.
-    - PENDING: 환불을 처리 중인 상태입니다.
-    - FAILED: 환불에 실패한 상태입니다.
-    - PARTIAL_FAILED: 부분 환불에 실패한 상태입니다.
-    - COMPLETED: 환불이 완료된 상태입니다.
-   */
+  refundStatus: VirtualAccountRefundStatus;
 
   @ApiProperty({ type: "boolean", nullable: false, description: "가상계좌가 만료되었는지 여부" })
   @IsBoolean()
   @IsNotEmpty()
   expired: boolean;
 
-  @ApiProperty({ type: "string", nullable: false, description: "정산 상태" })
-  @IsString()
+  @ApiProperty({
+    type: "enum",
+    enum: VirtualAccountSettlementStatus,
+    nullable: false,
+    description: "정산 상태",
+  })
+  @IsEnum(VirtualAccountSettlementStatus)
   @IsNotEmpty()
-  settlementStatus: string;
-  // 정산이 아직 되지 않았다면 INCOMPLETED, 정산이 완료됐다면 COMPLETED 값이 들어옵니다.
+  settlementStatus: VirtualAccountSettlementStatus;
 
   // TODO :: 문서 설명만으로는 이해 불가 확인 해야함
   // * 구매자의 환불계좌 정보는 결제창을 띄운 시점부터 30분 동안만 조회할 수 있습니다. 이후에는 값이 내려가지 않습니다.
