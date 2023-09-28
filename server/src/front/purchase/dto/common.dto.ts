@@ -26,7 +26,7 @@ export class TossPaymentErrorDto {
   message: string;
 }
 
-export class TossPaymentCartDto {
+export class TossPaymentCardDto {
   @ApiProperty({
     type: "number",
     nullable: false,

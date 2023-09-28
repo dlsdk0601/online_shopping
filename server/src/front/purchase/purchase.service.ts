@@ -22,8 +22,12 @@ import {
 } from "./dto/toss-payment.dto";
 import { HttpService } from "../http/http.service";
 import { Payment } from "../../entities/payment.entity";
-import { TossPaymentApprove, TossPaymentFailure } from "../../entities/payment-approve.entity";
-import { TossPaymentErrorDto } from "./dto/common.dto";
+import {
+  TossPaymentApprove,
+  TossPaymentApproveCard,
+  TossPaymentFailure,
+} from "../../entities/payment-approve.entity";
+import { TossPaymentCardDto, TossPaymentErrorDto } from "./dto/common.dto";
 
 @Injectable()
 export class PurchaseService {
@@ -161,6 +165,10 @@ export class PurchaseService {
       return { result: false };
     }
 
+    // 카드 결제
+    if (isNotNil(res.card)) {
+    }
+
     // TODO :: 카드, 무통장입금, 간편결제 테이블 만들어 지면 성공 후 저장 로직 추가
     return { result: true };
   }
@@ -235,4 +243,9 @@ export class PurchaseService {
       return null;
     }
   }
+
+  async saveCard(
+    card: TossPaymentCardDto,
+    approve: TossPaymentApprove
+  ): Promise<TossPaymentApproveCard | null> {}
 }

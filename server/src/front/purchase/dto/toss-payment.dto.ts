@@ -13,7 +13,7 @@ import {
 import { TossPaymentStatus, TossPaymentType } from "../../../type/commonType";
 import {
   TossPaymentCancel,
-  TossPaymentCartDto,
+  TossPaymentCardDto,
   TossPaymentCashReceipt,
   TossPaymentCashReceipts,
   TossPaymentEasyPay,
@@ -76,7 +76,7 @@ export class TossPaymentHttpApproveReqDto {
 }
 
 @ApiExtraModels(
-  TossPaymentCartDto,
+  TossPaymentCardDto,
   TossPaymentVirtualAccountDto,
   TossPaymentCancel,
   TossPaymentCashReceipt,
@@ -150,10 +150,10 @@ export class TossPaymentHttpApproveResDto {
   @ApiProperty({
     nullable: true,
     description: "카드로 결제하면 제공되는 카드 관련 정보",
-    items: { $ref: getSchemaPath(TossPaymentCartDto) },
+    items: { $ref: getSchemaPath(TossPaymentCardDto) },
   })
   @IsOptional()
-  card: TossPaymentCartDto | null;
+  card: TossPaymentCardDto | null;
 
   @ApiProperty({
     nullable: true,
