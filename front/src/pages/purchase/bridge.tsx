@@ -1,33 +1,66 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { queryFilter } from "../../ex/utils";
+import { useMutation } from "react-query";
+import { isNil } from "lodash";
+import { ignorePromise, isBlank, isNotNil, queryFilter } from "../../ex/utils";
+import { Urls } from "../../url/url.g";
+import { api } from "../../api/url.g";
+import { TossPaymentApproveReq } from "../../api/type.g";
+import { TossPaymentType } from "../../api/enum.g";
+import { BlockView } from "../../layout/Layout";
 
 const Bridge = () => {
-  // http://localhost:3000/purchase/success
-  // ?paymentType=NORMAL
-  // &orderId=GXWMACW1695648114395
-  // &paymentKey=xMljweGQBN5OWRapdA8dQn21WDoX93o1zEqZKLPbmD70vk4y
-  // &amount=928
-
   const router = useRouter();
-  const [paymentType, setPaymentType] = useState("");
-  const [orderCode, setOrderCode] = useState("");
-  const [paymentKey, setPaymentKey] = useState("");
-  const [amount, setAmount] = useState("");
+  const { mutate: onApiPayment } = useMutation(
+    (req: TossPaymentApproveReq) => api.tossPaymentApprove(req),
+    {
+      onSuccess: (res) => {
+        if (isNil(res)) {
+          return;
+        }
+
+        if (isNotNil(res.error)) {
+          const query = {
+            code: res.error.code,
+            message: res.error.message,
+          };
+          ignorePromise(() => router.replace(Urls.purchase.fail.url(query)));
+          return;
+        }
+
+        ignorePromise(() => router.replace(Urls.purchase.success.url({ pk: res.pk })));
+      },
+    },
+  );
 
   useEffect(() => {
-    if (router.isReady) {
+    if (!router.isReady) {
       return;
     }
 
-    const { paymentType, orderId, paymentKey, amount } = router.query;
-    setPaymentType(queryFilter(paymentType));
-    setOrderCode(queryFilter(orderId));
-    setPaymentKey(queryFilter(paymentKey));
-    setAmount(queryFilter(amount));
-  }, [router]);
+    const paymentType = queryFilter(router.query.paymentType);
+    const orderId = queryFilter(router.query.orderId);
+    const paymentKey = queryFilter(router.query.paymentKey);
+    const amount = queryFilter(router.query.amount);
 
-  return <div />;
+    if (isBlank(paymentKey) || isBlank(orderId) || isBlank(paymentKey) || isBlank(amount)) {
+      ignorePromise(() => router.replace(Urls.purchase.fail.url()));
+      return;
+    }
+
+    onApiPayment({
+      paymentKey,
+      amount: Number(amount),
+      paymentType: paymentType as TossPaymentType,
+      orderCode: orderId,
+    });
+  }, [router.isReady, router.query]);
+
+  return (
+    <div>
+      <BlockView />
+    </div>
+  );
 };
 
 export default Bridge;
