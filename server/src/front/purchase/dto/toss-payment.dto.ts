@@ -60,6 +60,7 @@ export class TossPaymentApproveResDto {
   pk: number;
 
   @ApiProperty({
+    type: TossPaymentErrorDto,
     nullable: true,
     description: "에러 코드",
     items: { $ref: getSchemaPath(TossPaymentErrorDto) },
