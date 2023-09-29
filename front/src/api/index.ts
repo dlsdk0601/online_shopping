@@ -1,8 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { sleep } from "sleepjs";
+import Router from "next/router";
 import { baseConfig } from "../lib/config";
 import { CONSTANT } from "../lib/contants";
 import errorMessageG from "./errorMessage.g";
+import { Urls } from "../url/url.g";
 
 export const axiosInstance = axios.create({
   baseURL: `${baseConfig.apiBaseUrl}`,
@@ -121,6 +123,11 @@ export class ApiBase {
       const message = err.response?.data.message ?? err.message;
       if (message !== errorMessageG.NOT_TOKEN_USER) {
         alert(message);
+      }
+
+      // 권한 x
+      if (message === "Unauthorized") {
+        return Router.replace(Urls.index.url());
       }
       // throw new Error(message);
     }
