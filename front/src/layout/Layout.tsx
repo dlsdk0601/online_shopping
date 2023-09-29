@@ -203,7 +203,7 @@ const FooterView = () => {
   );
 };
 
-const BlockView = () => {
+export const BlockView = () => {
   const postLoadingCount = useIsMutating();
   const getLoadingCount = useIsFetching();
   const isLocked = getLoadingCount + postLoadingCount > 0;
