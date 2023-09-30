@@ -13,7 +13,7 @@ import errorMessage from "../../config/errorMessage";
 import { AddPurchaseReqDto } from "./dto/add-purchase.dto";
 import { isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
-import { PurchaseItemStatus } from "../../type/commonType";
+import { PurchaseItemStatus, TossPaymentType } from "../../type/commonType";
 import { CartProduct } from "../../entities/cart.entity";
 import {
   TossPaymentApproveReqDto,
@@ -35,6 +35,7 @@ import {
   TossPaymentErrorDto,
   TossPaymentVirtualAccountDto,
 } from "./dto/common.dto";
+import { FailPurchaseReqDto } from "./dto/fail-purchase.dto";
 
 @Injectable()
 export class PurchaseService {
@@ -96,6 +97,32 @@ export class PurchaseService {
     try {
       await purchase.save();
       return { pk: purchase.pk };
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
+
+  // sdk 에서 결제 실패 이력
+  async failPurchase(body: FailPurchaseReqDto) {
+    const purchase = await Purchase.findOne({
+      where: {
+        order_code: body.orderCode,
+      },
+    });
+
+    if (isNil(purchase)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_PURCHASE);
+    }
+
+    const payment = new Payment();
+    payment.purchase = purchase;
+    payment.payment_key = "";
+    payment.payment_type = TossPaymentType.NORMAL; // 기획상 언제나 normal
+
+    // TODO :: 로직 완성
+    try {
+      await payment.save();
+      return { pk: payment.pk };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
