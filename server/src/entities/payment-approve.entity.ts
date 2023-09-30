@@ -28,7 +28,7 @@ export class TossPaymentApprove extends TimeSet {
   easypay: TossPaymentEasypay | null;
 
   @OneToOne(() => TossPaymentFailure, (fail) => fail.approve, { nullable: true })
-  failue: TossPaymentFailure | null;
+  failure: TossPaymentFailure | null;
 
   @Column({ type: "varchar", nullable: false, length: 16, comment: "상점 코드" })
   mid: string;
