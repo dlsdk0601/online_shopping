@@ -23,10 +23,10 @@ import {
 import { HttpService } from "../http/http.service";
 import { Payment } from "../../entities/payment.entity";
 import {
+  PaymentFailure,
   TossPaymentApprove,
   TossPaymentApproveCard,
   TossPaymentEasypay,
-  TossPaymentFailure,
   TossPaymentVirtualAccount,
 } from "../../entities/payment-approve.entity";
 import {
@@ -119,10 +119,17 @@ export class PurchaseService {
     payment.payment_key = "";
     payment.payment_type = TossPaymentType.NORMAL; // 기획상 언제나 normal
 
-    // TODO :: 로직 완성
+    const paymentFailure = new PaymentFailure();
+    paymentFailure.code = body.code;
+    paymentFailure.message = body.message;
+
     try {
       await payment.save();
-      return { pk: payment.pk };
+
+      paymentFailure.payment = payment;
+      await paymentFailure.save();
+
+      return { pk: paymentFailure.pk };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
@@ -182,7 +189,7 @@ export class PurchaseService {
 
     // 결제 실패
     if (isNotNil(res.failure)) {
-      await this.saveFailure(res.failure, approve);
+      await this.saveFailure(res.failure, payment);
       return { result: false, pk: approve.pk, error: res.failure };
     }
 
@@ -258,12 +265,9 @@ export class PurchaseService {
     }
   }
 
-  async saveFailure(
-    err: TossPaymentErrorDto,
-    approve: TossPaymentApprove
-  ): Promise<TossPaymentFailure> {
-    const fail = new TossPaymentFailure();
-    fail.approve = approve;
+  async saveFailure(err: TossPaymentErrorDto, payment: Payment): Promise<PaymentFailure> {
+    const fail = new PaymentFailure();
+    fail.payment = payment;
     fail.code = err.code;
     fail.message = err.message;
 

@@ -9,10 +9,10 @@ import { HttpService } from "../http/http.service";
 import { Payment } from "../../entities/payment.entity";
 import {
   PaymentCancelHistory,
+  PaymentFailure,
   TossPaymentApprove,
   TossPaymentApproveCard,
   TossPaymentEasypay,
-  TossPaymentFailure,
   TossPaymentVirtualAccount,
 } from "../../entities/payment-approve.entity";
 
@@ -27,7 +27,7 @@ import {
       PaymentCancelHistory,
       TossPaymentEasypay,
       TossPaymentVirtualAccount,
-      TossPaymentFailure,
+      PaymentFailure,
     ]),
   ],
   controllers: [PurchaseController],
