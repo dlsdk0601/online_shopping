@@ -59,6 +59,16 @@ export const isNotBlank = (value: any) => {
   return !isBlank(value);
 };
 
+export const isAllBlank = (value: any[]): boolean => {
+  for (let i = 0; i < value.length; i++) {
+    const val = isBlank(value[i]);
+    if (val) {
+      return true;
+    }
+  }
+  return false;
+};
+
 export const removePrefix = (str: string, prefix: string) => {
   if (str.startsWith(prefix)) {
     return str.substring(prefix.length);
