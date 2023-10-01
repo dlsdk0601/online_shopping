@@ -232,7 +232,7 @@ export class PurchaseService {
     approve.order_id = res.orderId;
     approve.order_name = res.orderName;
     approve.requested_at = res.requestedAt;
-    approve.approvedAt = res.approvedAt;
+    approve.approved_at = res.approvedAt;
     approve.use_escrow = res.useEscrow;
     approve.culture_expense = res.cultureExpense;
     approve.discount = res.discount?.amount ?? null;
