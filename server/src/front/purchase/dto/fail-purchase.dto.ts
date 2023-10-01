@@ -23,4 +23,9 @@ export class FailPurchaseResDto {
   @IsNumber()
   @IsNotEmpty()
   pk: number;
+
+  @ApiProperty({ type: "string", nullable: false, description: "에러 메세지" })
+  @IsString()
+  @IsNotEmpty()
+  message: string;
 }
