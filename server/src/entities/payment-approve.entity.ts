@@ -61,7 +61,7 @@ export class TossPaymentApprove extends TimeSet {
   requested_at: Date;
 
   @Column({ type: "date", nullable: false, comment: "결제 승인이 일어난 날짜와 시간" })
-  approvedAt: Date;
+  approved_at: Date;
 
   @Column({ type: "boolean", nullable: false, comment: "에스크로 사용 여부" })
   use_escrow: boolean;
