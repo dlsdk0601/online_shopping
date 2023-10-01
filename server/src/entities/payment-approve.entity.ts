@@ -27,9 +27,6 @@ export class TossPaymentApprove extends TimeSet {
   @OneToOne(() => TossPaymentEasypay, (easy) => easy.approve, { nullable: true })
   easypay: TossPaymentEasypay | null;
 
-  @OneToOne(() => TossPaymentFailure, (fail) => fail.approve, { nullable: true })
-  failure: TossPaymentFailure | null;
-
   @Column({ type: "varchar", nullable: false, length: 16, comment: "상점 코드" })
   mid: string;
 
@@ -323,14 +320,15 @@ export class TossPaymentVirtualAccount extends BaseEntity {
 }
 
 // 결제 실패
-@Entity("toss_payment_failure")
-export class TossPaymentFailure extends BaseEntity {
+@Entity("payment_failure")
+export class PaymentFailure extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: "pk" })
   pk: number;
 
-  @OneToOne(() => TossPaymentApprove, { nullable: false })
-  @JoinColumn({ name: "toss_payment_approve_pk", referencedColumnName: "pk" })
-  approve: TossPaymentApprove;
+  // 실패는 결제 생성, 결제 승인 모두에게 날 수 있기 때문에 mother 테이블에 외래키를 건다
+  @OneToOne(() => Payment, { nullable: false })
+  @JoinColumn({ name: "payment_pk", referencedColumnName: "pk" })
+  payment: Payment;
 
   @Column({ type: "varchar", nullable: false, length: 64, comment: "에러 코드" })
   code: string;

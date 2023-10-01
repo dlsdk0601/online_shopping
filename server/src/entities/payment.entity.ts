@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { Purchase } from "./Purchase.entity";
 import { TossPaymentType } from "../type/commonType";
-import { TossPaymentApprove } from "./payment-approve.entity";
+import { PaymentFailure, TossPaymentApprove } from "./payment-approve.entity";
 import { isNotNil } from "../ex/ex";
 
 // sdk 에서 결제가 생성된 구매 내역 테이블
@@ -26,6 +26,11 @@ export class Payment extends BaseEntity {
 
   @OneToOne(() => TossPaymentApprove, (approve) => approve.payment, { nullable: true })
   payment_approve: TossPaymentApprove | null;
+
+  @OneToOne(() => PaymentFailure, (failure) => failure.payment, {
+    nullable: true,
+  })
+  failure: PaymentFailure | null;
 
   @Column({ type: "varchar", nullable: false, length: 256, comment: "결제 키" })
   payment_key: string;
