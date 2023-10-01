@@ -129,7 +129,7 @@ export class PurchaseService {
       paymentFailure.payment = payment;
       await paymentFailure.save();
 
-      return { pk: paymentFailure.pk };
+      return { pk: paymentFailure.pk, message: paymentFailure.message };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
