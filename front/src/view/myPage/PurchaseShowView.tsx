@@ -47,14 +47,21 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
     }
 
     const paymentWidget = paymentWidgetRef.current;
-
+    console.log({
+      orderId: props.purchase.orderId,
+      orderName: props.purchase.title,
+      customerName: user.name,
+      customerEmail: user.email,
+      successUrl: `${window.location.origin}${Urls.purchase.bridge.url()}`,
+      failUrl: `${window.location.origin}${Urls.purchase.fail.pathname}`,
+    });
     try {
       await paymentWidget?.requestPayment({
         orderId: props.purchase.orderId,
         orderName: props.purchase.title,
         customerName: user.name,
         customerEmail: user.email,
-        successUrl: `${window.location.origin}${Urls.purchase.success.pathname}`,
+        successUrl: `${window.location.origin}${Urls.purchase.bridge.pathname}`,
         failUrl: `${window.location.origin}${Urls.purchase.fail.pathname}`,
       });
     } catch (e) {
