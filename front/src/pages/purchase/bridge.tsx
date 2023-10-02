@@ -16,6 +16,7 @@ const Bridge = () => {
     {
       onSuccess: (res) => {
         if (isNil(res)) {
+          ignorePromise(() => router.replace(Urls.purchase.fail.url()));
           return;
         }
 
