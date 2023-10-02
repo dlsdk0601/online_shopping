@@ -36,6 +36,7 @@ import {
   TossPaymentVirtualAccountDto,
 } from "./dto/common.dto";
 import { FailPurchaseReqDto } from "./dto/fail-purchase.dto";
+import { CartService } from "../cart/cart.service";
 
 @Injectable()
 export class PurchaseService {
@@ -46,7 +47,8 @@ export class PurchaseService {
   constructor(
     private assetService: AssetService,
     private configService: ConfigService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private cartService: CartService
   ) {
     this.tossClientKey = this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "";
     this.tossSecretKey = this.configService.get<string>("TOSS_PAYMENT_SECRET_KEY") ?? "";
@@ -57,6 +59,14 @@ export class PurchaseService {
 
     if (isNil(purchase)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    // 상품 결제 상태가 하나라도 waiting 이 아니면 막는다.
+    const isAllWaiting = purchase.purchase_items
+      .map((item) => item.status)
+      .every((item) => item === PurchaseItemStatus.WAITING);
+    if (!isAllWaiting) {
+      throw new BadRequestException(errorMessage.ALREADY_PAID);
     }
 
     return {
@@ -177,9 +187,6 @@ export class PurchaseService {
       }
     );
 
-    console.log("요기");
-    console.log(res);
-
     // 서버 통신 실패
     if (isNil(res)) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
@@ -190,6 +197,7 @@ export class PurchaseService {
     // 결제 실패
     if (isNotNil(res.failure)) {
       await this.saveFailure(res.failure, payment);
+      await this.editPurchaseItem(purchase.purchase_items, PurchaseItemStatus.FAIL);
       return { result: false, pk: approve.pk, error: res.failure };
     }
 
@@ -207,6 +215,13 @@ export class PurchaseService {
     if (isNotNil(res.easyPay)) {
       await this.saveEasypay(res.easyPay, approve);
     }
+
+    // 상품 상태값 변경
+    await this.editPurchaseItem(purchase.purchase_items, PurchaseItemStatus.SUCCESS);
+
+    // 장바구니에서 삭제
+    const cartProductPks = purchase.purchase_items.map((item) => item.product.pk);
+    await this.cartService.deleteCartItem({ cartProductPks }, user);
 
     return { result: true, pk: approve.pk, error: null };
   }
@@ -342,6 +357,19 @@ export class PurchaseService {
     try {
       await paymentEasypay.save();
       return paymentEasypay;
+    } catch (e) {
+      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
+    }
+  }
+
+  async editPurchaseItem(purchaseItems: PurchaseItem[], status: PurchaseItemStatus) {
+    try {
+      for (let i = 0; i < purchaseItems.length; i++) {
+        // eslint-disable-next-line no-param-reassign
+        purchaseItems[i].status = status;
+        // eslint-disable-next-line no-await-in-loop
+        await purchaseItems[i].save();
+      }
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
