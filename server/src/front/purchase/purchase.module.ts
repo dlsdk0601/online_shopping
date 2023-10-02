@@ -15,6 +15,7 @@ import {
   TossPaymentEasypay,
   TossPaymentVirtualAccount,
 } from "../../entities/payment-approve.entity";
+import { CartService } from "../cart/cart.service";
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import {
     ]),
   ],
   controllers: [PurchaseController],
-  providers: [PurchaseService, AssetService, ConfigService, HttpService],
+  providers: [PurchaseService, AssetService, ConfigService, HttpService, CartService],
 })
 export class PurchaseModule {}
