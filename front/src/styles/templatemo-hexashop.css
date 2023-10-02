@@ -2223,3 +2223,37 @@ responsive
         height: 400px;
     }
 }
+
+
+.success-text {
+    margin: 0 auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.success-button {
+    background-color: black;
+    border: none;
+    color: white;
+    padding: 0 1rem;
+}
+
+.success-button-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.success-button {
+    background-color: black;
+    color: white;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s;
+}
+
+.success-button:hover {
+    color: black;
+    background-color: white;
+}
