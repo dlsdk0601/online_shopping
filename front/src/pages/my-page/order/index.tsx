@@ -14,8 +14,10 @@ const OrderPage = () => {
             <div className="pagination">
               <ul>
                 <li>
+                  {/* 주문 내역 리스트 */}
                   <Link href="/">-</Link>
                 </li>
+                {/* 페이지 네이션 */}
                 {[1, 2, 3, 4].map((page) => {
                   return (
                     <li key={`product-women-list-page-${page}`}>
