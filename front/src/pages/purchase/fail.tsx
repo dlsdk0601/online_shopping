@@ -6,7 +6,7 @@ import { isBlank, queryFilter } from "../../ex/utils";
 import { api } from "../../api/url.g";
 import { FailPurchaseReq } from "../../api/type.g";
 
-const Fail = () => {
+const FailView = () => {
   const router = useRouter();
   const [message, setMessage] = useState("");
 
@@ -44,4 +44,4 @@ const Fail = () => {
   return <div>{message}</div>;
 };
 
-export default Fail;
+export default FailView;

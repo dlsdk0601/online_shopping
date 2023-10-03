@@ -9,7 +9,7 @@ import { TossPaymentApproveReq } from "../../api/type.g";
 import { TossPaymentType } from "../../api/enum.g";
 import { BlockView } from "../../layout/Layout";
 
-const Bridge = () => {
+const BridgeView = () => {
   const router = useRouter();
   const { mutate: onApiPayment } = useMutation(
     (req: TossPaymentApproveReq) => api.tossPaymentApprove(req),
@@ -64,4 +64,4 @@ const Bridge = () => {
   );
 };
 
-export default Bridge;
+export default BridgeView;
