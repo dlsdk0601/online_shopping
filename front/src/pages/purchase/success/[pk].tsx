@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Urls } from "../../../url/url.g";
 
-const SuccessView = () => {
+const SuccessPage = () => {
   return (
     <>
       <div className="page-heading" id="top">
@@ -31,4 +31,4 @@ const SuccessView = () => {
   );
 };
 
-export default SuccessView;
+export default SuccessPage;
