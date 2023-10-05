@@ -47,14 +47,6 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
     }
 
     const paymentWidget = paymentWidgetRef.current;
-    console.log({
-      orderId: props.purchase.orderId,
-      orderName: props.purchase.title,
-      customerName: user.name,
-      customerEmail: user.email,
-      successUrl: `${window.location.origin}${Urls.purchase.bridge.url()}`,
-      failUrl: `${window.location.origin}${Urls.purchase.fail.pathname}`,
-    });
     try {
       await paymentWidget?.requestPayment({
         orderId: props.purchase.orderId,
@@ -65,6 +57,7 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
         failUrl: `${window.location.origin}${Urls.purchase.fail.pathname}`,
       });
     } catch (e) {
+      // TODO :: 여기서 실패시의 처리도 있어야 한다.
       await router.replace(Urls.purchase.fail.url());
     }
   }, [props, user]);
