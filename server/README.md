@@ -5,8 +5,9 @@
 ## Installation
 
 ```bash
-$ npm install
+$ make
 ```
+nix-shell 기반이기에 npm i 불필요
 
 ## Running the app
 
