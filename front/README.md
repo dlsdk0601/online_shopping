@@ -1,10 +1,18 @@
 # front
 
-git pull
+## Installation
 
-npm i 
+```
+$ make
+``` 
+nix-shell 기반이기에 npm i 불필요
 
-# url generate
-npm run watch 
+# Router Generate
+```
+$ make watch
+``` 
 
-npm run dev
+## Running the app
+```
+$ npm run dev
+```
