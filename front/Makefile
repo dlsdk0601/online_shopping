@@ -4,6 +4,9 @@ open: setup
 setup:
 	nix-shell --run 'npm i'
 
+watch:
+	nix-shell --run 'npm run watch'
+
 cypress-open:
 	npx cypress open
 
