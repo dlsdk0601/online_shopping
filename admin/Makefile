@@ -1,8 +1,8 @@
-open:
+open: setup
 	webstorm .
 
-install:
-	npm i
+setup:
+	nix-shell --run 'npm i'
 
-setUp: install
-	open
+watch:
+	nix-shell --run 'npm run watch'
