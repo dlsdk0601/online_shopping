@@ -1,8 +1,5 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
 ## Installation
+git clone 후 server단 루트 폴더에서 
 
 ```bash
 $ make
@@ -14,7 +11,7 @@ nix-shell 기반이기에 npm i 불필요
 ```bash
 순서가 중요하므로 순서대로 실행 할 것.
 
-# docker-compose up -d and seed insert
+# docker-compose run and seed insert
 $ make dev-reinitialize
 
 # copy type files and watch mode
@@ -37,7 +34,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## License
-
-Nest is [MIT licensed](LICENSE).
