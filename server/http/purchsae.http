@@ -1,0 +1,9 @@
+POST http://localhost:8080/api/v1/purchase/toss-payment-approve
+Content-Type: application/json
+
+{
+  "paymentKey": "",
+  "orderCode": "",
+  "amount": 1,
+  "paymetType": "NORMAL"
+}
