@@ -219,6 +219,7 @@ export class PurchaseService {
     // 상품 상태값 변경
     await this.editPurchaseItem(purchase.purchase_items, PurchaseItemStatus.SUCCESS);
 
+    // TODO :: 삭제가 안되고 있는데 확인
     // 장바구니에서 삭제
     const cartProductPks = purchase.purchase_items.map((item) => item.product.pk);
     await this.cartService.deleteCartItem({ cartProductPks }, user);
