@@ -56,9 +56,11 @@ const LayoutSelector = (props: PropsWithChildren) => {
   const router = useRouter();
 
   // 예외 URL
-  const isSpecialUrl = some(["/_", Urls.purchase.bridge.pathname], (prefix) =>
-    router.pathname.startsWith(prefix),
-  );
+  const specialUrl = [
+    "/_", // Next custom page (ex. _error)
+    Urls.purchase.bridge.pathname,
+  ];
+  const isSpecialUrl = some(specialUrl, (prefix) => router.pathname.startsWith(prefix));
 
   if (isSpecialUrl) {
     return <>{props.children}</>;
