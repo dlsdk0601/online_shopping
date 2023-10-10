@@ -13,6 +13,7 @@ import {
 import { User } from "./user.entity";
 import { PurchaseItemStatus } from "../type/commonType";
 import { Product } from "./product.entity";
+import { Payment } from "./payment.entity";
 
 @Entity("purchase")
 export class Purchase extends BaseEntity {
@@ -38,6 +39,11 @@ export class Purchase extends BaseEntity {
     cascade: true,
   })
   purchase_items: PurchaseItem[];
+
+  @OneToOne(() => Payment, (payment) => payment.purchase, {
+    nullable: true,
+  })
+  payment: Payment;
 
   get totalPrice(): number {
     let total = 0;
