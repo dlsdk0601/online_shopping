@@ -37,6 +37,8 @@ import {
 } from "./dto/common.dto";
 import { FailPurchaseReqDto } from "./dto/fail-purchase.dto";
 import { CartService } from "../cart/cart.service";
+import { PurchaseListReqDto, PurchaseListResDto } from "./dto/list-purchase.dto";
+import { LIMIT } from "../../type/pagination.dto";
 
 @Injectable()
 export class PurchaseService {
@@ -52,6 +54,17 @@ export class PurchaseService {
   ) {
     this.tossClientKey = this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "";
     this.tossSecretKey = this.configService.get<string>("TOSS_PAYMENT_SECRET_KEY") ?? "";
+  }
+
+  async list(body: PurchaseListReqDto) {
+    const [purchases, count] = await Purchase.findAndCount({
+      take: LIMIT,
+      skip: LIMIT * (body.page - 1),
+    });
+
+    const list = purchases.map((item) => ({ pk: item.pk, orderCode: item.order_code }));
+
+    return new PurchaseListResDto(list, count, body.page);
   }
 
   show(pk: number, user: User) {
