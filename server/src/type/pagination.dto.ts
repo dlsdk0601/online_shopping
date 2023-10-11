@@ -1,9 +1,10 @@
 import { IsArray, IsBoolean, IsNotEmpty, IsNumber } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { PaginationType } from "./commonType";
 
 export const LIMIT = 10;
 
-export class PaginationDto {
+export class PaginationDto implements PaginationType {
   @ApiProperty({ description: "현재 페이지", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()
