@@ -13,7 +13,7 @@ import errorMessage from "../../config/errorMessage";
 import { AddPurchaseReqDto } from "./dto/add-purchase.dto";
 import { isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
-import { PurchaseItemStatus, TossPaymentType } from "../../type/commonType";
+import { PurchaseItemStatus, TossPaymentStatus, TossPaymentType } from "../../type/commonType";
 import { CartProduct } from "../../entities/cart.entity";
 import {
   TossPaymentApproveReqDto,
@@ -57,12 +57,23 @@ export class PurchaseService {
   }
 
   async list(body: PurchaseListReqDto) {
-    const [purchases, count] = await Purchase.findAndCount({
+    const [payment, count] = await Payment.findAndCount({
       take: LIMIT,
       skip: LIMIT * (body.page - 1),
+      relations: {
+        payment_approve: true,
+        purchase: true,
+      },
     });
 
-    const list = purchases.map((item) => ({ pk: item.pk, orderCode: item.order_code }));
+    const list = payment.map((item) => ({
+      pk: item.pk,
+      orderCode: item.purchase.order_code,
+      price: item.payment_approve?.total_amount ?? 0,
+      method: item.payment_approve?.method ?? "",
+      status: item.payment_approve?.status ?? TossPaymentStatus.ABORTED,
+      createAt: item.create_at.toString(),
+    }));
 
     return new PurchaseListResDto(list, count, body.page);
   }
@@ -232,9 +243,11 @@ export class PurchaseService {
     // 상품 상태값 변경
     await this.editPurchaseItem(purchase.purchase_items, PurchaseItemStatus.SUCCESS);
 
-    // TODO :: 삭제가 안되고 있는데 확인
     // 장바구니에서 삭제
-    const cartProductPks = purchase.purchase_items.map((item) => item.product.pk);
+    const productPks = purchase.purchase_items.map((item) => item.product.pk);
+    const cartProductPks = user.cart.cart_products
+      .filter((item) => !productPks.includes(item.product.pk))
+      .map((item) => item.pk);
     await this.cartService.deleteCartItem({ cartProductPks }, user);
 
     return { result: true, pk: approve.pk, error: null };
