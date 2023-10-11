@@ -43,7 +43,7 @@ export class Purchase extends BaseEntity {
   @OneToOne(() => Payment, (payment) => payment.purchase, {
     nullable: true,
   })
-  payment: Payment;
+  payment: Payment | null;
 
   get totalPrice(): number {
     let total = 0;
