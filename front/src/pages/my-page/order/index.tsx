@@ -1,43 +1,46 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
+import { isNil } from "lodash";
+import { validatePageQuery } from "../../../ex/utils";
+import { usePurchase } from "../../../hooks/usePurchase";
+import { Replace } from "../../../layout/App";
+import { mf2 } from "../../../ex/numberEx";
+import { d1 } from "../../../ex/dateEx";
+import PaginationBarView from "../../../view/PaginationBarView";
 
 const OrderPage = () => {
   const router = useRouter();
+  const page = validatePageQuery(router.query.page) ?? 1;
+
+  const { pagination, isLoading } = usePurchase(page);
+
+  if (isLoading) {
+    // TODO :: skeleton
+    return <></>;
+  }
+
+  if (isNil(pagination)) {
+    return <Replace url="_error" />;
+  }
+
   return (
     <section className="section" id="products">
       <div className="container">
         <div className="row">
-          <div className="col-lg-4">
-            <li className="item">{/* item */}</li>
-          </div>
-          <div className="col-lg-12">
-            <div className="pagination">
-              <ul>
+          <ul className="cart-item-wrapper">
+            {pagination.rows.map((item) => {
+              return (
                 <li>
-                  {/* 주문 내역 리스트 */}
-                  <Link href="/">-</Link>
+                  <p>{d1(item.createAt)}</p>
+                  <p>{item.orderCode}</p>
+                  <p>${mf2(item.price)}</p>
+                  <p>{item.method}</p>
+                  <p>{item.status}</p>
                 </li>
-                {/* 페이지 네이션 */}
-                {[1, 2, 3, 4].map((page) => {
-                  return (
-                    <li key={`product-women-list-page-${page}`}>
-                      <Link
-                        href={{
-                          pathname: router.pathname,
-                          query: { ...router.query, page },
-                        }}
-                      >
-                        {page}
-                      </Link>
-                    </li>
-                  );
-                })}
-                <li>
-                  <Link href="/">+</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
+              );
+            })}
+          </ul>
+          <PaginationBarView pagination={pagination} />
         </div>
       </div>
     </section>
