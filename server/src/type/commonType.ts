@@ -1,3 +1,15 @@
+export interface PaginationType {
+  page: number;
+  nextPage: number;
+  prevPage: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  total: number;
+  pages: number[];
+  first: number;
+  last: number;
+}
+
 export enum UserSearchType {
   NAME = "NAME",
   PHONE = "PHONE",
