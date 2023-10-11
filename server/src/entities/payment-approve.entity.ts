@@ -295,7 +295,7 @@ export class TossPaymentVirtualAccount extends BaseEntity {
   customer_name: string;
 
   @Column({ type: "timestamptz", nullable: false, comment: "입금 기한" })
-  due_date: string;
+  due_date: Date;
 
   @Column({
     type: "enum",

@@ -139,7 +139,7 @@ export class TossPaymentVirtualAccountDto {
   @ApiProperty({ type: "date", nullable: false, description: "입금 기한" })
   @IsISO8601()
   @IsNotEmpty()
-  dueDate: string;
+  dueDate: Date;
   // yyyy-MM-dd'T'HH:mm:ss ISO 8601 형식을 사용합니다.
 
   @ApiProperty({
