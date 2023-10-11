@@ -421,6 +421,11 @@ footer .under-footer a:hover {
     padding: 1vw;
 }
 
+.cart-item-wrapper li p {
+    width: 20%;
+    text-align: center;
+}
+
 .cart-item-wrapper .total-price{
     font-size: 24px;
 }
