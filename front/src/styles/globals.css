@@ -421,6 +421,19 @@ footer .under-footer a:hover {
     padding: 1vw;
 }
 
+.cart-item-wrapper li.order-item{
+    cursor: pointer;
+}
+
+.cart-item-wrapper li.order-item:hover{
+    background-color: #eee;
+    transition: all 0.3s;
+}
+
+.cart-item-wrapper li.order-item:first-of-type{
+    margin-top: 5px;
+}
+
 .cart-item-wrapper li p {
     width: 20%;
     text-align: center;
