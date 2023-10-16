@@ -7,14 +7,14 @@ import { Replace } from "../../layout/App";
 import { Urls } from "../../url/url.g";
 import PurchaseShowView from "../../view/myPage/PurchaseShowView";
 import { queryKeys } from "../../lib/contants";
-import PurchaseSkeleton from "../../view/skeleton/PurchaseSkeleton";
+import MyPageListSkeleton from "../../view/skeleton/MyPageListSkeleton";
 
 const PurchasePage = () => {
   const router = useRouter();
   const pk = validatePk(router.query.pk);
 
   if (!router.isReady || isNil(pk)) {
-    return <PurchaseSkeleton />;
+    return <MyPageListSkeleton />;
   }
 
   const { data: purchase, isLoading } = useQuery(
@@ -30,7 +30,7 @@ const PurchasePage = () => {
   );
 
   if (isLoading) {
-    return <PurchaseSkeleton />;
+    return <MyPageListSkeleton />;
   }
 
   if (isNil(purchase)) {

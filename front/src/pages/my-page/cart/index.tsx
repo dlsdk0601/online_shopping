@@ -8,7 +8,7 @@ import { ignorePromise } from "../../../ex/utils";
 import { Replace } from "../../../layout/App";
 import { Urls } from "../../../url/url.g";
 import CartListView from "../../../view/myPage/CartListView";
-import PurchaseSkeleton from "../../../view/skeleton/PurchaseSkeleton";
+import MyPageListSkeleton from "../../../view/skeleton/MyPageListSkeleton";
 
 const CartPage = () => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const CartPage = () => {
   });
 
   if (isLoading) {
-    return <PurchaseSkeleton />;
+    return <MyPageListSkeleton />;
   }
 
   if (isNil(cartList)) {

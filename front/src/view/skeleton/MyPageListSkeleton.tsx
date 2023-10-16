@@ -1,7 +1,7 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 
-const PurchaseSkeleton = () => {
+const MyPageListSkeleton = () => {
   return (
     <>
       <div className="page-heading" id="top">
@@ -52,4 +52,4 @@ const PurchaseSkeleton = () => {
   );
 };
 
-export default PurchaseSkeleton;
+export default MyPageListSkeleton;
