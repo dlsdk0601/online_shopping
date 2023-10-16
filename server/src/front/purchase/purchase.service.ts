@@ -39,6 +39,7 @@ import { FailPurchaseReqDto } from "./dto/fail-purchase.dto";
 import { CartService } from "../cart/cart.service";
 import { PurchaseListReqDto, PurchaseListResDto } from "./dto/list-purchase.dto";
 import { LIMIT } from "../../type/pagination.dto";
+import { ShowOrderReqDto } from "./dto/show-order.dto";
 
 @Injectable()
 export class PurchaseService {
@@ -96,6 +97,21 @@ export class PurchaseService {
     return {
       title: purchase.title,
       totalPrice: purchase.totalPrice,
+      orderId: purchase.order_code,
+    };
+  }
+
+  showOrder(body: ShowOrderReqDto, user: User) {
+    const purchase = user.purchases.find((item) => item.pk === body.pk);
+
+    if (isNil(purchase)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    return {
+      pk: purchase.pk,
+      totalPrice: purchase.totalPrice,
+      title: purchase.title,
       orderId: purchase.order_code,
     };
   }
