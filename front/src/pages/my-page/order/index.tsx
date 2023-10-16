@@ -7,6 +7,8 @@ import { Replace } from "../../../layout/App";
 import { mf2 } from "../../../ex/numberEx";
 import { d1 } from "../../../ex/dateEx";
 import PaginationBarView from "../../../view/PaginationBarView";
+import { Urls } from "../../../url/url.g";
+import MyPageListSkeleton from "../../../view/skeleton/MyPageListSkeleton";
 
 const OrderPage = () => {
   const router = useRouter();
@@ -15,8 +17,7 @@ const OrderPage = () => {
   const { pagination, isLoading } = usePurchase(page);
 
   if (isLoading) {
-    // TODO :: skeleton
-    return <></>;
+    return <MyPageListSkeleton />;
   }
 
   if (isNil(pagination)) {
@@ -30,7 +31,12 @@ const OrderPage = () => {
           <ul className="cart-item-wrapper">
             {pagination.rows.map((item) => {
               return (
-                <li>
+                <li
+                  className="order-item"
+                  onClick={() =>
+                    router.push(Urls["my-page"].order.show["[pk]"].url({ pk: item.pk }))
+                  }
+                >
                   <p>{d1(item.createAt)}</p>
                   <p>{item.orderCode}</p>
                   <p>${mf2(item.price)}</p>
