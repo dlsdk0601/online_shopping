@@ -7,13 +7,12 @@ import {
 import { isNil } from "lodash";
 import { In } from "typeorm";
 import { ConfigService } from "@nestjs/config";
-import { AssetService } from "../../asset/asset.service";
 import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
 import errorMessage from "../../config/errorMessage";
 import { AddPurchaseReqDto } from "./dto/add-purchase.dto";
 import { isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
-import { PurchaseItemStatus, TossPaymentStatus, TossPaymentType } from "../../type/commonType";
+import { PurchaseItemStatus, TossPaymentType } from "../../type/commonType";
 import { CartProduct } from "../../entities/cart.entity";
 import {
   TossPaymentApproveReqDto,
@@ -37,9 +36,6 @@ import {
 } from "./dto/common.dto";
 import { FailPurchaseReqDto } from "./dto/fail-purchase.dto";
 import { CartService } from "../cart/cart.service";
-import { PurchaseListReqDto, PurchaseListResDto } from "./dto/list-purchase.dto";
-import { LIMIT } from "../../type/pagination.dto";
-import { ShowOrderReqDto } from "./dto/show-order.dto";
 
 @Injectable()
 export class PurchaseService {
@@ -48,35 +44,12 @@ export class PurchaseService {
   private readonly tossPaymentApproveUrl = "https://api.tosspayments.com/v1/payments/confirm";
 
   constructor(
-    private assetService: AssetService,
     private configService: ConfigService,
     private httpService: HttpService,
     private cartService: CartService
   ) {
     this.tossClientKey = this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "";
     this.tossSecretKey = this.configService.get<string>("TOSS_PAYMENT_SECRET_KEY") ?? "";
-  }
-
-  async list(body: PurchaseListReqDto) {
-    const [payment, count] = await Payment.findAndCount({
-      take: LIMIT,
-      skip: LIMIT * (body.page - 1),
-      relations: {
-        payment_approve: true,
-        purchase: true,
-      },
-    });
-
-    const list = payment.map((item) => ({
-      pk: item.pk,
-      orderCode: item.purchase.order_code,
-      price: item.payment_approve?.total_amount ?? 0,
-      method: item.payment_approve?.method ?? "",
-      status: item.payment_approve?.status ?? TossPaymentStatus.ABORTED,
-      createAt: item.create_at.toString(),
-    }));
-
-    return new PurchaseListResDto(list, count, body.page);
   }
 
   show(pk: number, user: User) {
@@ -97,21 +70,6 @@ export class PurchaseService {
     return {
       title: purchase.title,
       totalPrice: purchase.totalPrice,
-      orderId: purchase.order_code,
-    };
-  }
-
-  showOrder(body: ShowOrderReqDto, user: User) {
-    const purchase = user.purchases.find((item) => item.pk === body.pk);
-
-    if (isNil(purchase)) {
-      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
-    }
-
-    return {
-      pk: purchase.pk,
-      totalPrice: purchase.totalPrice,
-      title: purchase.title,
       orderId: purchase.order_code,
     };
   }

@@ -8,27 +8,11 @@ import { GetUser } from "../../decorator/user.decorator";
 import { User } from "../../entities/user.entity";
 import { TossPaymentApproveReqDto, TossPaymentApproveResDto } from "./dto/toss-payment.dto";
 import { FailPurchaseReqDto, FailPurchaseResDto } from "./dto/fail-purchase.dto";
-import { PurchaseListReqDto, PurchaseListResDto } from "./dto/list-purchase.dto";
-import { ShowOrderReqDto, ShowOrderResDto } from "./dto/show-order.dto";
 
 @Controller("/purchase")
 @ApiTags("구매")
 export class PurchaseController {
   constructor(private readonly purchaseService: PurchaseService) {}
-
-  @Post("purchase-list")
-  @UseGuards(AuthGuard("jwt"))
-  @ApiCreatedResponse({ type: PurchaseListResDto })
-  list(@Body() body: PurchaseListReqDto) {
-    return this.purchaseService.list(body);
-  }
-
-  @Post("show-order")
-  @UseGuards(AuthGuard("jwt"))
-  @ApiCreatedResponse({ type: ShowOrderResDto })
-  showOrder(@Body() body: ShowOrderReqDto, @GetUser() user: User) {
-    return this.purchaseService.showOrder(body, user);
-  }
 
   // 회원 관련 API 는 보안 때문에 post 로 한다.
   @Post("show-purchase")
