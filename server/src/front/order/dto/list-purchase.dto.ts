@@ -3,14 +3,14 @@ import { IsArray, IsEnum, IsISO8601, IsNotEmpty, IsNumber, IsString } from "clas
 import { PaginationDto } from "../../../type/pagination.dto";
 import { TossPaymentStatus } from "../../../type/commonType";
 
-export class PurchaseListReqDto {
+export class OrderListReqDTo {
   @ApiProperty({ description: "page number", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()
   page: number;
 }
 
-export class PurchaseListItem {
+export class OrderListResItemDto {
   @ApiProperty({ description: "상품 pk", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()
@@ -42,19 +42,19 @@ export class PurchaseListItem {
   createAt: string;
 }
 
-@ApiExtraModels(PurchaseListItem)
-export class PurchaseListResDto extends PaginationDto {
+@ApiExtraModels(OrderListResItemDto)
+export class OrderListResDto extends PaginationDto {
   @ApiProperty({
     description: "상품 리스트",
     nullable: false,
     type: "array",
-    items: { $ref: getSchemaPath(PurchaseListItem) },
+    items: { $ref: getSchemaPath(OrderListResItemDto) },
   })
   @IsArray()
   @IsNotEmpty()
-  rows: PurchaseListItem[];
+  rows: OrderListResItemDto[];
 
-  constructor(data: PurchaseListItem[], count: number, page: number) {
+  constructor(data: OrderListResItemDto[], count: number, page: number) {
     super(count, page);
     this.rows = data;
   }
