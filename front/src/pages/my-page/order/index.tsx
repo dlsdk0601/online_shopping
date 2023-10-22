@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { isNil } from "lodash";
 import { validatePageQuery } from "../../../ex/utils";
-import { usePurchase } from "../../../hooks/usePurchase";
+import { useOrders } from "../../../hooks/useOrders";
 import { Replace } from "../../../layout/App";
 import { mf2 } from "../../../ex/numberEx";
 import { d1 } from "../../../ex/dateEx";
@@ -14,7 +14,7 @@ const OrderPage = () => {
   const router = useRouter();
   const page = validatePageQuery(router.query.page) ?? 1;
 
-  const { pagination, isLoading } = usePurchase(page);
+  const { pagination, isLoading } = useOrders(page);
 
   if (isLoading) {
     return <MyPageListSkeleton />;
