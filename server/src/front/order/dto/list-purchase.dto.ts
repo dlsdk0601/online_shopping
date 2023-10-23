@@ -3,7 +3,7 @@ import { IsArray, IsEnum, IsISO8601, IsNotEmpty, IsNumber, IsString } from "clas
 import { PaginationDto } from "../../../type/pagination.dto";
 import { TossPaymentStatus } from "../../../type/commonType";
 
-export class OrderListReqDTo {
+export class OrderListReqDto {
   @ApiProperty({ description: "page number", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
-import { OrderListReqDTo, OrderListResDto } from "./dto/list-purchase.dto";
+import { OrderListReqDto, OrderListResDto } from "./dto/list-purchase.dto";
 import { Payment } from "../../entities/payment.entity";
 import { LIMIT } from "../../type/pagination.dto";
 import { TossPaymentStatus } from "../../type/commonType";
@@ -12,7 +12,7 @@ import { ShowOrderReqDto } from "../purchase/dto/show-order.dto";
 @Injectable()
 export class OrderService {
   constructor(private assetService: AssetService) {}
-  async list(body: OrderListReqDTo) {
+  async list(body: OrderListReqDto) {
     const [payment, count] = await Payment.findAndCount({
       take: LIMIT,
       skip: LIMIT * (body.page - 1),
