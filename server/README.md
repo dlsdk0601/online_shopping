@@ -22,7 +22,7 @@ $ make gen-interface
 
 ```
 
-## Test
+## Test (테스트 코드 작성 x)
 
 ```bash
 # unit tests
