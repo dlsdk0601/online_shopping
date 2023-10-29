@@ -27,7 +27,7 @@ export const paymentEnumToLabel = (value: PaymentType): string => {
   }
 };
 
-export const PaymentStatusEnumToLabel = (value: TossPaymentStatus): string => {
+export const paymentStatusEnumToLabel = (value: TossPaymentStatus): string => {
   switch (value) {
     case TossPaymentStatus.READY:
       return "결제 전";
