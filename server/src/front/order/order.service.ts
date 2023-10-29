@@ -42,7 +42,12 @@ export class OrderService {
   }
 
   async show(body: ShowOrderReqDto) {
-    const payment = await Payment.findOne({ where: { pk: body.pk } });
+    const payment = await Payment.findOne({
+      where: { pk: body.pk },
+      relations: {
+        payment_approve: true,
+      },
+    });
 
     if (isNil(payment)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
