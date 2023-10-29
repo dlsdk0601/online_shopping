@@ -1,11 +1,12 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiCreatedResponse } from "@nestjs/swagger";
+import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 import { OrderService } from "./order.service";
 import { OrderListReqDto, OrderListResDto } from "./dto/list-purchase.dto";
 import { ShowOrderReqDto, ShowOrderResDto } from "../purchase/dto/show-order.dto";
 
 @Controller("order")
+@ApiTags("주문 내역")
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 

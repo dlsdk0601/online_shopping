@@ -46,6 +46,9 @@ export class OrderService {
       where: { pk: body.pk },
       relations: {
         payment_approve: true,
+        purchase: {
+          purchase_items: { product: { main_image: true } },
+        },
       },
     });
 
@@ -53,11 +56,25 @@ export class OrderService {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
     }
 
+    if (isNil(payment.payment_approve)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    const products = payment.purchase.purchase_items.map((item) => ({
+      pk: item.product.pk,
+      name: item.product.name,
+      count: item.count,
+      price: item.product.price * item.count,
+      status: item.status,
+      image: this.assetService.getFileSet(item.product.main_image),
+    }));
+
     return {
       pk: payment.pk,
-      totalPrice: payment.payment_approve?.total_amount ?? 0,
-      title: payment.payment_approve?.order_name ?? "",
-      orderId: payment.payment_approve?.order_id ?? "",
+      totalPrice: payment.payment_approve.total_amount,
+      title: payment.payment_approve.order_name,
+      orderId: payment.payment_approve.order_id,
+      products,
     };
   }
 }
