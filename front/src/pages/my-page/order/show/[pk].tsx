@@ -3,16 +3,18 @@ import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import { isNotNil, validatePk } from "../../../../ex/utils";
 import { api } from "../../../../api/url.g";
+import { queryKeys } from "../../../../lib/contants";
 
 const OrderShowPage = () => {
   const router = useRouter();
   const pk = validatePk(router.query.pk);
 
   if (isNil(pk)) {
-    return <div>pk 실패</div>;
+    // TODO :: skeleton
+    return <></>;
   }
 
-  const { data, isLoading } = useQuery(["order", pk], () => api.showOrder({ pk }), {
+  const { data, isLoading } = useQuery([queryKeys.order, pk], () => api.showOrder({ pk }), {
     onSuccess: (res) => {},
     staleTime: 5000,
     enabled: isNotNil(pk),
