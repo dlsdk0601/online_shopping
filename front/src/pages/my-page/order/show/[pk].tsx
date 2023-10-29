@@ -23,7 +23,20 @@ const OrderShowPage = () => {
     return <></>;
   }
 
-  return <div>test</div>;
+  return (
+    <section className="section" id="product">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-8">
+            <p>{data.pk}</p>
+            <p>{data.orderId}</p>
+            <p>{data.title}</p>
+            <p>{data.totalPrice}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default OrderShowPage;
