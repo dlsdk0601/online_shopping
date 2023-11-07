@@ -63,10 +63,26 @@ const menu: MenuItem[] = [
     url: Urls.cart.index.url(),
   },
   {
-    name: "구매",
+    name: "주문",
     icon: "fa-credit-card",
     pathname: Urls.purchase.index.pathname,
-    url: Urls.purchase.index.url(),
+    children: [
+      {
+        name: "구매 내역",
+        pathname: Urls.purchase.index.pathname,
+        url: Urls.purchase.index.url(),
+      },
+      {
+        name: "환불 내역",
+        pathname: Urls.refund.index.pathname,
+        url: Urls.refund.index.url(),
+      },
+      {
+        name: "취소 내역",
+        pathname: Urls.cancel.index.pathname,
+        url: Urls.cancel.index.url(),
+      },
+    ],
   },
 ];
 
