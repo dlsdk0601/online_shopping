@@ -65,22 +65,22 @@ const menu: MenuItem[] = [
   {
     name: "주문",
     icon: "fa-credit-card",
-    pathname: Urls.purchase.index.pathname,
+    pathname: Urls.order.index.pathname,
     children: [
       {
         name: "구매 내역",
-        pathname: Urls.purchase.index.pathname,
-        url: Urls.purchase.index.url(),
+        pathname: Urls.order.index.pathname,
+        url: Urls.order.index.url(),
       },
       {
         name: "환불 내역",
-        pathname: Urls.refund.index.pathname,
-        url: Urls.refund.index.url(),
+        pathname: Urls.order.refund.index.pathname,
+        url: Urls.order.refund.index.url(),
       },
       {
         name: "취소 내역",
-        pathname: Urls.cancel.index.pathname,
-        url: Urls.cancel.index.url(),
+        pathname: Urls.order.cancel.index.pathname,
+        url: Urls.order.cancel.index.url(),
       },
     ],
   },

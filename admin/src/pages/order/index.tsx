@@ -56,7 +56,7 @@ const PurchaseListPage = () => {
       searchType,
     };
 
-    ignorePromise(() => router.push(Urls.purchase.index.url(query)));
+    ignorePromise(() => router.push(Urls.order.purchase.index.url(query)));
   }, [page, search, searchType]);
 
   return (
@@ -89,7 +89,7 @@ const PurchaseListPage = () => {
             ["생성 일자", d2(value.createAt)],
           ]}
           links={(purchaseList?.rows ?? []).map((purchase) =>
-            Urls.purchase.edit["[pk]"].url({ pk: purchase.pk }),
+            Urls.order.purchase.edit["[pk]"].url({ pk: purchase.pk }),
           )}
         />
       </div>

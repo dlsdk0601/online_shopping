@@ -2,17 +2,17 @@ import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import { useQuery } from "react-query";
 import React, { memo, useEffect, useState } from "react";
-import { ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
-import { queryKeys } from "../../../lib/contants";
-import { api } from "../../../api/url.g";
-import { Urls } from "../../../url/url.g";
-import { PurchaseItem, ShowPurchaseRes } from "../../../api/type.g";
-import CardFormView from "../../../components/tailwindEx/CardFormView";
-import { ReadOnlyTextView, TextFieldView } from "../../../components/field/field";
-import useValueField from "../../../hooks/useValueField";
-import { d1 } from "../../../ex/dateEx";
-import { mf2 } from "../../../ex/numberEx";
-import { purchaseEnumToLabel } from "../../../api/enum";
+import { ignorePromise, isNotNil, validatePk } from "../../../../ex/utils";
+import { queryKeys } from "../../../../lib/contants";
+import { api } from "../../../../api/url.g";
+import { Urls } from "../../../../url/url.g";
+import { PurchaseItem, ShowPurchaseRes } from "../../../../api/type.g";
+import CardFormView from "../../../../components/tailwindEx/CardFormView";
+import { ReadOnlyTextView, TextFieldView } from "../../../../components/field/field";
+import useValueField from "../../../../hooks/useValueField";
+import { d1 } from "../../../../ex/dateEx";
+import { mf2 } from "../../../../ex/numberEx";
+import { purchaseEnumToLabel } from "../../../../api/enum";
 
 const PurchaseEditPage = () => {
   const router = useRouter();
