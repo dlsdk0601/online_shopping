@@ -10,5 +10,7 @@ services:
       - 'POSTGRES_PASSWORD='
       - POSTGRES_DB=online_shopping
     volumes:
-      - /Users/global/workspace/DB/pgdata:/var/lib/postgresql/data
+      - db-var_lib_postgresql_data:/var/lib/postgresql/data
 
+volumes:
+  db-var_lib_postgresql_data:
