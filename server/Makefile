@@ -22,10 +22,13 @@ dev:
 
 dev-clean:
 	docker compose down -v --rmi local
-	sleep 5
+	sleep 1
 
 import-faker: upgrade
 	npm run seed
+
+dev-restart: dev-clean dev
+	npm run typeorm:upgrade
 
 dev-reinitialize: dev-clean dev import-faker
 
