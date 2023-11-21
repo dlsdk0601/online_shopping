@@ -21,7 +21,8 @@ dev:
 	sleep 1
 
 dev-clean:
-	 docker compose down -v --rmi local
+	docker compose down -v --rmi local
+	sleep 5
 
 import-faker: upgrade
 	npm run seed
