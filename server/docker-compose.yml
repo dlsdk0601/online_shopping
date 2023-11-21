@@ -3,11 +3,12 @@ version: '3'
 services:
   db:
     image: postgres:latest
-    restart: always
     ports:
-      - '30230:5432'
+      - '5432:5432'
     environment:
-      - 'POSTGRES_PASSWORD='
+      - TZ=Asia/Seoul
+      - PGTZ=Asia/Seoul
+      - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_DB=online_shopping
     volumes:
       - db-var_lib_postgresql_data:/var/lib/postgresql/data
