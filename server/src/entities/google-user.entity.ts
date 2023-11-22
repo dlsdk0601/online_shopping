@@ -27,7 +27,7 @@ export class GoogleUser extends BaseEntity {
   @PrimaryColumn()
   pk: number;
 
-  @OneToOne(() => User, (user) => user.googleUser, { onDelete: "CASCADE" })
+  @OneToOne(() => User, (user) => user.googleUser)
   @JoinColumn({ name: "pk", referencedColumnName: "pk" })
   user: User;
 }

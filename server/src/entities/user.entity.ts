@@ -40,16 +40,16 @@ export class User extends TimeSet {
   @Column({ enum: UserType, type: "enum", nullable: false })
   type: UserType;
 
-  @OneToOne(() => LocalUser, (localUser) => localUser.user)
+  @OneToOne(() => LocalUser, (localUser) => localUser.user, { cascade: true })
   localUser: LocalUser;
 
-  @OneToOne(() => GoogleUser, (googleUser) => googleUser.user)
+  @OneToOne(() => GoogleUser, (googleUser) => googleUser.user, { cascade: true })
   googleUser: GoogleUser;
 
-  @OneToOne(() => KakaoUser, (kakaoUser) => kakaoUser.user)
+  @OneToOne(() => KakaoUser, (kakaoUser) => kakaoUser.user, { cascade: true })
   kakaoUser: KakaoUser;
 
-  @OneToOne(() => NaverUser, (naverUser) => naverUser.user)
+  @OneToOne(() => NaverUser, (naverUser) => naverUser.user, { cascade: true })
   naverUser: NaverUser;
 
   @OneToOne(() => Cart, (cart) => cart.user)

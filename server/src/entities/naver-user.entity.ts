@@ -24,7 +24,7 @@ export class NaverUser extends BaseEntity {
   @PrimaryColumn()
   pk: number;
 
-  @OneToOne(() => User, (user) => user.naverUser, { onDelete: "CASCADE" })
+  @OneToOne(() => User, (user) => user.naverUser)
   @JoinColumn({ name: "pk", referencedColumnName: "pk" })
   user: User;
 }

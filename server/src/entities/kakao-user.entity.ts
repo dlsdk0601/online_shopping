@@ -27,7 +27,7 @@ export class KakaoUser extends BaseEntity {
   @PrimaryColumn()
   pk: number;
 
-  @OneToOne(() => User, (user) => user.kakaoUser, { onDelete: "CASCADE" })
+  @OneToOne(() => User, (user) => user.kakaoUser)
   @JoinColumn({ name: "pk", referencedColumnName: "pk" })
   user: User;
 }
