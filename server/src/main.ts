@@ -3,11 +3,11 @@ import { ValidationPipe } from "@nestjs/common";
 import "reflect-metadata";
 import { json, urlencoded } from "body-parser";
 import { AppModule } from "./app.module";
-import constant from "./config/constant";
 import { ExceptionEx } from "./ex";
 import { getApiList } from "../bin/binApiUrl";
 import { setupSwagger } from "./lib/swagger";
 import { middle } from "./middleware/auth.middleware";
+import { config } from "./config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -33,7 +33,7 @@ async function bootstrap() {
   app.use(urlencoded({ limit: "50mb", extended: true }));
 
   // api path prefix
-  app.setGlobalPrefix(constant().ApiVersion);
+  app.setGlobalPrefix(config.apiVersion);
 
   // global exception 처리
   app.useGlobalFilters(new ExceptionEx());
@@ -44,7 +44,7 @@ async function bootstrap() {
   // swagger
   await setupSwagger(app);
 
-  await app.listen(constant().Port);
+  await app.listen(config.port);
 
   const server = app.getHttpServer();
   return server._events.request._router;
