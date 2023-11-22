@@ -5,7 +5,7 @@ import { HomeReqDto } from "./dto/home.dto";
 import { Product } from "../../entities/product.entity";
 import { ProductCategory } from "../../type/commonType";
 import { MainBanner } from "../../entities/main-banner.entity";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 
 @Injectable()
 export class HomeService {

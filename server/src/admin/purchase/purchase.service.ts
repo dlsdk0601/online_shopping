@@ -8,7 +8,7 @@ import {
 } from "./dto/show-purchase.dto";
 import { Purchase } from "../../entities/Purchase.entity";
 import { LIMIT } from "../../type/pagination.dto";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 
 @Injectable()
 export class PurchaseService {

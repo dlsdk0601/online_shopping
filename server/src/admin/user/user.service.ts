@@ -5,7 +5,7 @@ import { isNil } from "lodash";
 import { User } from "../../entities/user.entity";
 import { LIMIT } from "../../type/pagination.dto";
 import { UserListReqDto, UserListResDto } from "./dto/show-user.dto";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { EditUserReqDto } from "./dto/edit-user.dto";
 import { LocalUser } from "../../entities/local-user.entity";
 import { isNotNil } from "../../ex/ex";

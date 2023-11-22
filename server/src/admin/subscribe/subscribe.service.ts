@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException, NotFoundException } from "@ne
 import { isNil } from "lodash";
 import { In, Like } from "typeorm";
 import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { DeleteSubscribeReqDto } from "./dto/delete-subscribe.dto";
 import {
   ShowSubscribeHistoryReqDto,

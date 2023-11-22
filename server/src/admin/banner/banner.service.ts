@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException, NotFoundException } from "@ne
 import { isNil } from "lodash";
 import { AssetService } from "../../asset/asset.service";
 import { MainBanner } from "../../entities/main-banner.entity";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { EditBannerReqDto } from "./dto/edit-banner.dto";
 import { DeleteBannerReqDto } from "./dto/delete-banner.dto";
 

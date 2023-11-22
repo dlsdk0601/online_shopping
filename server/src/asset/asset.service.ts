@@ -7,7 +7,7 @@ import sharp from "sharp";
 import path from "path";
 import { UploadReqDto } from "./dto/upload.dto";
 import { Asset } from "../entities/asset.entity";
-import errorMessage from "../config/errorMessage";
+import errorMessage from "../constant/errorMessage";
 import { FileSetDto } from "./dto/fileSet.dto";
 import { config } from "../config";
 

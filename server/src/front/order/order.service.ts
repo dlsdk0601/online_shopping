@@ -4,7 +4,7 @@ import { OrderListReqDto, OrderListResDto } from "./dto/list-purchase.dto";
 import { Payment } from "../../entities/payment.entity";
 import { LIMIT } from "../../type/pagination.dto";
 import { TossPaymentStatus } from "../../type/commonType";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { AssetService } from "../../asset/asset.service";
 import { ShowOrderReqDto } from "../purchase/dto/show-order.dto";
 

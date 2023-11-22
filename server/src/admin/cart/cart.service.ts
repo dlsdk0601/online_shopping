@@ -9,7 +9,7 @@ import { isNil } from "lodash";
 import { CartListReqDto, CartListResDto, ShowCartReqDto } from "./dto/show-cart.dto";
 import { Cart, CartProduct } from "../../entities/cart.entity";
 import { LIMIT } from "../../type/pagination.dto";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { AssetService } from "../../asset/asset.service";
 import { DeleteCartReqDto } from "./dto/delete-cart.dto";
 

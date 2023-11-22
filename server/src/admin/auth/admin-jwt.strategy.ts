@@ -9,7 +9,7 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { isNil } from "lodash";
 import moment from "moment";
 import { ManagerService } from "../manager/manager.service";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import Authentication from "../../entities/manager-authentication.entity";
 import { getLastAuth } from "../../ex/ex";
 import { config } from "../../config";

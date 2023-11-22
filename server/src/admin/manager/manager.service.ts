@@ -9,7 +9,7 @@ import { isNil } from "lodash";
 import { AddManagerReqDto } from "./dto/add-manager.dto";
 import { LIMIT } from "../../type/pagination.dto";
 import { ManagerListResDto } from "./dto/show-manager.dto";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { EditManagerReqDto } from "./dto/edit-manager.dto";
 import { getHash } from "../../ex/bcryptEx";
 import Manager from "../../entities/manager.entity";

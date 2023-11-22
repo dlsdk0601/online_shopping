@@ -4,7 +4,7 @@ import { UnauthorizedException } from "@nestjs/common";
 import { Between } from "typeorm";
 import moment from "moment";
 import Authentication from "../entities/manager-authentication.entity";
-import errorMessage from "../config/errorMessage";
+import errorMessage from "../constant/errorMessage";
 import { getDeviceInfo } from "../ex/ex";
 
 export async function middle(req: Request, res: Response, next: NextFunction) {

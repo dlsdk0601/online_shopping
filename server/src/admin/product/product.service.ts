@@ -5,7 +5,7 @@ import { EditProductReqDto } from "./dto/edit-product.dto";
 import { Product } from "../../entities/product.entity";
 import { AssetService } from "../../asset/asset.service";
 import { Asset } from "../../entities/asset.entity";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { ProductListReqDto, ProductListResDto, ShowProductReqDto } from "./dto/show-product.dto";
 import { LIMIT } from "../../type/pagination.dto";
 import { isNotNil } from "../../ex/ex";

@@ -3,7 +3,7 @@ import { isNil } from "lodash";
 import { AssetService } from "../../asset/asset.service";
 import { ProductListReqDto, ProductListResDto } from "./dto/show-product.dto";
 import { Product } from "../../entities/product.entity";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 
 @Injectable()
 export class ProductService {

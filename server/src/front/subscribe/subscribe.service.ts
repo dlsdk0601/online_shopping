@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
 import { AddSubscribeReqDto } from "./dto/add-subscribe.dto";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { Subscribe } from "../../entities/subscribe.entity";
 
 @Injectable()

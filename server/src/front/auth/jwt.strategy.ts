@@ -8,7 +8,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { isNil } from "lodash";
 import moment from "moment";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { getLastAuth } from "../../ex/ex";
 import { FrontUserAuth, User } from "../../entities/user.entity";
 import { config } from "../../config";

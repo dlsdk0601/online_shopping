@@ -5,7 +5,7 @@ import { JwtService } from "@nestjs/jwt";
 import { CustomRequest, GlobalManager } from "../../type/type";
 import Authentication from "../../entities/manager-authentication.entity";
 import { getDeviceInfo, getLastAuth } from "../../ex/ex";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { ManagerService } from "../manager/manager.service";
 
 @Injectable()

@@ -3,7 +3,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-local";
 import { isNil } from "lodash";
 import { AuthService } from "./auth.service";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { User } from "../../entities/user.entity";
 import { compare } from "../../ex/bcryptEx";
 

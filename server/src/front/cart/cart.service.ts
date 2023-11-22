@@ -8,7 +8,7 @@ import { isNil } from "lodash";
 import { AssetService } from "../../asset/asset.service";
 import { CartListReqDto } from "./dto/show-cart.dto";
 import { User } from "../../entities/user.entity";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { EditCartProductCountReqDto } from "./dto/edit-cart.dto";
 import { Cart, CartProduct } from "../../entities/cart.entity";
 import { DeleteCartReqDto } from "./dto/delete-cart.dto";

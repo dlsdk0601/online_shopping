@@ -3,7 +3,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-local";
 import { isNil } from "lodash";
 import Manager from "../../entities/manager.entity";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { compare } from "../../ex/bcryptEx";
 
 @Injectable()

@@ -8,7 +8,7 @@ import { isNil } from "lodash";
 import { In } from "typeorm";
 import { ConfigService } from "@nestjs/config";
 import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
-import errorMessage from "../../config/errorMessage";
+import errorMessage from "../../constant/errorMessage";
 import { AddPurchaseReqDto } from "./dto/add-purchase.dto";
 import { isNotNil, makeOrderCode } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
