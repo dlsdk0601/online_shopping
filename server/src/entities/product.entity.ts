@@ -39,6 +39,7 @@ export class Product extends TimeSet {
   @ManyToMany(() => Asset, {
     nullable: false,
     onDelete: "CASCADE",
+    eager: true,
     createForeignKeyConstraints: false,
   })
   @JoinTable()
