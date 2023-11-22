@@ -1,9 +1,9 @@
 import jsonwebtoken, { JwtPayload } from "jsonwebtoken";
 import { isNil } from "lodash";
-import constant from "../config/constant";
+import { config } from "../config";
 
 export function decodeToken<T>(jwt: string): JwtPayload | string | undefined {
-  const payload = jsonwebtoken.verify(jwt, constant().Jwt.Exp);
+  const payload = jsonwebtoken.verify(jwt, config.exp);
 
   if (isNil(payload)) {
     return;
@@ -13,7 +13,7 @@ export function decodeToken<T>(jwt: string): JwtPayload | string | undefined {
 }
 
 export function generateJWT(data: string | object | Buffer): string | undefined {
-  const jwt = jsonwebtoken.sign(data, constant().Jwt.Secret, { expiresIn: constant().Jwt.Exp });
+  const jwt = jsonwebtoken.sign(data, config.secret, { expiresIn: config.exp });
 
   if (isNil(jwt)) {
     return;
