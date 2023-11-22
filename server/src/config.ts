@@ -39,10 +39,10 @@ class Config {
   swaggerJson = configService.get("SWAGGER_JSON") ?? "http://localhost:8080/swagger-json";
 
   // AWS
-  AWS_ACCESS_KEY = configService.get<string>("AWS_ACCESS_KEY") ?? "";
-  AWS_SECRET_KEY = configService.get<string>("AWS_SECRET_KEY") ?? "";
-  AWS_BUCKET_NAME = configService.get<string>("AWS_BUCKET_NAME") ?? "";
-  AWS_REGION = configService.get<string>("AWS_REGION") ?? "";
+  awsAccessKey = configService.get<string>("AWS_ACCESS_KEY") ?? "";
+  awsSecretKey = configService.get<string>("AWS_SECRET_KEY") ?? "";
+  awsBucketName = configService.get<string>("AWS_BUCKET_NAME") ?? "";
+  awsRegion = configService.get<string>("AWS_REGION") ?? "";
 
   // TOSS PAY
   tossPaymentClientApiKey = configService.get("TOSS_PAYMENT_CLIENT_API_KEY") ?? "";
