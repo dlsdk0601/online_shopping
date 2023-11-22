@@ -9,19 +9,18 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { isNil } from "lodash";
 import moment from "moment";
 import { ManagerService } from "../manager/manager.service";
-import constant from "../../config/constant";
 import errorMessage from "../../config/errorMessage";
 import { getLastAuth } from "../../ex/ex";
 import Authentication from "../../entities/manager-authentication.entity";
-import { AuthService } from "./auth.service";
+import { config } from "../../config";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, "admin-jwt") {
-  constructor(private authService: AuthService, private managerService: ManagerService) {
+  constructor(private managerService: ManagerService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false, // 만료된 토큰을 무시하지 않고 401 응답을 전송
-      secretOrKey: constant().Jwt.Secret,
+      secretOrKey: config.secret,
     });
   }
 

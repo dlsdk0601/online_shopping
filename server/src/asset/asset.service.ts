@@ -1,6 +1,5 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { ConfigService } from "@nestjs/config";
 import { v4 as uuidv4 } from "uuid";
 import { isNil } from "lodash";
 import fs from "fs";
@@ -10,7 +9,7 @@ import { UploadReqDto } from "./dto/upload.dto";
 import { Asset } from "../entities/asset.entity";
 import errorMessage from "../config/errorMessage";
 import { FileSetDto } from "./dto/fileSet.dto";
-import constant from "../config/constant";
+import { config } from "../config";
 
 @Injectable()
 export class AssetService {
@@ -18,15 +17,15 @@ export class AssetService {
   private readonly S3_BUCKET_NAME: string;
   private readonly thumbnail_size: [number, number] = [150, 150];
 
-  constructor(private readonly configService: ConfigService) {
+  constructor() {
     this.s3 = new S3Client({
       credentials: {
-        accessKeyId: this.configService.get<string>("AWS_ACCESS_KEY") ?? "",
-        secretAccessKey: this.configService.get<string>("AWS_SECRET_KEY") ?? "",
+        accessKeyId: config.awsAccessKey,
+        secretAccessKey: config.awsSecretKey,
       },
-      region: this.configService.get<string>("AWS_REGION") ?? "",
+      region: config.awsRegion,
     });
-    this.S3_BUCKET_NAME = this.configService.get<string>("AWS_BUCKET_NAME") ?? "";
+    this.S3_BUCKET_NAME = config.awsBucketName;
   }
 
   async uploadService(body: UploadReqDto) {
@@ -106,13 +105,11 @@ export class AssetService {
   }
 
   awsDownloadUrl(fileName: string) {
-    const region = this.configService.get<string>("AWS_REGION") ?? "";
-    return `https://${this.S3_BUCKET_NAME}.s3.${region}.amazonaws.com/${fileName}`;
+    return `https://${this.S3_BUCKET_NAME}.s3.${config.awsRegion}.amazonaws.com/${fileName}`;
   }
 
   thumbnailUrl(uuid: string, fileName: string) {
-    const origin = this.configService.get<string>("ORIGINURL") ?? "";
-    return `${origin}${constant().ApiVersion}/asset/${uuid}/${fileName}`;
+    return `${config.originUrl}${config.apiVersion}/asset/${uuid}/${fileName}`;
   }
 
   getTempPath(uuid: string) {
