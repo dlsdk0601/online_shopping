@@ -341,17 +341,17 @@ export class AuthService {
       user.name = body.name;
       user.phone = body.phone;
       user.type = UserType.LOCAL;
-      await user.save();
 
       const newLocalUser = new LocalUser();
       newLocalUser.id = body.id;
       newLocalUser.email = body.email;
       newLocalUser.password_hash = passwordHash;
-      newLocalUser.user = user;
-      await newLocalUser.save();
+      user.localUser = newLocalUser;
+      await user.save();
 
       const token = this.jwtService.sign({ pk: newLocalUser.pk, type: "FRONT" });
 
+      // TODO :: 회원 가입 후 바로 로그인 시키지 말고 다시 로그인 화면으로 보내자
       const localAuth = new LocalAuthentication();
       localAuth.token = token;
       localAuth.ip = req.ip;
