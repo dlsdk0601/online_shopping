@@ -51,6 +51,7 @@ export default class TypeOrmSeeder implements Seeder {
       // () => this.onAddUser(faker),
       // () => this.onAddProduct(faker),
       () => this.onAddBanner(faker),
+      () => this.onAddCart(faker),
     ];
     // this.onAddBanner(faker),
     // this.onAddCart(faker),
@@ -266,36 +267,36 @@ export default class TypeOrmSeeder implements Seeder {
     return products;
   }
 
-  // TODO :: 여기서 부터 다시 시작
   async onAddCart(faker: Faker) {
-    const oldCart = await Cart.find();
-    await Cart.remove(oldCart);
+    const users = await User.find();
+    const count = await Product.count();
+    const carts: Cart[] = [];
 
-    const carts = this.cartList(faker);
-    const cartProduct: CartProduct[] = [];
-
-    for (let i = 0; i < carts.length; i++) {
-      const cartProductEntity = new CartProduct();
+    for (let i = 0; i < users.length; i++) {
+      const cartProducts: CartProduct[] = [];
+      const cartProduct = new CartProduct();
+      cartProduct.count = random(1, 4);
+      const randomPk = faker.datatype.number({ min: 1, max: count });
       // eslint-disable-next-line no-await-in-loop
-      cartProductEntity.product = (await Product.findOne({
-        where: { pk: carts[i].product_pk },
-      })) as Product;
-      cartProductEntity.count = carts[i].count;
-      cartProduct.push(cartProductEntity);
+      const product = await Product.findOne({
+        where: { pk: randomPk },
+      });
+
+      if (isNil(product)) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      cartProduct.product = product;
+      cartProducts.push(cartProduct);
+
+      const cart = new Cart();
+      cart.user = users[i];
+      cart.cart_products = cartProducts;
+
+      carts.push(cart);
     }
 
-    await CartProduct.save(cartProduct);
-
-    const user = await User.findOne({ where: { pk: 4090 } });
-    const cart = new Cart();
-
-    if (isNil(user)) {
-      return;
-    }
-
-    cart.user = user;
-    cart.cart_products = cartProduct;
-    await cart.save();
+    await Cart.save(carts);
   }
 
   async onAddPurchase(faker: Faker) {
