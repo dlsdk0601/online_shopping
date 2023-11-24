@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import { Seeder } from "typeorm-extension";
 import { Faker, faker } from "@faker-js/faker";
-import { isNil } from "lodash";
+import { isNil, random } from "lodash";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
@@ -12,7 +12,6 @@ import { getHash, hashSync } from "../../ex/bcryptEx";
 import { User } from "../../entities/user.entity";
 import { ProductCategory, PurchaseItemStatus, UserType } from "../../type/commonType";
 import { LocalUser } from "../../entities/local-user.entity";
-import { Subscribe } from "../../entities/subscribe.entity";
 import { Product } from "../../entities/product.entity";
 import { Asset } from "../../entities/asset.entity";
 import { MainBanner } from "../../entities/main-banner.entity";
@@ -20,6 +19,9 @@ import { Cart, CartProduct } from "../../entities/cart.entity";
 import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
 import { makeOrderCode } from "../../ex/ex";
 import { config } from "../../config";
+import { GoogleUser } from "../../entities/google-user.entity";
+import { KakaoUser } from "../../entities/kakao-user.entity";
+import { NaverUser } from "../../entities/naver-user.entity";
 
 export default class TypeOrmSeeder implements Seeder {
   s3 = new S3Client({
@@ -41,21 +43,27 @@ export default class TypeOrmSeeder implements Seeder {
     "baner-right-image-04.jpg",
   ];
 
+  userTypes: UserType[] = [
+    UserType.LOCAL,
+    UserType.GOOGLE,
+    UserType.APPLE,
+    UserType.KAKAO,
+    UserType.NAVER,
+  ];
+
   async run(dataSource: DataSource): Promise<any> {
     console.log("----------------Faker Insert Start----------------");
 
     faker.locale = "ko";
     const importers: ((faker: Faker) => Promise<void>)[] = [
-      // () => this.onAddAsset(faker),
-      // () => this.onAddManager(faker),
-      // () => this.onAddUser(faker),
-      // () => this.onAddProduct(faker),
+      () => this.onAddAsset(faker),
+      () => this.onAddManager(faker),
+      () => this.onAddUser(faker),
+      () => this.onAddProduct(faker),
       () => this.onAddBanner(faker),
       () => this.onAddCart(faker),
     ];
-    // this.onAddBanner(faker),
-    // this.onAddCart(faker),
-    // this.onAddPurchase(faker),
+
     return this.runAsyncFunctionsSequentially(importers, faker).then(() => console.log("success"));
   }
 
@@ -146,24 +154,44 @@ export default class TypeOrmSeeder implements Seeder {
 
   async onAddUser(faker: Faker) {
     const users: User[] = [];
+
+    // 테스트 계정
+    const user = new User();
+    const local = this.localUser(faker);
+    user.name = faker.name.fullName();
+    user.phone = this.makeFakerPhone(faker);
+    user.type = UserType.LOCAL;
+    local.id = "test";
+    local.password_hash = hashSync("1234");
+    user.localUser = local;
+    users.push(user);
+
     for (let i = 0; i < 120; i++) {
       const user = new User();
-      const localUser = new LocalUser();
-
       user.name = faker.name.fullName();
       user.phone = this.makeFakerPhone(faker);
-      user.type = UserType.LOCAL;
 
-      localUser.id = faker.datatype.uuid();
-      localUser.email = faker.internet.email();
-      localUser.password_hash = hashSync(this.randomPassword(faker));
-      user.localUser = localUser;
+      const int = faker.datatype.number({ min: 0, max: this.userTypes.length - 1 });
+      const type = this.userTypes[int];
+      user.type = type;
 
-      users.push(user);
+      if (user.type === UserType.LOCAL) {
+        const localUser = this.localUser(faker);
+        user.localUser = localUser;
+        users.push(user);
+      } else if (user.type === UserType.GOOGLE) {
+        user.googleUser = this.googleUser(faker);
+        users.push(user);
+      } else if (user.type === UserType.KAKAO) {
+        user.kakaoUser = this.kakaoUser(faker);
+        users.push(user);
+      } else {
+        // naver
+        user.naverUser = this.naverUser(faker);
+        users.push(user);
+      }
     }
 
-    users[0].localUser.id = "test";
-    users[0].localUser.password_hash = await getHash("1234");
     await User.save(users);
   }
 
@@ -323,51 +351,39 @@ export default class TypeOrmSeeder implements Seeder {
     await Purchase.save(purchases);
   }
 
-  async userList(faker: Faker) {
-    for (let i = 0; i < 120; i++) {
-      const user = new User();
-      const localUser = new LocalUser();
-      const subscribe = new Subscribe();
+  localUser(faker: Faker) {
+    const localUser = new LocalUser();
+    localUser.id = faker.datatype.uuid();
+    localUser.email = faker.internet.email();
+    localUser.password_hash = hashSync(this.randomPassword(faker));
 
-      user.name = faker.name.fullName();
-      user.phone = this.makeFakerPhone(faker);
-      user.type = UserType.LOCAL;
-      // eslint-disable-next-line no-await-in-loop
-      await user.save();
-
-      subscribe.user = user;
-      subscribe.email = faker.internet.email();
-      subscribe.name = faker.name.fullName();
-      // eslint-disable-next-line no-await-in-loop
-      await subscribe.save();
-
-      // eslint-disable-next-line no-await-in-loop
-      const password_hash = await getHash(this.randomPassword(faker));
-      localUser.id = faker.datatype.uuid();
-      localUser.email = faker.internet.email();
-      localUser.password_hash = password_hash;
-      localUser.user = user;
-
-      // localUsers.push(localUser);
-    }
-
-    // localUsers[0].id = "test";
-    // localUsers[0].password_hash = await getHash("1234");
-
-    // return localUsers;
+    return localUser;
   }
 
-  cartList(faker: Faker) {
-    const carts: Array<{ product_pk: number; count: number }> = [];
+  googleUser(faker: Faker) {
+    const google = new GoogleUser();
+    google.sub = faker.name.middleName();
+    google.email = faker.internet.email();
+    google.social_name = faker.word.noun();
 
-    for (let i = 0; i < 5; i++) {
-      carts.push({
-        product_pk: faker.datatype.number({ min: 86, max: 165 }),
-        count: faker.datatype.number({ min: 2, max: 10 }),
-      });
-    }
+    return google;
+  }
 
-    return carts;
+  kakaoUser(faker: Faker) {
+    const kakao = new KakaoUser();
+    kakao.id = faker.datatype.uuid();
+    kakao.email = faker.internet.email();
+    kakao.social_name = faker.word.noun();
+
+    return kakao;
+  }
+
+  naverUser(faker: Faker) {
+    const naver = new NaverUser();
+    naver.id = faker.datatype.uuid();
+    naver.email = faker.internet.email();
+
+    return naver;
   }
 
   async purchaseItems(faker: Faker) {
