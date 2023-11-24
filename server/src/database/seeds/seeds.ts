@@ -10,14 +10,12 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import Manager, { ManagerType } from "../../entities/manager.entity";
 import { getHash, hashSync } from "../../ex/bcryptEx";
 import { User } from "../../entities/user.entity";
-import { ProductCategory, PurchaseItemStatus, UserType } from "../../type/commonType";
+import { ProductCategory, UserType } from "../../type/commonType";
 import { LocalUser } from "../../entities/local-user.entity";
 import { Product } from "../../entities/product.entity";
 import { Asset } from "../../entities/asset.entity";
 import { MainBanner } from "../../entities/main-banner.entity";
 import { Cart, CartProduct } from "../../entities/cart.entity";
-import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
-import { makeOrderCode } from "../../ex/ex";
 import { config } from "../../config";
 import { GoogleUser } from "../../entities/google-user.entity";
 import { KakaoUser } from "../../entities/kakao-user.entity";
@@ -327,30 +325,6 @@ export default class TypeOrmSeeder implements Seeder {
     await Cart.save(carts);
   }
 
-  async onAddPurchase(faker: Faker) {
-    // const oldPurchase = await Purchase.find();
-    // const oldPurchaseItems = await PurchaseItem.find();
-    // await Purchase.remove(oldPurchase);
-    // await PurchaseItem.remove(oldPurchaseItems);
-
-    const purchases: Purchase[] = [];
-
-    for (let i = 0; i < 5; i++) {
-      const purchase = new Purchase();
-      purchase.order_code = makeOrderCode();
-      const userPk = faker.datatype.number({ min: 4091, max: 4209 });
-      // eslint-disable-next-line no-await-in-loop
-      purchase.user = (await User.findOneBy({
-        pk: userPk,
-      })) as User;
-      // eslint-disable-next-line no-await-in-loop
-      purchase.purchase_items = await this.purchaseItems(faker);
-      purchases.push(purchase);
-    }
-
-    await Purchase.save(purchases);
-  }
-
   localUser(faker: Faker) {
     const localUser = new LocalUser();
     localUser.id = faker.datatype.uuid();
@@ -384,30 +358,6 @@ export default class TypeOrmSeeder implements Seeder {
     naver.email = faker.internet.email();
 
     return naver;
-  }
-
-  async purchaseItems(faker: Faker) {
-    const purchaseList: PurchaseItem[] = [];
-    const maxPkProduct = await Product.find({
-      order: {
-        pk: "desc",
-      },
-    });
-
-    const maxPk = maxPkProduct[0].pk;
-
-    for (let i = 0; i < 6; i++) {
-      const purchase = new PurchaseItem();
-      purchase.status = PurchaseItemStatus.WAITING;
-      purchase.count = faker.datatype.number({ min: 1, max: 3 });
-      // eslint-disable-next-line no-await-in-loop
-      purchase.product = (await Product.findOne({
-        where: { pk: faker.datatype.number({ min: maxPk - 80, max: maxPk }) },
-      })) as Product;
-      purchaseList.push(purchase);
-    }
-
-    return purchaseList;
   }
 
   makeFakerPhone(faker: Faker) {
