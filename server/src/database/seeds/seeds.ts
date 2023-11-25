@@ -54,11 +54,11 @@ export default class TypeOrmSeeder implements Seeder {
 
     faker.locale = "ko";
     const importers: ((faker: Faker) => Promise<void>)[] = [
-      () => this.onAddAsset(faker),
-      () => this.onAddManager(faker),
-      () => this.onAddUser(faker),
-      () => this.onAddProduct(faker),
-      () => this.onAddBanner(faker),
+      // () => this.onAddAsset(faker),
+      // () => this.onAddManager(faker),
+      // () => this.onAddUser(faker),
+      // () => this.onAddProduct(faker),
+      // () => this.onAddBanner(faker),
       () => this.onAddCart(faker),
     ];
 
@@ -284,7 +284,7 @@ export default class TypeOrmSeeder implements Seeder {
       product.description = faker.random.words(50);
       product.price = Number(faker.random.numeric(3));
       product.main_image = mainImage;
-      product.sub_images = subImages; // TODO :: 서브 이미지들이 안들어간다.
+      product.sub_images = subImages;
       product.category = category;
       product.stock_count = 10;
       products.push(product);
@@ -299,26 +299,29 @@ export default class TypeOrmSeeder implements Seeder {
     const carts: Cart[] = [];
 
     for (let i = 0; i < users.length; i++) {
-      const cartProducts: CartProduct[] = [];
-      const cartProduct = new CartProduct();
-      cartProduct.count = random(1, 4);
-      const randomPk = faker.datatype.number({ min: 1, max: count });
-      // eslint-disable-next-line no-await-in-loop
-      const product = await Product.findOne({
-        where: { pk: randomPk },
-      });
-
-      if (isNil(product)) {
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-      cartProduct.product = product;
-      cartProducts.push(cartProduct);
-
       const cart = new Cart();
       cart.user = users[i];
-      cart.cart_products = cartProducts;
 
+      const cartProducts: CartProduct[] = [];
+      for (let j = 0; j < 5; j++) {
+        const cartProduct = new CartProduct();
+        cartProduct.count = random(1, 4);
+        const randomPk = faker.datatype.number({ min: 1, max: count });
+        // eslint-disable-next-line no-await-in-loop
+        const product = await Product.findOne({
+          where: { pk: randomPk },
+        });
+
+        if (isNil(product)) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
+        cartProduct.product = product;
+        cartProducts.push(cartProduct);
+      }
+
+      cart.cart_products = cartProducts;
       carts.push(cart);
     }
 
