@@ -116,10 +116,7 @@ export default class TypeOrmSeeder implements Seeder {
 
     try {
       const res = await this.s3.send(command);
-      if (res.$metadata.httpStatusCode !== 200) {
-        return false;
-      }
-      return true;
+      return res.$metadata.httpStatusCode === 200;
     } catch {
       return false;
     }
