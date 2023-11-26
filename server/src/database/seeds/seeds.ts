@@ -318,6 +318,7 @@ export default class TypeOrmSeeder implements Seeder {
         cartProducts.push(cartProduct);
       }
 
+      // TODO :: 장바구니에 상품이 왜 안들어갈까, console 에 찍히는건 잘 들어감
       cart.cart_products = cartProducts;
       carts.push(cart);
     }
