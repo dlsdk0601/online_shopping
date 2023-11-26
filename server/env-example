@@ -1,55 +1,62 @@
 ## Environment ##
-NODE_ENV=
+NODE_ENV=development
 
 ## Server ##
-VERSION=
-PORT=
-HOST=
-ORIGINURL=
-FRONT_ORIGIN_URL=
-FRONT_SNS_SIGN_UP=
-FRONT_SNS_REDIRECT=
+VERSION=1
+PORT=8080
+HOST=localhost
+ORIGINURL=http://localhost:8080
+FRONT_ORIGIN_URL=http://localhost:3000
+FRONT_SNS_SIGN_UP=http://localhost:3000/auth/snsSignUp
+FRONT_SNS_REDIRECT=http://localhost:3000/auth/snsRedirect
 
 # DB
-DB_TYPE=
-POSTGRES_HOST=
-POSTGRES_PORT=
-POSTGRES_USERNAME=
-POSTGRES_PASSWORD=
-POSTGRES_DATABASE=
-POSTGRES_SYNCHRONIZE=
-POSTGRES_LOGGING=
+DB_TYPE=postgres
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USERNAME=postgres
+POSTGRES_PASSWORD=7008
+POSTGRES_DATABASE=online_shopping
+POSTGRES_SYNCHRONIZE=false
+POSTGRES_LOGGING=true
 
 ## Authentication ##
-JWT_SECRET=
-
+JWT_SECRET=online_shopping
 # expires in 3 days
-COOKIE_EXP=
+EXP=259200000
 
 
 #GOOGLE OAUTH
 GOOGLE_ID=
 GOOGLE_SECRET=
-GOOGLE_CLIENT_REDIRECT_URL=
+GOOGLE_CLIENT_REDIRECT_URL=http://localhost:3000/callback/google
 
 #KAKAO OAUTH
 KAKAO_ID=
-KAKAO_CODE_VERIFY_URI=
-KAKAO_GET_USER_URI=
-KAKAO_FRONT_REDIRECT=
+KAKAO_CODE_VERIFY_URI=https://kauth.kakao.com/oauth/token
+KAKAO_GET_USER_URI=https://kapi.kakao.com/v2/user/me
+KAKAO_FRONT_REDIRECT=http://localhost:3000/redirect/kakao
 
 #NAVER OAUTH
-NAVER_GET_USER_URI=
-NAVER_CODE_VERIFY_URI=
-NAVER_REDIRECT_URL=
+NAVER_GET_USER_URI=https://openapi.naver.com/v1/nid/me
+NAVER_CODE_VERIFY_URI=https://nid.naver.com/oauth2.0/token?grant_type=authorization_code
+NAVER_REDIRECT_URL=http://localhost:3000/redirect/naver
 NAVER_CLIENT_ID=
 NAVER_CLIENT_SECRET_KEY=
 
 #SWAGGER
-SWAGGER_JSON=
+SWAGGER_JSON=http://localhost:8080/swagger-json
 
 #AWS
 AWS_ACCESS_KEY=
 AWS_SECRET_KEY=
-AWS_BUCKET_NAME=
-AWS_REGION=
+AWS_BUCKET_NAME=nest-ina-boilerplate
+AWS_REGION=ap-northeast-2
+
+
+#purchase
+TOSS_PAYMENT_CLIENT_API_KEY=test_ck_DpexMgkW36m7oJewMgw8GbR5ozO0
+TOSS_PAYMENT_SECRET_KEY=test_sk_LkKEypNArWQ1Lv9aaPe3lmeaxYG5
+TOSS_PAYMENT_CALLBACK_URL=http://localhost:8080/api/v1/purchase/toss-pay/callback
+TOSS_PAYMENT_RESULT_URL=http://localhost:3000/purchase/result
+TOSS_PAYMENT_FAIL_URL=http://localhost:3000/purchase/fail
