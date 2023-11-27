@@ -40,7 +40,6 @@ export class CartProduct extends BaseEntity {
   @OneToOne(() => Product, (product) => product, {
     nullable: false,
     eager: true,
-    createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: "product_pk", referencedColumnName: "pk" })
   product: Product;
