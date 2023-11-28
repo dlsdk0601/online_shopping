@@ -6,7 +6,9 @@ function tempDelete() {
   const entries = fs.readdirSync(tempPath, { withFileTypes: true });
   try {
     for (let i = 0; i < entries.length; i++) {
-      fs.unlinkSync(`${tempPath}/${entries[i].name}`);
+      if (entries[i].isFile()) {
+        fs.unlinkSync(`${tempPath}/${entries[i].name}`);
+      }
     }
   } catch (err) {
     console.error(`Error deleting file`);
