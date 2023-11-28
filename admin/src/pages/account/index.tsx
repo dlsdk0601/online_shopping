@@ -11,8 +11,6 @@ import { Urls } from "../../url/url.g";
 import { d2 } from "../../ex/dateEx";
 import useIsReady from "../../hooks/useIsReady";
 import UseValueField from "../../hooks/useValueField";
-import GoogleIcon from "../../components/icons/Google";
-import LocalIcon from "../../components/icons/LocalIcon";
 import { userSearchTypeEnumToLabel } from "../../api/enum";
 import { ignorePromise } from "../../ex/utils";
 import SelectView from "../../view/SelectView";
@@ -34,13 +32,18 @@ const UserListPage = () => {
     ignorePromise(() => router.push({ pathname: router.pathname, query }));
   }, [page, search, searchType]);
 
-  const typeToIcon = (type: UserType) => {
+  const typeToIconSrc = (type: UserType) => {
     switch (type) {
       case UserType.GOOGLE:
-        return <GoogleIcon />;
-      case UserType.LOCAL:
+        return "/img/logo/google.png";
+      case UserType.APPLE:
+        return "/img/logo/apple.png";
+      case UserType.NAVER:
+        return "/img/logo/naver.png";
+      case UserType.KAKAO:
+        return "/img/logo/kakao.png";
       default:
-        return <LocalIcon />;
+        return "/img/logo/local.png";
     }
   };
 
@@ -94,7 +97,16 @@ const UserListPage = () => {
           mapper={(value) => [
             ["이름", value.name],
             ["핸드폰", value.phone],
-            ["가입유형", typeToIcon(value.type as UserType)],
+            [
+              "가입유형",
+              <div className="mx-auto h-[24px] w-[24px]">
+                <img
+                  className="h-full w-full"
+                  src={typeToIconSrc(value.type as UserType)}
+                  alt="카카오 로고"
+                />
+              </div>,
+            ],
             ["가입 날짜", d2(value.create_at)],
           ]}
         />
