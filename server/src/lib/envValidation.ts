@@ -8,7 +8,7 @@ export const envValidation: Joi.Schema = Joi.object({
   FRONT_SNS_SIGN_UP: Joi.string().required(),
   FRONT_SNS_REDIRECT: Joi.string().required(),
   GOOGLE_CLIENT_REDIRECT_URL: Joi.string().required(),
-  COOKIE_EXP: Joi.number().required(),
+  EXP: Joi.number().required(),
   JWT_SECRET: Joi.string().required(),
   KAKAO_ID: Joi.string().required(),
   KAKAO_GET_USER_URI: Joi.string().required(),
