@@ -22,6 +22,7 @@ import { KakaoUser } from "../../entities/kakao-user.entity";
 import { NaverUser } from "../../entities/naver-user.entity";
 
 export default class TypeOrmSeeder implements Seeder {
+  dataSource: DataSource | null = null;
   s3 = new S3Client({
     credentials: {
       accessKeyId: config.awsAccessKey,
@@ -50,6 +51,8 @@ export default class TypeOrmSeeder implements Seeder {
   ];
 
   async run(dataSource: DataSource): Promise<any> {
+    this.dataSource = dataSource;
+
     console.log("----------------Faker Insert Start----------------");
 
     faker.locale = "ko";
@@ -59,7 +62,9 @@ export default class TypeOrmSeeder implements Seeder {
       // () => this.onAddUser(faker),
       // () => this.onAddProduct(faker),
       // () => this.onAddBanner(faker),
+      // () => this.onAddCart(faker),
       () => this.onAddCart(faker),
+      () => this.onAddPurchase(faker),
     ];
 
     return this.runAsyncFunctionsSequentially(importers, faker).then(() => console.log("success"));
@@ -326,6 +331,10 @@ export default class TypeOrmSeeder implements Seeder {
     await Cart.save(carts);
   }
 
+  async onAddPurchase(faker: Faker) {
+    // TODO :: 구매 내역 faker 등록
+  }
+
   localUser(faker: Faker) {
     const localUser = new LocalUser();
     localUser.id = faker.datatype.uuid();
@@ -369,5 +378,19 @@ export default class TypeOrmSeeder implements Seeder {
 
   randomPassword(faker: Faker) {
     return faker.datatype.number({ min: 1000, max: 9999 }).toString();
+  }
+
+  async randomUser(): Promise<User | null> {
+    if (isNil(this.dataSource)) {
+      return null;
+    }
+
+    const user = await this.dataSource
+      .getRepository(User)
+      .createQueryBuilder("user")
+      .select()
+      .orderBy("RANDOM()")
+      .getOne();
+    return user;
   }
 }
