@@ -19,6 +19,7 @@ import { KakaoUser } from "../../entities/kakao-user.entity";
 import { NaverUser } from "../../entities/naver-user.entity";
 import { LocalUser } from "../../entities/local-user.entity";
 import { HttpService } from "../http/http.service";
+import { config } from "../../config";
 
 @Module({
   imports: [
@@ -26,10 +27,10 @@ import { HttpService } from "../http/http.service";
     PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         global: true,
-        secret: config.get("JWT_SECRET"),
-        signOptions: { expiresIn: config.get("COOKIE_EXP") },
+        secret: config.secret,
+        signOptions: { expiresIn: config.exp },
       }),
     }),
     TypeOrmModule.forFeature([

@@ -10,6 +10,7 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { JwtStrategy } from "./jwt-strategy.service";
 import { LocalStrategy } from "./local-strategy.service";
+import { config } from "../../config";
 
 @Module({
   imports: [
@@ -17,10 +18,10 @@ import { LocalStrategy } from "./local-strategy.service";
     PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         global: true,
-        secret: config.get("JWT_SECRET"),
-        signOptions: { expiresIn: config.get("COOKIE_EXP") },
+        secret: config.secret,
+        signOptions: { expiresIn: config.exp },
       }),
     }),
     TypeOrmModule.forFeature([Authentication, Manager]),
