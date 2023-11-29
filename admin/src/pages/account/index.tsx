@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
-import { isArray } from "lodash";
+import { isNil } from "lodash";
 import { useMutation } from "react-query";
 import { UserListReq, UserListRes, UserListResUser } from "../../api/type.g";
 import { UserSearchType, UserType } from "../../api/enum.g";
@@ -12,7 +12,7 @@ import { d2 } from "../../ex/dateEx";
 import useIsReady from "../../hooks/useIsReady";
 import UseValueField from "../../hooks/useValueField";
 import { userSearchTypeEnumToLabel } from "../../api/enum";
-import { ignorePromise } from "../../ex/utils";
+import { ignorePromise, queryFilter, validatePageQuery } from "../../ex/utils";
 import SelectView from "../../view/SelectView";
 
 const UserListPage = () => {
@@ -56,17 +56,20 @@ const UserListPage = () => {
   useIsReady(() => {
     const { page, search, searchType } = router.query;
 
-    if (isArray(page) || isArray(search) || isArray(searchType)) {
+    const parsePage = validatePageQuery(page);
+    const parseSearch = queryFilter(search);
+    const parseSearchType = queryFilter(searchType);
+    if (isNil(parsePage)) {
       return;
     }
 
-    setPage(Number(page ?? 1));
-    setSearch.set(search ?? "");
-    setSearchType(userSearchTypeEnumToLabel(searchType) ?? null);
+    setPage(parsePage ?? 1);
+    setSearch.set(parseSearch);
+    setSearchType(userSearchTypeEnumToLabel(parseSearchType) ?? null);
     mutate({
-      page: Number(page ?? 1),
-      search: search ?? "",
-      searchType: userSearchTypeEnumToLabel(searchType) ?? null,
+      page: parsePage ?? 1,
+      search: parseSearch ?? "",
+      searchType: userSearchTypeEnumToLabel(parseSearchType) ?? null,
     });
   });
 
