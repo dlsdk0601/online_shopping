@@ -8,7 +8,7 @@ import HeaderView from "../components/layoutView/HeaderView";
 import Cards from "../components/tailwindEx/CardListView";
 import FooterView from "../components/layoutView/FooterView";
 import LeftSideBarView from "../components/layoutView/LeftSideBarView";
-import { isLoading } from "../store/loading";
+import { isGlobalLoading } from "../store/loading";
 
 // 로그인 유저가 보는 화면 (ex 어드민 메인화면)
 export const LayoutView = (props: PropsWithChildren) => {
@@ -47,7 +47,8 @@ const BlockView = () => {
   const postLoadingCount = useIsMutating();
   const getLoadingCount = useIsFetching();
   const isLocked = getLoadingCount + postLoadingCount > 0;
-  const isLoad = useRecoilValue(isLoading);
+  const isLoad = useRecoilValue(isGlobalLoading);
+  console.log(isLoad);
   return (
     <div
       style={{
