@@ -36,13 +36,16 @@ export function TableView(props: { rows: TableViewRow[]; links?: UrlObject[] }) 
               "cursor-pointer": isNotNil(props.links),
             })}
             onClick={() => {
-              if (isNil(props.links) || isNil(props.links[rowIndex])) {
+              if (isNil(props.links)) {
                 return;
               }
-              // ignorePromise 로 처리하고 싶으나 scope 영역 때문에 분기 처리가 또 일어나야 해서
-              // const ignore 로 처리한다.
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              const ignore = router.push(props.links[rowIndex]);
+
+              const path = props.links[rowIndex];
+              if (isNil(path)) {
+                return;
+              }
+
+              return router.push(path);
             }}
           >
             {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
