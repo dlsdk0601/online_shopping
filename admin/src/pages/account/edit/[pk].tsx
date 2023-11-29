@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
+import { useSetRecoilState } from "recoil";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
 import { ReadOnlyTextView, TextFieldView } from "../../../components/field/field";
 import useValueField from "../../../hooks/useValueField";
@@ -21,18 +22,32 @@ import { UserType } from "../../../api/enum.g";
 import { Urls } from "../../../url/url.g";
 import { EditButtonView } from "../../../components/tailwindEx/EditButtonView";
 import { UserTypeView } from "../../../view/UserTypeView";
+import { isGlobalLoading } from "../../../store/loading";
+
+// TODO :: get => POST 로 수정
 
 const UserShowPage = () => {
   const router = useRouter();
+  const setIsLoading = useSetRecoilState(isGlobalLoading);
   const pk = validatePk(router.query.pk);
 
-  if (isNil(pk)) {
+  if (!router.isReady || isNil(pk)) {
+    // 로딩 처리
+    setIsLoading(true);
     return <></>;
   }
 
-  const { data: user } = useQuery([queryKeys.showUser, pk], () => api.showUser({ pk }), {
+  const { data: user, isLoading } = useQuery([queryKeys.showUser, pk], () => api.showUser({ pk }), {
     enabled: router.isReady && isNotNil(pk),
+    onSuccess: (res) => {
+      setIsLoading(false);
+    },
   });
+
+  if (isLoading) {
+    setIsLoading(true);
+    return <></>;
+  }
 
   return (
     <div className="w-full px-4">
@@ -46,7 +61,7 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
   const [phone, setPhone] = useValueField("", "휴대폰");
   const [email, setEmail] = useValueField("", "이메일");
   const [type, setType] = useState<UserType | null>(null);
-  const buyCount = 0;
+  const [buyCount, setBuyCount] = useState(0);
   const refundCount = 0;
   const reviewCount = 0;
 
@@ -85,6 +100,7 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
     setType(props.user.type as UserType);
     setPhone.set(props.user.phone ?? "");
     setEmail.set(props.user.email);
+    setBuyCount(props.user.buyCount);
   }, [props]);
 
   return (
