@@ -10,7 +10,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import Manager, { ManagerType } from "../../entities/manager.entity";
 import { getHash, hashSync } from "../../ex/bcryptEx";
 import { User } from "../../entities/user.entity";
-import { ProductCategory, UserType } from "../../type/commonType";
+import { ProductCategory, PurchaseItemStatus, UserType } from "../../type/commonType";
 import { LocalUser } from "../../entities/local-user.entity";
 import { Product } from "../../entities/product.entity";
 import { Asset } from "../../entities/asset.entity";
@@ -20,6 +20,8 @@ import { config } from "../../config";
 import { GoogleUser } from "../../entities/google-user.entity";
 import { KakaoUser } from "../../entities/kakao-user.entity";
 import { NaverUser } from "../../entities/naver-user.entity";
+import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
+import { makeOrderCode } from "../../ex/ex";
 
 export default class TypeOrmSeeder implements Seeder {
   dataSource: DataSource | null = null;
@@ -63,7 +65,7 @@ export default class TypeOrmSeeder implements Seeder {
       // () => this.onAddProduct(faker),
       // () => this.onAddBanner(faker),
       // () => this.onAddCart(faker),
-      () => this.onAddCart(faker),
+      // () => this.onAddCart(faker),
       () => this.onAddPurchase(faker),
     ];
 
@@ -332,7 +334,40 @@ export default class TypeOrmSeeder implements Seeder {
   }
 
   async onAddPurchase(faker: Faker) {
-    // TODO :: 구매 내역 faker 등록
+    const purchases: Purchase[] = [];
+
+    for (let i = 0; i < 15; i++) {
+      const purchase = new Purchase();
+      // eslint-disable-next-line no-await-in-loop
+      const user = await this.randomUser();
+      if (isNil(user)) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      purchase.user = user;
+      purchase.order_code = makeOrderCode();
+
+      const purchaseItems: PurchaseItem[] = [];
+      for (let j = 0; j < faker.datatype.number({ min: 1, max: 5 }); j++) {
+        const purchaseItem = new PurchaseItem();
+        purchaseItem.status = PurchaseItemStatus.WAITING;
+        purchaseItem.count = faker.datatype.number({ min: 1, max: 3 });
+        // eslint-disable-next-line no-await-in-loop
+        const product = await this.randomProduct();
+        if (isNil(product)) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+        purchaseItem.product = product;
+
+        purchaseItems.push(purchaseItem);
+      }
+
+      purchase.purchase_items = purchaseItems;
+      purchases.push(purchase);
+    }
+
+    await Purchase.save(purchases);
   }
 
   localUser(faker: Faker) {
@@ -392,5 +427,19 @@ export default class TypeOrmSeeder implements Seeder {
       .orderBy("RANDOM()")
       .getOne();
     return user;
+  }
+
+  async randomProduct(): Promise<Product | null> {
+    if (isNil(this.dataSource)) {
+      return null;
+    }
+
+    const product = await this.dataSource
+      .getRepository(Product)
+      .createQueryBuilder("product")
+      .select()
+      .orderBy("RANDOM()")
+      .getOne();
+    return product;
   }
 }
