@@ -2,11 +2,13 @@ import React, { PropsWithChildren } from "react";
 import Head from "next/head";
 import { ClipLoader } from "react-spinners";
 import { useIsFetching, useIsMutating } from "react-query";
+import { useRecoilValue } from "recoil";
 import Favicon from "../../public/favicon.ico";
 import HeaderView from "../components/layoutView/HeaderView";
 import Cards from "../components/tailwindEx/CardListView";
 import FooterView from "../components/layoutView/FooterView";
 import LeftSideBarView from "../components/layoutView/LeftSideBarView";
+import { isLoading } from "../store/loading";
 
 // 로그인 유저가 보는 화면 (ex 어드민 메인화면)
 export const LayoutView = (props: PropsWithChildren) => {
@@ -42,7 +44,10 @@ export const DefaultLayoutView = (props: PropsWithChildren<Record<never, any>>) 
 };
 
 const BlockView = () => {
-  const isLocked = useIsMutating() + useIsFetching() > 0;
+  const postLoadingCount = useIsMutating();
+  const getLoadingCount = useIsFetching();
+  const isLocked = getLoadingCount + postLoadingCount > 0;
+  const isLoad = useRecoilValue(isLoading);
   return (
     <div
       style={{
@@ -52,8 +57,8 @@ const BlockView = () => {
         width: "100vw",
         height: "100vh",
         zIndex: 9999,
-        pointerEvents: isLocked ? "auto" : "none",
-        opacity: isLocked ? 1 : 0,
+        pointerEvents: isLocked || isLoad ? "auto" : "none",
+        opacity: isLocked || isLoad ? 1 : 0,
         transition: "opacity .3s .1s",
         display: "flex",
         justifyContent: "center",
