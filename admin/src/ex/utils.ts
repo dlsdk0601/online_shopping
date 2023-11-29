@@ -1,6 +1,16 @@
 import { ParsedUrlQuery } from "querystring";
 import { BaseSyntheticEvent } from "react";
-import { isArray, isDate, isEmpty, isNil, isNull, isNumber, isString, isUndefined } from "lodash";
+import {
+  head,
+  isArray,
+  isDate,
+  isEmpty,
+  isNil,
+  isNull,
+  isNumber,
+  isString,
+  isUndefined,
+} from "lodash";
 import moment, { Moment } from "moment";
 import { NEWPK } from "../lib/contants";
 
@@ -150,4 +160,32 @@ export function validatePk(pk: string | string[] | undefined): number | null {
 
 export function editAlert(isNew: boolean) {
   return alert(isNew ? "등록 되었습니다." : "수정 되었습니다.");
+}
+
+export function validatePageQuery(page: string | string[] | undefined): number | null {
+  if (isNil(page) || isArray(page)) {
+    return null;
+  }
+
+  const pageNum = Number(page);
+
+  if (isNaN(pageNum)) {
+    return null;
+  }
+
+  return pageNum;
+}
+
+// 제일 기본 query 처리 함수
+export function queryFilter(query: string | string[] | undefined): string {
+  // undefined 나 query[0] 이 제대로 된값이 아니면 어차피 에러 처리가 되어야 한다.
+  if (isNil(query)) {
+    return "";
+  }
+
+  if (isArray(query)) {
+    return head(query) ?? "";
+  }
+
+  return query;
 }
