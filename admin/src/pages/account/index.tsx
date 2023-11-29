@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
-import { isNil } from "lodash";
 import { useMutation } from "react-query";
 import { UserListReq, UserListRes, UserListResUser } from "../../api/type.g";
 import { UserSearchType, UserType } from "../../api/enum.g";
@@ -56,12 +55,9 @@ const UserListPage = () => {
   useIsReady(() => {
     const { page, search, searchType } = router.query;
 
-    const parsePage = validatePageQuery(page);
+    const parsePage = validatePageQuery(page) ?? 1;
     const parseSearch = queryFilter(search);
     const parseSearchType = queryFilter(searchType);
-    if (isNil(parsePage)) {
-      return;
-    }
 
     setPage(parsePage ?? 1);
     setSearch.set(parseSearch);
