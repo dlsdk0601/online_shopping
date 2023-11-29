@@ -60,6 +60,11 @@ export class ShowUserResDto {
   @IsOptional()
   @IsDate()
   updateAt: Date | null;
+
+  @ApiProperty({ description: "상품 구매 횟수", nullable: false, type: "number" })
+  @IsNumber()
+  @IsNotEmpty()
+  buyCount: number;
 }
 
 export class UserListReqDto {
