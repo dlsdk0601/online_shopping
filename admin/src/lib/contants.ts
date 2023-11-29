@@ -19,6 +19,7 @@ export const ATOM_KEY = {
   TOKEN: "TOKEN",
   USER: "USER",
   TOKEN_MODEL: "TOKEN_MODEL",
+  LOADING: "LOADING",
 };
 
 export const NEWPK = "new";
