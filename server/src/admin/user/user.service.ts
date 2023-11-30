@@ -71,7 +71,7 @@ export class UserService {
 
     const buyCountList = user.purchases.map((item) => item.buyCount);
     const refundCountList = user.purchases.map((item) => item.refundCount);
-    console.log(user);
+
     return {
       pk: user.pk,
       id: user.userData().id,
