@@ -65,6 +65,11 @@ export class ShowUserResDto {
   @IsNumber()
   @IsNotEmpty()
   buyCount: number;
+
+  @ApiProperty({ description: "환불한 상품 갯수", nullable: false, type: "number" })
+  @IsNumber()
+  @IsNotEmpty()
+  refundCount: number;
 }
 
 export class UserListReqDto {
