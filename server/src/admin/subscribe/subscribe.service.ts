@@ -93,7 +93,10 @@ export class SubscribeService {
   }
 
   async historyShow(body: ShowSubscribeHistoryReqDto) {
-    const history = await SubscribeHistory.findOne({ where: { pk: body.pk } });
+    const history = await SubscribeHistory.findOne({
+      where: { pk: body.pk },
+      relations: { users: true },
+    });
 
     if (isNil(history)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
@@ -107,13 +110,14 @@ export class SubscribeService {
       sendAt: history.send_time,
       createAt: history.create_at,
       updateAt: history.update_at,
+      users: history.users.map((item) => ({ pk: item.pk, name: item.name })),
     };
   }
 
   async selectSubscribes() {
     const subscribes = await Subscribe.find();
 
-    return { list: subscribes.map((item) => [item.user_pk, item.name]) };
+    return { list: subscribes.map((item) => [item.user.pk, item.name]) };
   }
 
   async addSubscribeHistory(body: AddSubscribeHistoryReqDto) {

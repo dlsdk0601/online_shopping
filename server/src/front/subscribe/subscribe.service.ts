@@ -1,22 +1,18 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
-import { isNil } from "lodash";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { AddSubscribeReqDto } from "./dto/add-subscribe.dto";
 import errorMessage from "../../constant/errorMessage";
 import { Subscribe } from "../../entities/subscribe.entity";
+import { User } from "../../entities/user.entity";
 
 @Injectable()
 export class SubscribeService {
   constructor() {}
 
-  async create(body: AddSubscribeReqDto, userPk: number | null) {
-    if (isNil(userPk)) {
-      throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
-    }
-
+  async create(body: AddSubscribeReqDto, user: User) {
     const subscribe = new Subscribe();
     subscribe.name = body.name;
     subscribe.email = body.email;
-    subscribe.user_pk = userPk;
+    subscribe.user = user;
 
     try {
       await subscribe.save();
