@@ -59,13 +59,13 @@ export default class TypeOrmSeeder implements Seeder {
 
     faker.locale = "ko";
     const importers: ((faker: Faker) => Promise<void>)[] = [
-      // () => this.onAddAsset(faker),
-      // () => this.onAddManager(faker),
-      // () => this.onAddUser(faker),
-      // () => this.onAddProduct(faker),
-      // () => this.onAddBanner(faker),
-      // () => this.onAddCart(faker),
-      // () => this.onAddCart(faker),
+      () => this.onAddAsset(faker),
+      () => this.onAddManager(faker),
+      () => this.onAddUser(faker),
+      () => this.onAddProduct(faker),
+      () => this.onAddBanner(faker),
+      () => this.onAddCart(faker),
+      () => this.onAddCart(faker),
       () => this.onAddPurchase(faker),
     ];
 
@@ -85,18 +85,15 @@ export default class TypeOrmSeeder implements Seeder {
     for (let i = 0; i < files.length; i++) {
       const entry = files[i];
       if (!entry.isFile()) {
-        // eslint-disable-next-line no-continue
         continue;
       }
 
       const filePath = path.join(temp, entry.name);
       const file = fs.readFileSync(filePath);
       const fileBase64 = file.toString("base64");
-      // eslint-disable-next-line no-await-in-loop
       const isUpload = await this.awsUpload(entry.name, fileBase64);
 
       if (!isUpload) {
-        // eslint-disable-next-line no-continue
         continue;
       }
 
@@ -174,12 +171,15 @@ export default class TypeOrmSeeder implements Seeder {
       user.phone = this.makeFakerPhone(faker);
 
       const int = faker.datatype.number({ min: 0, max: this.userTypes.length - 1 });
-      const type = this.userTypes[int];
-      user.type = type;
+      user.type = this.userTypes[int];
+
+      if (user.type === UserType.APPLE) {
+        // apple 유저는 테이블 없음 테스트 불가
+        continue;
+      }
 
       if (user.type === UserType.LOCAL) {
-        const localUser = this.localUser(faker);
-        user.localUser = localUser;
+        user.localUser = this.localUser(faker);
         users.push(user);
       } else if (user.type === UserType.GOOGLE) {
         user.googleUser = this.googleUser(faker);
@@ -187,7 +187,7 @@ export default class TypeOrmSeeder implements Seeder {
       } else if (user.type === UserType.KAKAO) {
         user.kakaoUser = this.kakaoUser(faker);
         users.push(user);
-      } else {
+      } else if (user.type === UserType.NAVER) {
         // naver
         user.naverUser = this.naverUser(faker);
         users.push(user);
@@ -221,7 +221,6 @@ export default class TypeOrmSeeder implements Seeder {
     for (let i = 0; i < categories.length; i++) {
       const asset = categories[i].asset;
       if (isNil(asset)) {
-        // eslint-disable-next-line no-continue
         continue;
       }
       const banner = new MainBanner();
@@ -311,13 +310,11 @@ export default class TypeOrmSeeder implements Seeder {
         const cartProduct = new CartProduct();
         cartProduct.count = random(1, 4);
         const randomPk = faker.datatype.number({ min: 1, max: count });
-        // eslint-disable-next-line no-await-in-loop
         const product = await Product.findOne({
           where: { pk: randomPk },
         });
 
         if (isNil(product)) {
-          // eslint-disable-next-line no-continue
           continue;
         }
 
@@ -338,10 +335,8 @@ export default class TypeOrmSeeder implements Seeder {
 
     for (let i = 0; i < 15; i++) {
       const purchase = new Purchase();
-      // eslint-disable-next-line no-await-in-loop
       const user = await this.randomUser();
       if (isNil(user)) {
-        // eslint-disable-next-line no-continue
         continue;
       }
       purchase.user = user;
@@ -352,10 +347,8 @@ export default class TypeOrmSeeder implements Seeder {
         const purchaseItem = new PurchaseItem();
         purchaseItem.status = PurchaseItemStatus.WAITING;
         purchaseItem.count = faker.datatype.number({ min: 1, max: 3 });
-        // eslint-disable-next-line no-await-in-loop
         const product = await this.randomProduct();
         if (isNil(product)) {
-          // eslint-disable-next-line no-continue
           continue;
         }
         purchaseItem.product = product;
@@ -420,13 +413,12 @@ export default class TypeOrmSeeder implements Seeder {
       return null;
     }
 
-    const user = await this.dataSource
+    return this.dataSource
       .getRepository(User)
       .createQueryBuilder("user")
       .select()
       .orderBy("RANDOM()")
       .getOne();
-    return user;
   }
 
   async randomProduct(): Promise<Product | null> {
@@ -434,12 +426,11 @@ export default class TypeOrmSeeder implements Seeder {
       return null;
     }
 
-    const product = await this.dataSource
+    return this.dataSource
       .getRepository(Product)
       .createQueryBuilder("product")
       .select()
       .orderBy("RANDOM()")
       .getOne();
-    return product;
   }
 }
