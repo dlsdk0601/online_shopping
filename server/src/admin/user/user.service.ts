@@ -1,24 +1,24 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Like, Repository } from "typeorm";
-import { isNil } from "lodash";
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import { Like } from "typeorm";
+import { isEmpty, isNil } from "lodash";
 import { User } from "../../entities/user.entity";
 import { LIMIT } from "../../type/pagination.dto";
 import { UserListReqDto, UserListResDto } from "./dto/show-user.dto";
 import errorMessage from "../../constant/errorMessage";
 import { EditUserReqDto } from "./dto/edit-user.dto";
-import { LocalUser } from "../../entities/local-user.entity";
 import { isNotNil } from "../../ex/ex";
 import { UserSearchType, UserType } from "../../type/commonType";
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(LocalUser)
-    private localUser: Repository<LocalUser>
-  ) {}
+  constructor() {}
 
-  async getUserList(req: UserListReqDto) {
+  async list(req: UserListReqDto) {
     let searchOption = {};
 
     if (isNil(req.searchType)) {
@@ -53,29 +53,25 @@ export class UserService {
     return new UserListResDto(users, count, req.page);
   }
 
-  async findLocalUserOneOr404(pk: number) {
-    const user = await LocalUser.findOne({
-      where: { pk },
-      relations: { user: true },
-    });
-
-    if (isNil(user)) {
-      throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
-    }
-
-    return user;
-  }
-
-  async findUserOneOr404(pk: number) {
+  async show(pk: number) {
     const user = await User.findOne({
       where: { pk },
-      relations: { localUser: true, googleUser: true, kakaoUser: true, naverUser: true },
+      relations: {
+        localUser: true,
+        googleUser: true,
+        kakaoUser: true,
+        naverUser: true,
+        purchases: true,
+      },
     });
 
     if (isNil(user)) {
       throw new NotFoundException(errorMessage.USER_NOT_FOUND_ERR);
     }
 
+    const buyCountList = user.purchases.map((item) => item.buyCount);
+    const refundCountList = user.purchases.map((item) => item.refundCount);
+    console.log(user);
     return {
       pk: user.pk,
       id: user.userData().id,
@@ -85,6 +81,10 @@ export class UserService {
       email: user.userData().email,
       createAt: user.create_at,
       updateAt: user.userData().updateAt,
+      buyCount: isEmpty(buyCountList) ? 0 : buyCountList.reduce((prev, next) => prev + next),
+      refundCount: isEmpty(refundCountList)
+        ? 0
+        : refundCountList.reduce((prev, next) => prev + next),
     };
   }
 
@@ -117,11 +117,15 @@ export class UserService {
   }
 
   async remove(pk: number) {
-    const localUser = await this.findLocalUserOneOr404(pk);
+    const user = await User.findOne({ where: { pk } });
+
+    if (isNil(user)) {
+      throw new BadRequestException(errorMessage.NOT_FOUND_DATA);
+    }
 
     try {
-      await this.localUser.softDelete(localUser.pk);
-      return localUser.pk;
+      await user.softRemove();
+      return user.pk;
     } catch (e) {
       throw new ConflictException(errorMessage.UPDATE_FAILED);
     }

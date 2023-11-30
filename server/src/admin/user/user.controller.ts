@@ -21,13 +21,13 @@ export class UserController {
   @ApiCreatedResponse({ type: UserListResDto })
   @Roles(ManagerType.MANAGER)
   userList(@Body() body: UserListReqDto) {
-    return this.userService.getUserList(body);
+    return this.userService.list(body);
   }
 
   @Post("/show-user")
   @ApiCreatedResponse({ type: ShowUserResDto })
   async findOne(@Body() body: ShowUserReqDto) {
-    return this.userService.findUserOneOr404(body.pk);
+    return this.userService.show(body.pk);
   }
 
   // 관리자에게 직접적으로 수정 문의를 줬을 경우, 사용할 API
