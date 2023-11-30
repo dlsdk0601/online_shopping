@@ -21,7 +21,8 @@ import { GoogleUser } from "../../entities/google-user.entity";
 import { KakaoUser } from "../../entities/kakao-user.entity";
 import { NaverUser } from "../../entities/naver-user.entity";
 import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
-import { makeOrderCode } from "../../ex/ex";
+import { isNotNil, makeOrderCode } from "../../ex/ex";
+import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
 
 export default class TypeOrmSeeder implements Seeder {
   dataSource: DataSource | null = null;
@@ -59,14 +60,15 @@ export default class TypeOrmSeeder implements Seeder {
 
     faker.locale = "ko";
     const importers: ((faker: Faker) => Promise<void>)[] = [
-      () => this.onAddAsset(faker),
-      () => this.onAddManager(faker),
-      () => this.onAddUser(faker),
-      () => this.onAddProduct(faker),
-      () => this.onAddBanner(faker),
-      () => this.onAddCart(faker),
-      () => this.onAddCart(faker),
-      () => this.onAddPurchase(faker),
+      // () => this.onAddAsset(faker),
+      // () => this.onAddManager(faker),
+      // () => this.onAddUser(faker),
+      // () => this.onAddProduct(faker),
+      // () => this.onAddBanner(faker),
+      // () => this.onAddCart(faker),
+      // () => this.onAddPurchase(faker),
+      () => this.onAddSubscribe(faker),
+      () => this.onAddSubscribeHistory(faker),
     ];
 
     return this.runAsyncFunctionsSequentially(importers, faker).then(() => console.log("success"));
@@ -322,7 +324,6 @@ export default class TypeOrmSeeder implements Seeder {
         cartProducts.push(cartProduct);
       }
 
-      // TODO :: 장바구니에 상품이 왜 안들어갈까, console 에 찍히는건 잘 들어감
       cart.cart_products = cartProducts;
       carts.push(cart);
     }
@@ -361,6 +362,48 @@ export default class TypeOrmSeeder implements Seeder {
     }
 
     await Purchase.save(purchases);
+  }
+
+  async onAddSubscribe(faker: Faker) {
+    const subscribes: Subscribe[] = [];
+    const length = faker.datatype.number({ min: 0, max: 30 });
+
+    for (let i = 0; i < length; i++) {
+      const subscribe = new Subscribe();
+      subscribe.email = faker.internet.email();
+      subscribe.name = faker.name.fullName();
+      const user = await this.randomUser();
+      if (isNil(user)) {
+        continue;
+      }
+      const isExist = subscribes.find((item) => item.user.pk === user.pk);
+      if (isNotNil(isExist)) {
+        continue;
+      }
+      subscribe.user = user;
+      subscribes.push(subscribe);
+    }
+
+    await Subscribe.save(subscribes);
+  }
+
+  async onAddSubscribeHistory(faker: Faker) {
+    const subscribeHistories: SubscribeHistory[] = [];
+
+    const subscribers = await Subscribe.find();
+    const subscribeUsers = subscribers.map((item) => item.user);
+    for (let i = 0; i < faker.datatype.number({ min: 1, max: 10 }); i++) {
+      const history = new SubscribeHistory();
+      history.title = faker.lorem.word();
+      history.body = faker.lorem.words();
+      history.send_time = faker.date.past();
+      history.is_send = faker.datatype.boolean();
+      history.users = subscribeUsers;
+
+      subscribeHistories.push(history);
+    }
+
+    await SubscribeHistory.save(subscribeHistories);
   }
 
   localUser(faker: Faker) {
