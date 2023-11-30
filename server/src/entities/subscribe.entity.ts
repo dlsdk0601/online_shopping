@@ -21,10 +21,7 @@ export class Subscribe extends TimeSet {
   @Column({ type: "varchar", nullable: false, comment: "이름", length: 64 })
   name: string;
 
-  @Column({ type: "int", nullable: false, comment: "유저 외래키" })
-  user_pk: number;
-
-  @OneToOne(() => User, { onDelete: "CASCADE" })
+  @OneToOne(() => User, { onDelete: "CASCADE", eager: true })
   @JoinColumn({ name: "user_pk", referencedColumnName: "pk" })
   user: User;
 }
@@ -46,7 +43,7 @@ export class SubscribeHistory extends TimeSet {
   @Column({ type: "boolean", nullable: false, comment: "발송 완료 여부", default: false })
   is_send: boolean;
 
-  @ManyToMany(() => User, { onDelete: "CASCADE" })
+  @ManyToMany(() => User, { onDelete: "CASCADE", cascade: true })
   @JoinTable()
   users: User[];
 }
