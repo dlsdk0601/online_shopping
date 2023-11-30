@@ -96,6 +96,10 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
     setBody.set(props.res.body);
     setIsSend.set(props.res.isSend);
     setSendDate.set(moment(props.res.sendAt));
+
+    // ts 가 타입 순서를 반대로 인식한다.
+    const users: [number, string][] = props.res.users.map((item) => [item.pk, item.name]);
+    setUserList([...users]);
   }, [props.res]);
 
   const onChangeSubscribeSelectBox = useCallback((value: [number | null, string] | null) => {
@@ -183,7 +187,7 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
       <EditButtonView
         isNew={isNil(props.res)}
         onClick={() => onEdit()}
-        onDelete={isNotNil(props.res) && onDeleteSubscribeHistory}
+        onDelete={isNotNil(props.res) ? onDeleteSubscribeHistory : undefined}
       />
     </CardFormView>
   );
