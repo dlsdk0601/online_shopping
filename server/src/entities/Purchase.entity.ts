@@ -63,6 +63,15 @@ export class Purchase extends BaseEntity {
 
     return `${name} 외 ${length - 1}`;
   }
+
+  get refundCount() {
+    return this.purchase_items.filter((item) => item.status === PurchaseItemStatus.REFUND_SUCCESS)
+      .length;
+  }
+
+  get buyCount() {
+    return this.purchase_items.filter((item) => item.status === PurchaseItemStatus.SUCCESS).length;
+  }
 }
 
 @Entity("purchase_item")
