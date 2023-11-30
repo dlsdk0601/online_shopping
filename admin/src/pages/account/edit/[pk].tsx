@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
@@ -6,7 +6,6 @@ import { useSetRecoilState } from "recoil";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
 import { ReadOnlyTextView, TextFieldView } from "../../../components/field/field";
 import useValueField from "../../../hooks/useValueField";
-import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
 import {
   dateFormatter,
@@ -16,7 +15,7 @@ import {
   isNotNil,
   validatePk,
 } from "../../../ex/utils";
-import { EditUserReq, EditUserRes, ShowUserRes } from "../../../api/type.g";
+import { EditUserReq, EditUserRes, ShowUserReq, ShowUserRes } from "../../../api/type.g";
 import { vEmail, vPhone } from "../../../ex/validate";
 import { UserType } from "../../../api/enum.g";
 import { Urls } from "../../../url/url.g";
@@ -28,21 +27,38 @@ import { isGlobalLoading } from "../../../store/loading";
 
 const UserShowPage = () => {
   const router = useRouter();
+  const [user, setUser] = useState<ShowUserRes | null>(null);
   const setIsLoading = useSetRecoilState(isGlobalLoading);
-  const pk = validatePk(router.query.pk);
 
-  if (!router.isReady || isNil(pk)) {
+  const { mutate, isLoading } = useMutation((req: ShowUserReq) => api.showUser(req), {
+    onSuccess: (res) => {
+      if (isNil(res)) {
+        return;
+      }
+
+      setIsLoading(false);
+      setUser(res);
+    },
+  });
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+
+    const pk = validatePk(router.query.pk);
+    if (isNil(pk)) {
+      return;
+    }
+
+    mutate({ pk });
+  }, [router.isReady]);
+
+  if (!router.isReady) {
     // 로딩 처리
     setIsLoading(true);
     return <></>;
   }
-
-  const { data: user, isLoading } = useQuery([queryKeys.showUser, pk], () => api.showUser({ pk }), {
-    enabled: router.isReady && isNotNil(pk),
-    onSuccess: (res) => {
-      setIsLoading(false);
-    },
-  });
 
   if (isLoading) {
     setIsLoading(true);
@@ -56,14 +72,13 @@ const UserShowPage = () => {
   );
 };
 
-const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
+const UserShowView = React.memo((props: { user: ShowUserRes | null }) => {
   const router = useRouter();
   const [phone, setPhone] = useValueField("", "휴대폰");
   const [email, setEmail] = useValueField("", "이메일");
   const [type, setType] = useState<UserType | null>(null);
   const [buyCount, setBuyCount] = useState(0);
-  const refundCount = 0;
-  const reviewCount = 0;
+  const [refundCount, setRefundCount] = useState(0);
 
   const { mutate } = useMutation((req: EditUserReq) => api.editUser(req), {
     onSuccess: (res: EditUserRes) => {
@@ -101,6 +116,7 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
     setPhone.set(props.user.phone ?? "");
     setEmail.set(props.user.email);
     setBuyCount(props.user.buyCount);
+    setRefundCount(props.user.refundCount);
   }, [props]);
 
   return (
@@ -117,8 +133,7 @@ const UserShowView = React.memo((props: { user: ShowUserRes | undefined }) => {
           isShowingLabel
         />
         <ReadOnlyTextView value={buyCount} label="상품 구매 횟수" />
-        <ReadOnlyTextView value={refundCount} label="상품 환뷸 횟수" />
-        <ReadOnlyTextView value={reviewCount} label="리뷰 횟수" />
+        <ReadOnlyTextView value={refundCount} label="환불 상품 갯수" />
         <ReadOnlyTextView value={dateFormatter(props.user?.createAt)} label="생성 일자" />
         <ReadOnlyTextView value={dateFormatter(props.user?.updateAt)} label="수정 일자" />
         <EditButtonView isNew={isNil(props.user)} onClick={() => onEdit()} />
