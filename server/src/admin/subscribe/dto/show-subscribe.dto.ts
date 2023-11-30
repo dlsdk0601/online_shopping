@@ -131,6 +131,19 @@ export class ShowSubscribeHistoryReqDto {
   pk: number;
 }
 
+export class ShowSubscribeHistoryResUserDto {
+  @ApiProperty({ description: "pk", nullable: false, type: "number" })
+  @IsNotEmpty()
+  @IsNumber()
+  pk: number;
+
+  @ApiProperty({ description: "이름", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+}
+
+@ApiExtraModels(ShowSubscribeHistoryResUserDto)
 export class ShowSubscribeHistoryResDto {
   @ApiProperty({ description: "pk", nullable: false, type: "number" })
   @IsNotEmpty()
@@ -156,4 +169,14 @@ export class ShowSubscribeHistoryResDto {
   @IsBoolean()
   @IsNotEmpty()
   isSend: boolean;
+
+  @ApiProperty({
+    description: "유저 리스트",
+    nullable: false,
+    type: "array",
+    items: { $ref: getSchemaPath(ShowSubscribeHistoryResUserDto) },
+  })
+  @IsArray()
+  @IsNotEmpty()
+  users: ShowSubscribeHistoryResUserDto[];
 }
