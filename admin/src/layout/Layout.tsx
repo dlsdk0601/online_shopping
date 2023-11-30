@@ -48,7 +48,6 @@ const BlockView = () => {
   const getLoadingCount = useIsFetching();
   const isLocked = getLoadingCount + postLoadingCount > 0;
   const isLoad = useRecoilValue(isGlobalLoading);
-  console.log(isLoad);
   return (
     <div
       style={{
