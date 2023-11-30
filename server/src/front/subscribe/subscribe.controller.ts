@@ -15,6 +15,6 @@ export class SubscribeController {
   @ApiCreatedResponse({ type: AddSubscribeResDto })
   @UseGuards(AuthGuard("jwt"))
   addSubscribe(@Body() body: AddSubscribeReqDto, @GetUser() user: User) {
-    return this.subscribeService.create(body, user.pk);
+    return this.subscribeService.create(body, user);
   }
 }
