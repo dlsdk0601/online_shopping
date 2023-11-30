@@ -26,7 +26,7 @@ const PurchaseEditPage = () => {
     enabled: router.isReady && isNotNil(pk),
     onSuccess: (res) => {
       if (isNil(res)) {
-        ignorePromise(() => router.replace(Urls.purchase.index.url()));
+        ignorePromise(() => router.replace(Urls.order.index.url()));
       }
     },
   });
