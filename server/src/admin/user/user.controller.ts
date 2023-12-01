@@ -1,5 +1,6 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
+import { AuthGuard } from "@nestjs/passport";
 import { UserService } from "./user.service";
 import {
   ShowUserReqDto,
@@ -7,8 +8,6 @@ import {
   UserListReqDto,
   UserListResDto,
 } from "./dto/show-user.dto";
-import { Roles } from "../../decorator/roles.decorator";
-import { ManagerType } from "../../type/type";
 import { EditUserReqDto, EditUserResDto } from "./dto/edit-user.dto";
 import { SelectUserReqDto, SelectUserResDto } from "./dto/select-user.dto";
 
@@ -18,13 +17,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post("/user-list")
+  @UseGuards(AuthGuard("admin-jwt"))
   @ApiCreatedResponse({ type: UserListResDto })
-  @Roles(ManagerType.MANAGER)
   userList(@Body() body: UserListReqDto) {
     return this.userService.list(body);
   }
 
   @Post("/show-user")
+  @UseGuards(AuthGuard("admin-jwt"))
   @ApiCreatedResponse({ type: ShowUserResDto })
   async findOne(@Body() body: ShowUserReqDto) {
     return this.userService.show(body.pk);
@@ -33,12 +33,14 @@ export class UserController {
   // 관리자에게 직접적으로 수정 문의를 줬을 경우, 사용할 API
   // 그렇기 때문에 실제로 수정 할 수 있는 데이터는 휴대폰 번호와 LocalUser 일 경우에는 이메일 까지
   @Post("/edit-user")
+  @UseGuards(AuthGuard("admin-jwt"))
   @ApiCreatedResponse({ type: EditUserResDto })
   async editOne(@Body() body: EditUserReqDto) {
     return this.userService.update(body);
   }
 
   @Post("select-user")
+  @UseGuards(AuthGuard("admin-jwt"))
   @ApiCreatedResponse({ type: SelectUserResDto })
   async selectUser(@Body() body: SelectUserReqDto) {
     return this.userService.selectUser();
