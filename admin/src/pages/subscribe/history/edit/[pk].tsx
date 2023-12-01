@@ -184,11 +184,21 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
           />
         ))}
       </div>
-      <EditButtonView
-        isNew={isNil(props.res)}
-        onClick={() => onEdit()}
-        onDelete={isNotNil(props.res) ? onDeleteSubscribeHistory : undefined}
-      />
+      <div className="flex w-full justify-between">
+        {props.res?.enableResend && (
+          <button
+            type="button"
+            className="mt-3 w-[100px] rounded-lg bg-blueGray-400 px-5 py-1 text-sm font-medium text-white transition duration-300 hover:opacity-60 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          >
+            재전송
+          </button>
+        )}
+        <EditButtonView
+          isNew={isNil(props.res)}
+          onClick={() => onEdit()}
+          onDelete={isNotNil(props.res) ? onDeleteSubscribeHistory : undefined}
+        />
+      </div>
     </CardFormView>
   );
 });
