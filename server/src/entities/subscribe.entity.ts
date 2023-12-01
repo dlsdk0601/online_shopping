@@ -7,6 +7,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import moment from "moment";
 import TimeSet from "./timeSet.entity";
 import { User } from "./user.entity";
 
@@ -46,4 +47,11 @@ export class SubscribeHistory extends TimeSet {
   @ManyToMany(() => User, { onDelete: "CASCADE", cascade: true })
   @JoinTable()
   users: User[];
+
+  get enableResend() {
+    const today = moment();
+    const sendDay = moment(this.send_time);
+    // 시간은 지났는데, 안보내 졌을 떄
+    return !this.is_send && sendDay.isBefore(today);
+  }
 }
