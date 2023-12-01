@@ -24,7 +24,7 @@ export const EditButtonView = (props: {
       {!props.isNew && props.onDelete && (
         <button
           type="button"
-          className="mr-3 rounded-lg bg-red-400 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          className="mr-3 rounded-lg bg-red-400 px-5 py-2.5 text-sm font-medium text-white transition duration-300 hover:opacity-60 focus:outline-none focus:ring-4 focus:ring-blue-300"
           onClick={props.onDelete}
         >
           삭제
@@ -32,7 +32,7 @@ export const EditButtonView = (props: {
       )}
       <button
         type="button"
-        className="rounded-lg bg-blue-400 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+        className="rounded-lg bg-blue-400 px-5 py-2.5 text-sm font-medium text-white transition duration-300 hover:opacity-60 focus:outline-none focus:ring-4 focus:ring-blue-300"
         onClick={() => props.onClick()}
       >
         {props.isNew ? "저장" : "수정"}
