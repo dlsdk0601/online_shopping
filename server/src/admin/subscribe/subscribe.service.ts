@@ -111,6 +111,7 @@ export class SubscribeService {
       createAt: history.create_at,
       updateAt: history.update_at,
       users: history.users.map((item) => ({ pk: item.pk, name: item.name })),
+      enableResend: history.enableResend,
     };
   }
 
@@ -173,4 +174,7 @@ export class SubscribeService {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
   }
+
+  // TODO :: 이메일 전송 API
+  async sendEmail() {}
 }

@@ -179,4 +179,9 @@ export class ShowSubscribeHistoryResDto {
   @IsArray()
   @IsNotEmpty()
   users: ShowSubscribeHistoryResUserDto[];
+
+  @ApiProperty({ description: "재발송 여부", nullable: false, type: "boolean" })
+  @IsBoolean()
+  @IsNotEmpty()
+  enableResend: boolean;
 }
