@@ -31,6 +31,9 @@ export const envValidation: Joi.Schema = Joi.object({
   DB_TYPE: Joi.string().valid("postgres").required(),
   POSTGRES_SYNCHRONIZE: Joi.string().required(),
   POSTGRES_LOGGING: Joi.string().required(),
+  MAILER_SERVICE: Joi.string().required(),
+  MAILER_AUTH_USER: Joi.string().required(),
+  MAILER_AUTH_PASS: Joi.string().required(),
 }).options({
   abortEarly: true, // 첫 번째 오류가 발생하면 즉시 유효성 검사를 중지하고 모든 오류를 반환
 });
