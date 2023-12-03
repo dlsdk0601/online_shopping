@@ -32,6 +32,7 @@ const ErrorMessage = {
   NOT_EQUAL_PRICE: "결제 금액이 다릅니다.",
   FAIL_PAYMENT: "결제에 실패하였습니다.",
   NOT_FOUND_PURCHASE: "구매 내역을 찾을 수 없습니다.",
+  FAIL_SEND_EMAIL: "메일 보내기에 실패 했습니다.",
 } as const;
 
 export default ErrorMessage;
