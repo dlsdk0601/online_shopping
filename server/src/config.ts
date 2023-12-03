@@ -62,6 +62,11 @@ class Config {
   logging = configService.get<boolean>("POSTGRES_LOGGING") ?? true;
   autoLoadEntities = true; // 엔티티 자동 등록
 
+  // EMAIL
+  service = configService.get<string>("NODE_MAILER_SERVICE") ?? "";
+  auth_user = configService.get<string>("NODE_MAILER_AUTH_USER") ?? "";
+  auth_pass = configService.get<string>("NODE_MAILER_AUTH_PASS") ?? "";
+
   get apiVersion() {
     return `/api/v${Math.floor(Number(this.version ?? 1))}`;
   }
