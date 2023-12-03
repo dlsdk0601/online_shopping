@@ -1,6 +1,14 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { isNil } from "lodash";
 import { In, Like } from "typeorm";
+import nodemailer, { Transporter } from "nodemailer";
+import Mail from "nodemailer/lib/mailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { Subscribe, SubscribeHistory } from "../../entities/subscribe.entity";
 import errorMessage from "../../constant/errorMessage";
 import { DeleteSubscribeReqDto } from "./dto/delete-subscribe.dto";
@@ -17,10 +25,21 @@ import { AddSubscribeHistoryReqDto } from "./dto/add-subscribe-history.dto";
 import { isNotNil } from "../../ex/ex";
 import { User } from "../../entities/user.entity";
 import { DeleteSubscribeHistoryReqDto } from "./dto/delete-subscribe-history.dto";
+import { config } from "../../config";
+import { ResendEmailReqDto } from "./dto/resend-email.dto";
 
 @Injectable()
 export class SubscribeService {
-  constructor() {}
+  transporter: Transporter<SMTPTransport.SentMessageInfo> | null = null;
+  constructor() {
+    this.transporter = nodemailer.createTransport({
+      service: config.service,
+      auth: {
+        user: config.auth_user,
+        pass: config.auth_pass,
+      },
+    });
+  }
 
   async delete(body: DeleteSubscribeReqDto) {
     const subscribe = await Subscribe.findOne({
@@ -176,5 +195,45 @@ export class SubscribeService {
   }
 
   // TODO :: 이메일 전송 API
-  async sendEmail() {}
+  async sendEmail(body: ResendEmailReqDto) {
+    if (isNil(this.transporter)) {
+      throw new InternalServerErrorException(errorMessage.FAIL_SEND_EMAIL);
+    }
+
+    const subscribe = await SubscribeHistory.findOne({
+      where: { pk: body.pk },
+      relations: {
+        users: {
+          localUser: true,
+          naverUser: true,
+          kakaoUser: true,
+          googleUser: true,
+        },
+      },
+    });
+
+    if (isNil(subscribe)) {
+      throw new BadRequestException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    const option: Mail.Options = {
+      from: "no-reply@gmail.com",
+      to: subscribe.users.map((user) => user.userData().email).join(", "),
+      subject: subscribe.title,
+      text: subscribe.body,
+    };
+
+    try {
+      const res = await this.transporter.sendMail(option);
+      if (isNil(res)) {
+        return new InternalServerErrorException();
+      }
+
+      subscribe.is_send = true;
+      await subscribe.save();
+      return { result: true };
+    } catch (e) {
+      return { result: false };
+    }
+  }
 }
