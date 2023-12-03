@@ -45,13 +45,7 @@ export default class TypeOrmSeeder implements Seeder {
     "baner-right-image-04.jpg",
   ];
 
-  userTypes: UserType[] = [
-    UserType.LOCAL,
-    UserType.GOOGLE,
-    UserType.APPLE,
-    UserType.KAKAO,
-    UserType.NAVER,
-  ];
+  userTypes: UserType[] = [UserType.LOCAL, UserType.GOOGLE, UserType.KAKAO, UserType.NAVER];
 
   async run(dataSource: DataSource): Promise<any> {
     this.dataSource = dataSource;
@@ -60,13 +54,13 @@ export default class TypeOrmSeeder implements Seeder {
 
     faker.locale = "ko";
     const importers: ((faker: Faker) => Promise<void>)[] = [
-      // () => this.onAddAsset(faker),
-      // () => this.onAddManager(faker),
-      // () => this.onAddUser(faker),
-      // () => this.onAddProduct(faker),
-      // () => this.onAddBanner(faker),
-      // () => this.onAddCart(faker),
-      // () => this.onAddPurchase(faker),
+      () => this.onAddAsset(faker),
+      () => this.onAddManager(faker),
+      () => this.onAddUser(faker),
+      () => this.onAddProduct(faker),
+      () => this.onAddBanner(faker),
+      () => this.onAddCart(faker),
+      () => this.onAddPurchase(faker),
       () => this.onAddSubscribe(faker),
       () => this.onAddSubscribeHistory(faker),
     ];
@@ -174,11 +168,6 @@ export default class TypeOrmSeeder implements Seeder {
 
       const int = faker.datatype.number({ min: 0, max: this.userTypes.length - 1 });
       user.type = this.userTypes[int];
-
-      if (user.type === UserType.APPLE) {
-        // apple 유저는 테이블 없음 테스트 불가
-        continue;
-      }
 
       if (user.type === UserType.LOCAL) {
         user.localUser = this.localUser(faker);

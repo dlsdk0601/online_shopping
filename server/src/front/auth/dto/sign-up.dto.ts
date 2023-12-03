@@ -55,7 +55,7 @@ export class SnsSignUpReqDto {
   @ApiProperty({
     description: "가입 타입",
     nullable: false,
-    enum: [UserType.GOOGLE, UserType.LOCAL, UserType.APPLE, UserType.KAKAO, UserType.NAVER],
+    enum: [UserType.GOOGLE, UserType.LOCAL, UserType.KAKAO, UserType.NAVER],
   })
   @IsNotEmpty()
   @IsEnum(UserType)

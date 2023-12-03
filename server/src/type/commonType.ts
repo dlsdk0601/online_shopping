@@ -18,7 +18,6 @@ export enum UserSearchType {
 export enum UserType {
   LOCAL = "LOCAL",
   GOOGLE = "GOOGLE",
-  APPLE = "APPLE",
   KAKAO = "KAKAO",
   NAVER = "NAVER",
 }
