@@ -17,6 +17,7 @@ import { api } from "../../../../api/url.g";
 import {
   AddSubscribeHistoryReq,
   DeleteSubscribeHistoryReq,
+  ResendEmailReq,
   ShowSubscribeHistoryRes,
 } from "../../../../api/type.g";
 import { EditButtonView } from "../../../../components/tailwindEx/EditButtonView";
@@ -185,14 +186,7 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
         ))}
       </div>
       <div className="flex w-full justify-between">
-        {props.res?.enableResend && (
-          <button
-            type="button"
-            className="mt-3 w-[100px] rounded-lg bg-blueGray-400 px-5 py-1 text-sm font-medium text-white transition duration-300 hover:opacity-60 focus:outline-none focus:ring-4 focus:ring-blue-300"
-          >
-            재전송
-          </button>
-        )}
+        {props.res?.enableResend && <ResendEmailButtonView pk={props.res.pk} />}
         <EditButtonView
           isNew={isNil(props.res)}
           onClick={() => onEdit()}
@@ -200,6 +194,36 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
         />
       </div>
     </CardFormView>
+  );
+});
+
+const ResendEmailButtonView = memo((props: { pk: number }) => {
+  const router = useRouter();
+
+  const { mutate } = useMutation((req: ResendEmailReq) => api.resendEmail(req), {
+    onSuccess: (res) => {
+      if (isNil(res) || !res.result) {
+        alert("이메일이 전송에 실패하였습니다.");
+        return;
+      }
+
+      alert("이메일이 정상적으로 전송 되었습니다.");
+      router.reload();
+    },
+  });
+
+  const onClickResendButton = useCallback(() => {
+    mutate({ pk: props.pk });
+  }, [props.pk]);
+
+  return (
+    <button
+      type="button"
+      className="mt-3 w-[100px] rounded-lg bg-blueGray-400 px-5 py-1 text-sm font-medium text-white transition duration-300 hover:opacity-60 focus:outline-none focus:ring-4 focus:ring-blue-300"
+      onClick={() => onClickResendButton()}
+    >
+      재전송
+    </button>
   );
 });
 
