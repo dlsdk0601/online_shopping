@@ -110,7 +110,7 @@ module.exports = {
     "prefer-destructuring": 0,
     // if 문에서 크기 비교는 항상 > 으로 하기로 한다.
     "yoda": 0,
-    // function 앞에서 공간 넣기 비활성화
+    // function 앞에서 공간 넣기 활성화
     "space-before-function-paren": 0,
     // 선언 보다 먼저 사용 가능
     "no-use-before-define": 0,
