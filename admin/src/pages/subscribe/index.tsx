@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
-import { isArray, isNil } from "lodash";
+import { isNil } from "lodash";
 import UseValueField from "../../hooks/useValueField";
-import { ignorePromise } from "../../ex/utils";
+import { ignorePromise, queryFilter, validatePageQuery } from "../../ex/utils";
 import {
   DeleteSubscribeReq,
   SubscribeListReq,
@@ -49,13 +49,10 @@ const SubscribeListPage = () => {
   useIsReady(() => {
     const { page, search, searchType } = router.query;
 
-    if (isArray(page) || isArray(search) || isArray(searchType)) {
-      return;
-    }
+    const parsedPage = validatePageQuery(page) ?? 1;
+    const parsedSearch = queryFilter(search);
+    const parsedSearchType = subscribeSearchTypeEnumToLabel(queryFilter(searchType)) ?? null;
 
-    const parsedPage = Number(page ?? 1);
-    const parsedSearch = search ?? "";
-    const parsedSearchType = subscribeSearchTypeEnumToLabel(searchType) ?? null;
     setPage(parsedPage);
     setSearch.set(parsedSearch);
     setSearchType(parsedSearchType);
