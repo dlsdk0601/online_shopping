@@ -11,7 +11,7 @@ import { d2 } from "../../ex/dateEx";
 import useIsReady from "../../hooks/useIsReady";
 import UseValueField from "../../hooks/useValueField";
 import { userSearchTypeEnumToLabel } from "../../api/enum";
-import { ignorePromise, queryFilter, validatePageQuery } from "../../ex/utils";
+import { codecNumber, codecString, ignorePromise } from "../../ex/utils";
 import SelectView from "../../view/SelectView";
 
 const UserListPage = () => {
@@ -53,9 +53,9 @@ const UserListPage = () => {
   useIsReady(() => {
     const { page, search, searchType } = router.query;
 
-    const parsePage = validatePageQuery(page) ?? 1;
-    const parseSearch = queryFilter(search);
-    const parseSearchType = queryFilter(searchType);
+    const parsePage = codecNumber(page) ?? 1;
+    const parseSearch = codecString(search);
+    const parseSearchType = codecString(searchType);
 
     setPage(parsePage);
     setSearch.set(parseSearch);

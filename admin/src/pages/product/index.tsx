@@ -8,7 +8,7 @@ import { ProductListReq, ProductListRes, ProductListResProduct } from "../../api
 import { api } from "../../api/url.g";
 import useIsReady from "../../hooks/useIsReady";
 import { categoryEnumToLabel, labelToCategoryEnum } from "../../api/enum";
-import { ignorePromise, queryFilter, validatePageQuery } from "../../ex/utils";
+import { codecNumber, codecString, ignorePromise } from "../../ex/utils";
 import { Urls } from "../../url/url.g";
 import SearchBarView from "../../components/table/searchBarView";
 import { PaginationTableView } from "../../components/table/Table";
@@ -38,9 +38,9 @@ const ProductListPage = () => {
   useIsReady(() => {
     const { page, search, category } = router.query;
 
-    const parsedPage = validatePageQuery(page) ?? 1;
-    const parsedSearch = queryFilter(search);
-    const parsedCategory = labelToCategoryEnum(queryFilter(category)) ?? null;
+    const parsedPage = codecNumber(page) ?? 1;
+    const parsedSearch = codecString(search);
+    const parsedCategory = labelToCategoryEnum(codecString(category)) ?? null;
 
     setPage(parsedPage);
     setSearch.set(parsedSearch);

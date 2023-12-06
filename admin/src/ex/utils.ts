@@ -162,7 +162,7 @@ export function editAlert(isNew: boolean) {
   return alert(isNew ? "등록 되었습니다." : "수정 되었습니다.");
 }
 
-export function validatePageQuery(page: string | string[] | undefined): number | null {
+export function codecNumber(page: string | string[] | undefined): number | null {
   if (isNil(page) || isArray(page)) {
     return null;
   }
@@ -176,8 +176,7 @@ export function validatePageQuery(page: string | string[] | undefined): number |
   return pageNum;
 }
 
-// 제일 기본 query 처리 함수
-export function queryFilter(query: string | string[] | undefined): string {
+export function codecString(query: string | string[] | undefined): string {
   // undefined 나 query[0] 이 제대로 된값이 아니면 어차피 에러 처리가 되어야 한다.
   if (isNil(query)) {
     return "";
@@ -188,4 +187,22 @@ export function queryFilter(query: string | string[] | undefined): string {
   }
 
   return query;
+}
+
+export function codecBoolean(query: string | string[] | undefined): boolean | null {
+  // undefined 나 query[0] 이 제대로 된값이 아니면 어차피 에러 처리가 되어야 한다.
+  if (isNil(query)) {
+    return null;
+  }
+
+  const value = isArray(query) ? head(query) : query;
+
+  switch (value) {
+    case "true":
+      return true;
+    case "false":
+      return false;
+    default:
+      return null;
+  }
 }

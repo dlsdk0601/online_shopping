@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
 import { isNil } from "lodash";
 import UseValueField from "../../hooks/useValueField";
-import { ignorePromise, queryFilter, validatePageQuery } from "../../ex/utils";
+import { codecNumber, codecString, ignorePromise } from "../../ex/utils";
 import {
   DeleteSubscribeReq,
   SubscribeListReq,
@@ -49,9 +49,9 @@ const SubscribeListPage = () => {
   useIsReady(() => {
     const { page, search, searchType } = router.query;
 
-    const parsedPage = validatePageQuery(page) ?? 1;
-    const parsedSearch = queryFilter(search);
-    const parsedSearchType = subscribeSearchTypeEnumToLabel(queryFilter(searchType)) ?? null;
+    const parsedPage = codecNumber(page) ?? 1;
+    const parsedSearch = codecString(search);
+    const parsedSearchType = subscribeSearchTypeEnumToLabel(codecString(searchType)) ?? null;
 
     setPage(parsedPage);
     setSearch.set(parsedSearch);
