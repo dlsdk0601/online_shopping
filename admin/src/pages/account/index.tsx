@@ -35,8 +35,6 @@ const UserListPage = () => {
     switch (type) {
       case UserType.GOOGLE:
         return "/img/logo/google.png";
-      case UserType.APPLE:
-        return "/img/logo/apple.png";
       case UserType.NAVER:
         return "/img/logo/naver.png";
       case UserType.KAKAO:
@@ -59,7 +57,7 @@ const UserListPage = () => {
     const parseSearch = queryFilter(search);
     const parseSearchType = queryFilter(searchType);
 
-    setPage(parsePage ?? 1);
+    setPage(parsePage);
     setSearch.set(parseSearch);
     setSearchType(userSearchTypeEnumToLabel(parseSearchType) ?? null);
     mutate({

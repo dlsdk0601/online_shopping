@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
-import { isArray, isNil } from "lodash";
+import { isNil } from "lodash";
 import UseValueField from "../../hooks/useValueField";
 import { ProductCategory } from "../../api/enum.g";
 import { ProductListReq, ProductListRes, ProductListResProduct } from "../../api/type.g";
 import { api } from "../../api/url.g";
 import useIsReady from "../../hooks/useIsReady";
 import { categoryEnumToLabel, labelToCategoryEnum } from "../../api/enum";
-import { ignorePromise } from "../../ex/utils";
+import { ignorePromise, queryFilter, validatePageQuery } from "../../ex/utils";
 import { Urls } from "../../url/url.g";
 import SearchBarView from "../../components/table/searchBarView";
 import { PaginationTableView } from "../../components/table/Table";
@@ -38,13 +38,10 @@ const ProductListPage = () => {
   useIsReady(() => {
     const { page, search, category } = router.query;
 
-    if (isArray(page) || isArray(search) || isArray(category)) {
-      return;
-    }
+    const parsedPage = validatePageQuery(page) ?? 1;
+    const parsedSearch = queryFilter(search);
+    const parsedCategory = labelToCategoryEnum(queryFilter(category)) ?? null;
 
-    const parsedPage = Number(page ?? 1);
-    const parsedSearch = search ?? "";
-    const parsedCategory = labelToCategoryEnum(category) ?? null;
     setPage(parsedPage);
     setSearch.set(parsedSearch);
     setCategory(parsedCategory);

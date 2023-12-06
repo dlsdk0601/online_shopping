@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { isEmpty, isNil } from "lodash";
 import { useMutation, useQuery } from "react-query";
 import React, { memo, useCallback, useEffect } from "react";
+import { useSetRecoilState } from "recoil";
 import { editAlert, ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
@@ -15,24 +16,43 @@ import ProductSelectView from "../../../view/ProductSelectView";
 import { EditButtonView } from "../../../components/tailwindEx/EditButtonView";
 import ImageUploadView from "../../../view/ImageUploadView";
 import ImageMultipleUploadView from "../../../view/ImageMultipleUploadView";
+import { isGlobalLoading } from "../../../store/loading";
 
 const ProductEditPage = () => {
   const router = useRouter();
   const pk = validatePk(router.query.pk);
+  const setIsLoading = useSetRecoilState(isGlobalLoading);
 
+  if (!router.isReady) {
+    setIsLoading(true);
+    return <></>;
+  }
+
+  // New
   if (isNil(pk)) {
+    setIsLoading(false);
     return <ProductEditView />;
   }
 
-  const { data: product } = useQuery([queryKeys.product, pk], () => api.showProduct({ pk }), {
-    enabled: router.isReady && isNotNil(pk),
-    onSuccess: (res) => {
-      if (isNil(res)) {
-        ignorePromise(() => router.replace(Urls.product.index.url()));
-      }
+  const { data: product, isLoading } = useQuery(
+    [queryKeys.product, pk],
+    () => api.showProduct({ pk }),
+    {
+      enabled: router.isReady && isNotNil(pk),
+      onSuccess: (res) => {
+        if (isNil(res)) {
+          ignorePromise(() => router.replace(Urls.product.index.url()));
+        }
+      },
     },
-  });
+  );
 
+  if (isLoading) {
+    setIsLoading(true);
+    return <></>;
+  }
+
+  setIsLoading(false);
   return (
     <div className="w-full px-4">
       <ProductEditView res={product} />

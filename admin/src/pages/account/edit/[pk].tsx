@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
@@ -15,54 +15,41 @@ import {
   isNotNil,
   validatePk,
 } from "../../../ex/utils";
-import { EditUserReq, EditUserRes, ShowUserReq, ShowUserRes } from "../../../api/type.g";
+import { EditUserReq, EditUserRes, ShowUserRes } from "../../../api/type.g";
 import { vEmail, vPhone } from "../../../ex/validate";
 import { UserType } from "../../../api/enum.g";
 import { Urls } from "../../../url/url.g";
 import { EditButtonView } from "../../../components/tailwindEx/EditButtonView";
 import { UserTypeView } from "../../../view/UserTypeView";
 import { isGlobalLoading } from "../../../store/loading";
-
-// TODO :: get => POST 로 수정
+import { queryKeys } from "../../../lib/contants";
+import { Replace } from "../../../layout/App";
 
 const UserShowPage = () => {
   const router = useRouter();
-  const [user, setUser] = useState<ShowUserRes | null>(null);
   const setIsLoading = useSetRecoilState(isGlobalLoading);
 
-  const { mutate, isLoading } = useMutation((req: ShowUserReq) => api.showUser(req), {
-    onSuccess: (res) => {
-      if (isNil(res)) {
-        return;
-      }
+  const pk = validatePk(router.query.pk);
 
-      setIsLoading(false);
-      setUser(res);
-    },
-  });
-
-  useEffect(() => {
-    if (!router.isReady) {
-      return;
-    }
-
-    const pk = validatePk(router.query.pk);
-    if (isNil(pk)) {
-      return;
-    }
-
-    mutate({ pk });
-  }, [router.isReady]);
-
-  if (!router.isReady) {
-    // 로딩 처리
+  if (!router.isReady || isNil(pk)) {
     setIsLoading(true);
     return <></>;
   }
 
+  const { data: user, isLoading } = useQuery([queryKeys.showUser, pk], () => api.showUser({ pk }), {
+    enabled: isNotNil(pk),
+  });
+
   if (isLoading) {
     setIsLoading(true);
     return <></>;
+  }
+
+  setIsLoading(false);
+
+  // user 는 new 가 없기 때문에 list 페이지로 보낸다.
+  if (isNil(user)) {
+    return <Replace url={Urls.account.index.url()} />;
   }
 
   return (
@@ -72,7 +59,7 @@ const UserShowPage = () => {
   );
 };
 
-const UserShowView = React.memo((props: { user: ShowUserRes | null }) => {
+const UserShowView = React.memo((props: { user: ShowUserRes }) => {
   const router = useRouter();
   const [phone, setPhone] = useValueField("", "휴대폰");
   const [email, setEmail] = useValueField("", "이메일");
@@ -88,23 +75,21 @@ const UserShowView = React.memo((props: { user: ShowUserRes | null }) => {
   });
 
   const onEdit = useCallback(() => {
-    if (isNotNil(props.user)) {
-      const isValidPhone = vPhone(phone.value);
-      if (isNotBlank(isValidPhone)) {
-        return alert(isValidPhone);
-      }
-
-      const isValidEmail = vEmail(email.value);
-      if (isNotBlank(isValidEmail)) {
-        return alert(isValidEmail);
-      }
-
-      mutate({
-        pk: props.user.pk,
-        phone: phone.value,
-        email: email.value,
-      });
+    const isValidPhone = vPhone(phone.value);
+    if (isNotBlank(isValidPhone)) {
+      return alert(isValidPhone);
     }
+
+    const isValidEmail = vEmail(email.value);
+    if (isNotBlank(isValidEmail)) {
+      return alert(isValidEmail);
+    }
+
+    mutate({
+      pk: props.user.pk,
+      phone: phone.value,
+      email: email.value,
+    });
   }, [phone, email]);
 
   useEffect(() => {
