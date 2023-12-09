@@ -53,11 +53,7 @@ const ProductEditPage = () => {
   }
 
   setIsLoading(false);
-  return (
-    <div className="w-full px-4">
-      <ProductEditView res={product} />
-    </div>
-  );
+  return <ProductEditView res={product} />;
 };
 
 const ProductEditView = memo((props: { res?: ShowProductRes }) => {
@@ -152,41 +148,46 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
   }, [props.res]);
 
   return (
-    <CardFormView title="상품 정보">
-      <TextFieldView value={name} onChange={(value) => setName.set(value)} isShowingLabel />
-      <TextFieldView
-        value={descriptionTitle}
-        onChange={(value) => setDescriptionTitle.set(value)}
-        isShowingLabel
-      />
-      <TextFieldView
-        value={description}
-        onChange={(value) => setDescription.set(value)}
-        isShowingLabel
-      />
-      <NumberFieldView value={price} onChange={(value) => setPrice.set(value)} isShowingLabel />
-      <NumberFieldView
-        value={stockCount}
-        onChange={(value) => setStockCount.set(value)}
-        isShowingLabel
-      />
-      <ProductSelectView value={category} onChange={(value) => setCategory.set(value)} />
-      <ImageUploadView field={mainImage} onChange={(res) => setMainImage.set({ ...res.fileSet })} />
-      <ImageMultipleUploadView
-        field={subImages}
-        onChange={(res) => {
-          setSubImages.set(res);
-        }}
-        onDelete={(res) => {
-          setSubImages.set(res);
-        }}
-      />
-      <EditButtonView
-        isNew={isNil(props.res)}
-        onClick={() => onEdit()}
-        onDelete={() => onDelete()}
-      />
-    </CardFormView>
+    <div className="w-full px-4">
+      <CardFormView title="상품 정보">
+        <TextFieldView value={name} onChange={(value) => setName.set(value)} isShowingLabel />
+        <TextFieldView
+          value={descriptionTitle}
+          onChange={(value) => setDescriptionTitle.set(value)}
+          isShowingLabel
+        />
+        <TextFieldView
+          value={description}
+          onChange={(value) => setDescription.set(value)}
+          isShowingLabel
+        />
+        <NumberFieldView value={price} onChange={(value) => setPrice.set(value)} isShowingLabel />
+        <NumberFieldView
+          value={stockCount}
+          onChange={(value) => setStockCount.set(value)}
+          isShowingLabel
+        />
+        <ProductSelectView value={category} onChange={(value) => setCategory.set(value)} />
+        <ImageUploadView
+          field={mainImage}
+          onChange={(res) => setMainImage.set({ ...res.fileSet })}
+        />
+        <ImageMultipleUploadView
+          field={subImages}
+          onChange={(res) => {
+            setSubImages.set(res);
+          }}
+          onDelete={(res) => {
+            setSubImages.set(res);
+          }}
+        />
+        <EditButtonView
+          isNew={isNil(props.res)}
+          onClick={() => onEdit()}
+          onDelete={() => onDelete()}
+        />
+      </CardFormView>
+    </div>
   );
 });
 

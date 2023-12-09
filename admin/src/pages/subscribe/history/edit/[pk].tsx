@@ -4,6 +4,7 @@ import { compact, isEmpty, isNil } from "lodash";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import { useMutation, useQuery } from "react-query";
+import { useSetRecoilState } from "recoil";
 import CardFormView from "../../../../components/tailwindEx/CardFormView";
 import EditorEx from "../../../../view/EditorEx";
 import useValueField from "../../../../hooks/useValueField";
@@ -22,16 +23,24 @@ import {
 } from "../../../../api/type.g";
 import { EditButtonView } from "../../../../components/tailwindEx/EditButtonView";
 import { Urls } from "../../../../url/url.g";
+import { isGlobalLoading } from "../../../../store/loading";
 
 const SendEmailEditPage = () => {
   const router = useRouter();
   const pk = validatePk(router.query.pk);
+  const setIsLoading = useSetRecoilState(isGlobalLoading);
 
+  if (!router.isReady) {
+    setIsLoading(true);
+    return <></>;
+  }
+
+  // New
   if (isNil(pk)) {
     return <SendEmailEditView />;
   }
 
-  const { data: subscribeHistory } = useQuery(
+  const { data: subscribeHistory, isLoading } = useQuery(
     [queryKeys.subscribe, pk],
     () => api.showSubscribeHistory({ pk }),
     {
@@ -44,11 +53,13 @@ const SendEmailEditPage = () => {
     },
   );
 
-  return (
-    <div className="w-full px-4">
-      <SendEmailEditView res={subscribeHistory} />
-    </div>
-  );
+  if (isLoading) {
+    setIsLoading(true);
+    return <></>;
+  }
+
+  setIsLoading(false);
+  return <SendEmailEditView res={subscribeHistory} />;
 };
 
 const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
@@ -158,42 +169,44 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
   }, [props.res, title, body, userList, sendDate]);
 
   return (
-    <CardFormView title="구독 이메일">
-      <TextFieldView value={title} onChange={(value) => setTitle.set(value)} isShowingLabel />
-      <DatePickerView
-        field={sendDate}
-        onChange={(value) => setSendDate.set(value)}
-        disabled={isSend.value}
-        isShowingLabel
-      />
-      <EditorEx field={body} onChange={(value) => setBody.set(value)} />
-      <SubscribeSelectBoxView
-        userList={userList}
-        onChange={(value) => onChangeSubscribeSelectBox(value)}
-        disabled={isSend.value}
-      />
-      <div
-        className={classNames("w-full rounded p-2", {
-          "bg-white": userList.length > 0,
-        })}
-      >
-        {userList.map(([pk, label]) => (
-          <UserBadgeView
-            key={`user-list-${pk}`}
-            label={label}
-            onClickRemove={() => onClickRemoveUser(pk)}
-          />
-        ))}
-      </div>
-      <div className="flex w-full justify-between">
-        {props.res?.enableResend && <ResendEmailButtonView pk={props.res.pk} />}
-        <EditButtonView
-          isNew={isNil(props.res)}
-          onClick={() => onEdit()}
-          onDelete={isNotNil(props.res) ? onDeleteSubscribeHistory : undefined}
+    <div className="w-full px-4">
+      <CardFormView title="구독 이메일">
+        <TextFieldView value={title} onChange={(value) => setTitle.set(value)} isShowingLabel />
+        <DatePickerView
+          field={sendDate}
+          onChange={(value) => setSendDate.set(value)}
+          disabled={isSend.value}
+          isShowingLabel
         />
-      </div>
-    </CardFormView>
+        <EditorEx field={body} onChange={(value) => setBody.set(value)} />
+        <SubscribeSelectBoxView
+          userList={userList}
+          onChange={(value) => onChangeSubscribeSelectBox(value)}
+          disabled={isSend.value}
+        />
+        <div
+          className={classNames("w-full rounded p-2", {
+            "bg-white": userList.length > 0,
+          })}
+        >
+          {userList.map(([pk, label]) => (
+            <UserBadgeView
+              key={`user-list-${pk}`}
+              label={label}
+              onClickRemove={() => onClickRemoveUser(pk)}
+            />
+          ))}
+        </div>
+        <div className="flex w-full justify-between">
+          {props.res?.enableResend && <ResendEmailButtonView pk={props.res.pk} />}
+          <EditButtonView
+            isNew={isNil(props.res)}
+            onClick={() => onEdit()}
+            onDelete={isNotNil(props.res) ? onDeleteSubscribeHistory : undefined}
+          />
+        </div>
+      </CardFormView>
+    </div>
   );
 });
 
