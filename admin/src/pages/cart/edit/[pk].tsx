@@ -1,54 +1,21 @@
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
-import { Urls } from "../../../url/url.g";
 import { CartProductListItem, DeleteCartReq, ShowCartRes } from "../../../api/type.g";
 import useValueField from "../../../hooks/useValueField";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
 import { TextFieldView } from "../../../components/field/field";
 import { mf2 } from "../../../ex/numberEx";
-import { isGlobalLoading } from "../../../store/loading";
+import ShowContainer from "../../../layout/ShowContainer";
 
 const CartEditPage = () => {
-  const router = useRouter();
-  const pk = validatePk(router.query.pk);
-  const setIsLoading = useSetRecoilState(isGlobalLoading);
-
-  if (!router.isReady) {
-    setIsLoading(true);
-    return <></>;
-  }
-
-  // New
-  if (isNil(pk)) {
-    setIsLoading(false);
-    return <CartEditView />;
-  }
-
-  const { data: cart, isLoading } = useQuery([queryKeys.cart, pk], () => api.showCart({ pk }), {
-    enabled: router.isReady && isNotNil(pk),
-    onSuccess: (res) => {
-      if (isNil(res)) {
-        ignorePromise(() => router.replace(Urls.cart.index.url()));
-      }
-    },
-  });
-
-  if (isLoading) {
-    setIsLoading(true);
-    return <></>;
-  }
-
-  setIsLoading(false);
-  return <CartEditView res={cart} />;
+  return <ShowContainer queryKey={queryKeys.cart} api={api.showCart} Component={CartEditView} />;
 };
 
-const CartEditView = memo((props: { res?: ShowCartRes }) => {
+const CartEditView = memo((props: { data?: ShowCartRes }) => {
   const router = useRouter();
   const [name, setName] = useValueField("", "유저 이름");
   const [phone, setPhone] = useValueField("", "유저 휴대폰");
@@ -67,15 +34,15 @@ const CartEditView = memo((props: { res?: ShowCartRes }) => {
   });
 
   useEffect(() => {
-    if (isNil(props.res)) {
+    if (isNil(props.data)) {
       return;
     }
 
-    setName.set(props.res.name);
-    setPhone.set(props.res.phone);
-    setTotalPrice(props.res.totalPrice);
-    setList([...props.res.list]);
-  }, [props.res]);
+    setName.set(props.data.name);
+    setPhone.set(props.data.phone);
+    setTotalPrice(props.data.totalPrice);
+    setList([...props.data.list]);
+  }, [props.data]);
 
   const onDelete = useCallback((pk: number) => {
     if (!confirm("정말로 삭제 하시겠습니까?")) {

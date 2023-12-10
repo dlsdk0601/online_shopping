@@ -3,8 +3,7 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import { compact, isEmpty, isNil } from "lodash";
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import { useMutation, useQuery } from "react-query";
-import { useSetRecoilState } from "recoil";
+import { useMutation } from "react-query";
 import CardFormView from "../../../../components/tailwindEx/CardFormView";
 import EditorEx from "../../../../view/EditorEx";
 import useValueField from "../../../../hooks/useValueField";
@@ -12,7 +11,7 @@ import { TextFieldView } from "../../../../components/field/field";
 import DatePickerView from "../../../../view/DatePickerView";
 import UserBadgeView from "../../../../view/UserBadgeView";
 import SubscribeSelectBoxView from "../../../../view/SubscribeSelectBoxView";
-import { editAlert, ignorePromise, isNotNil, validatePk } from "../../../../ex/utils";
+import { editAlert, ignorePromise, isNotNil } from "../../../../ex/utils";
 import { queryKeys } from "../../../../lib/contants";
 import { api } from "../../../../api/url.g";
 import {
@@ -23,46 +22,19 @@ import {
 } from "../../../../api/type.g";
 import { EditButtonView } from "../../../../components/tailwindEx/EditButtonView";
 import { Urls } from "../../../../url/url.g";
-import { isGlobalLoading } from "../../../../store/loading";
+import ShowContainer from "../../../../layout/ShowContainer";
 
 const SendEmailEditPage = () => {
-  const router = useRouter();
-  const pk = validatePk(router.query.pk);
-  const setIsLoading = useSetRecoilState(isGlobalLoading);
-
-  if (!router.isReady) {
-    setIsLoading(true);
-    return <></>;
-  }
-
-  // New
-  if (isNil(pk)) {
-    return <SendEmailEditView />;
-  }
-
-  const { data: subscribeHistory, isLoading } = useQuery(
-    [queryKeys.subscribe, pk],
-    () => api.showSubscribeHistory({ pk }),
-    {
-      enabled: router.isReady && isNotNil(pk),
-      onSuccess: (res) => {
-        if (isNil(res)) {
-          ignorePromise(() => router.replace(Urls.subscribe.history.index.url()));
-        }
-      },
-    },
+  return (
+    <ShowContainer
+      queryKey={queryKeys.subscribe}
+      api={api.showSubscribeHistory}
+      Component={SendEmailEditView}
+    />
   );
-
-  if (isLoading) {
-    setIsLoading(true);
-    return <></>;
-  }
-
-  setIsLoading(false);
-  return <SendEmailEditView res={subscribeHistory} />;
 };
 
-const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
+const SendEmailEditView = memo((props: { data?: ShowSubscribeHistoryRes }) => {
   const router = useRouter();
   const [title, setTitle] = useValueField("", "제목");
   const [body, setBody] = useValueField("", "본분");
@@ -78,7 +50,7 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
           return;
         }
 
-        editAlert(isNil(props.res));
+        editAlert(isNil(props.data));
         ignorePromise(() =>
           router.replace(Urls.subscribe.history.edit["[pk]"].url({ pk: res.pk })),
         );
@@ -100,19 +72,19 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
   );
 
   useEffect(() => {
-    if (isNil(props.res)) {
+    if (isNil(props.data)) {
       return;
     }
 
-    setTitle.set(props.res.title);
-    setBody.set(props.res.body);
-    setIsSend.set(props.res.isSend);
-    setSendDate.set(moment(props.res.sendAt));
+    setTitle.set(props.data.title);
+    setBody.set(props.data.body);
+    setIsSend.set(props.data.isSend);
+    setSendDate.set(moment(props.data.sendAt));
 
     // ts 가 타입 순서를 반대로 인식한다.
-    const users: [number, string][] = props.res.users.map((item) => [item.pk, item.name]);
+    const users: [number, string][] = props.data.users.map((item) => [item.pk, item.name]);
     setUserList([...users]);
-  }, [props.res]);
+  }, [props.data]);
 
   const onChangeSubscribeSelectBox = useCallback((value: [number | null, string] | null) => {
     // 전체 선택
@@ -140,7 +112,7 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
   );
 
   const onDeleteSubscribeHistory = useCallback(() => {
-    if (isNil(props.res)) {
+    if (isNil(props.data)) {
       return;
     }
 
@@ -149,7 +121,7 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
       return alert("이미 발송한 메일은 지울 수 없습니다.");
     }
 
-    onDeleteApi({ pk: props.res.pk });
+    onDeleteApi({ pk: props.data.pk });
   }, [isSend]);
 
   const onEdit = useCallback(() => {
@@ -160,13 +132,13 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
     const users = isEmpty(userList) ? null : compact(userList.map(([pk, label]) => pk));
 
     onEditApi({
-      pk: props.res?.pk ?? null,
+      pk: props.data?.pk ?? null,
       title: title.value,
       body: body.value,
       sendDate: sendDate.value?.toISOString() ?? "",
       users,
     });
-  }, [props.res, title, body, userList, sendDate]);
+  }, [props.data, title, body, userList, sendDate]);
 
   return (
     <div className="w-full px-4">
@@ -198,11 +170,11 @@ const SendEmailEditView = memo((props: { res?: ShowSubscribeHistoryRes }) => {
           ))}
         </div>
         <div className="flex w-full justify-between">
-          {props.res?.enableResend && <ResendEmailButtonView pk={props.res.pk} />}
+          {props.data?.enableResend && <ResendEmailButtonView pk={props.data.pk} />}
           <EditButtonView
-            isNew={isNil(props.res)}
+            isNew={isNil(props.data)}
             onClick={() => onEdit()}
-            onDelete={isNotNil(props.res) ? onDeleteSubscribeHistory : undefined}
+            onDelete={isNotNil(props.data) ? onDeleteSubscribeHistory : undefined}
           />
         </div>
       </CardFormView>

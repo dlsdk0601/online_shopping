@@ -1,9 +1,8 @@
 import { useRouter } from "next/router";
 import { isEmpty, isNil } from "lodash";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import React, { memo, useCallback, useEffect } from "react";
-import { useSetRecoilState } from "recoil";
-import { editAlert, ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
+import { editAlert, ignorePromise } from "../../../ex/utils";
 import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
 import { Urls } from "../../../url/url.g";
@@ -16,47 +15,15 @@ import ProductSelectView from "../../../view/ProductSelectView";
 import { EditButtonView } from "../../../components/tailwindEx/EditButtonView";
 import ImageUploadView from "../../../view/ImageUploadView";
 import ImageMultipleUploadView from "../../../view/ImageMultipleUploadView";
-import { isGlobalLoading } from "../../../store/loading";
+import ShowContainer from "../../../layout/ShowContainer";
 
 const ProductEditPage = () => {
-  const router = useRouter();
-  const pk = validatePk(router.query.pk);
-  const setIsLoading = useSetRecoilState(isGlobalLoading);
-
-  if (!router.isReady) {
-    setIsLoading(true);
-    return <></>;
-  }
-
-  // New
-  if (isNil(pk)) {
-    setIsLoading(false);
-    return <ProductEditView />;
-  }
-
-  const { data: product, isLoading } = useQuery(
-    [queryKeys.product, pk],
-    () => api.showProduct({ pk }),
-    {
-      enabled: router.isReady && isNotNil(pk),
-      onSuccess: (res) => {
-        if (isNil(res)) {
-          ignorePromise(() => router.replace(Urls.product.index.url()));
-        }
-      },
-    },
+  return (
+    <ShowContainer queryKey={queryKeys.product} api={api.showProduct} Component={ProductEditView} />
   );
-
-  if (isLoading) {
-    setIsLoading(true);
-    return <></>;
-  }
-
-  setIsLoading(false);
-  return <ProductEditView res={product} />;
 };
 
-const ProductEditView = memo((props: { res?: ShowProductRes }) => {
+const ProductEditView = memo((props: { data?: ShowProductRes }) => {
   const router = useRouter();
   const [name, setName] = useValueField("", "상품명");
   const [descriptionTitle, setDescriptionTitle] = useValueField("", "상품 설명 타이틀");
@@ -73,7 +40,7 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
         return;
       }
 
-      editAlert(isNil(props.res));
+      editAlert(isNil(props.data));
       ignorePromise(() => router.replace(Urls.product.edit["[pk]"].url({ pk: res.pk })));
     },
   });
@@ -90,19 +57,19 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
   });
 
   useEffect(() => {
-    if (isNil(props.res)) {
+    if (isNil(props.data)) {
       return;
     }
 
-    setName.set(props.res.name);
-    setDescriptionTitle.set(props.res.descriptionTitle);
-    setDescription.set(props.res.description);
-    setPrice.set(props.res.price);
-    setStockCount.set(props.res.stockCount);
-    setCategory.set(props.res.category as ProductCategory);
-    setMainImage.set(props.res.mainImage);
-    setSubImages.set([...props.res.subImages]);
-  }, [props.res]);
+    setName.set(props.data.name);
+    setDescriptionTitle.set(props.data.descriptionTitle);
+    setDescription.set(props.data.description);
+    setPrice.set(props.data.price);
+    setStockCount.set(props.data.stockCount);
+    setCategory.set(props.data.category as ProductCategory);
+    setMainImage.set(props.data.mainImage);
+    setSubImages.set([...props.data.subImages]);
+  }, [props.data]);
 
   const onEdit = useCallback(() => {
     if (
@@ -123,7 +90,7 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
     }
 
     onEditApi({
-      pk: isNil(props.res) ? null : props.res.pk,
+      pk: isNil(props.data) ? null : props.data.pk,
       name: name.value,
       descriptionTitle: descriptionTitle.value,
       description: description.value,
@@ -136,7 +103,7 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
   }, [name, descriptionTitle, description, price, mainImage, subImages, stockCount, category]);
 
   const onDelete = useCallback(() => {
-    if (isNil(props.res)) {
+    if (isNil(props.data)) {
       return;
     }
 
@@ -144,8 +111,8 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
       return;
     }
 
-    onDeleteApi({ pk: props.res.pk });
-  }, [props.res]);
+    onDeleteApi({ pk: props.data.pk });
+  }, [props.data]);
 
   return (
     <div className="w-full px-4">
@@ -182,7 +149,7 @@ const ProductEditView = memo((props: { res?: ShowProductRes }) => {
           }}
         />
         <EditButtonView
-          isNew={isNil(props.res)}
+          isNew={isNil(props.data)}
           onClick={() => onEdit()}
           onDelete={() => onDelete()}
         />

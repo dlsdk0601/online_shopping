@@ -1,11 +1,9 @@
 import { useRouter } from "next/router";
 import { isNil } from "lodash";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import React, { useCallback, useEffect } from "react";
-import { useSetRecoilState } from "recoil";
-import { editAlert, ignorePromise, isNotNil, validatePk } from "../../../ex/utils";
+import { editAlert, ignorePromise } from "../../../ex/utils";
 import { DeleteBannerReq, EditBannerReq, FileSet, ShowBannerRes } from "../../../api/type.g";
-import { queryKeys } from "../../../lib/contants";
 import { api } from "../../../api/url.g";
 import { Urls } from "../../../url/url.g";
 import useValueField from "../../../hooks/useValueField";
@@ -15,47 +13,16 @@ import ProductSelectView from "../../../view/ProductSelectView";
 import ImageUploadView from "../../../view/ImageUploadView";
 import { EditButtonView } from "../../../components/tailwindEx/EditButtonView";
 import CardFormView from "../../../components/tailwindEx/CardFormView";
-import { isGlobalLoading } from "../../../store/loading";
+import ShowContainer from "../../../layout/ShowContainer";
+import { queryKeys } from "../../../lib/contants";
 
 const BannerEditPage = () => {
-  const router = useRouter();
-  const pk = validatePk(router.query.pk);
-  const setIsLoading = useSetRecoilState(isGlobalLoading);
-
-  if (!router.isReady) {
-    setIsLoading(true);
-    return <></>;
-  }
-
-  // New
-  if (isNil(pk)) {
-    setIsLoading(false);
-    return <BannerEditView />;
-  }
-
-  const { data: banner, isLoading } = useQuery(
-    [queryKeys.banner, pk],
-    () => api.showBanner({ pk }),
-    {
-      enabled: router.isReady && isNotNil(pk),
-      onSuccess: (res) => {
-        if (isNil(res)) {
-          ignorePromise(() => router.replace(Urls.banner.index.url()));
-        }
-      },
-    },
+  return (
+    <ShowContainer queryKey={queryKeys.banner} api={api.showBanner} Component={BannerEditView} />
   );
-
-  if (isLoading) {
-    setIsLoading(true);
-    return <></>;
-  }
-
-  setIsLoading(false);
-  return <BannerEditView res={banner} />;
 };
 
-const BannerEditView = (props: { res?: ShowBannerRes }) => {
+const BannerEditView = (props: { data?: ShowBannerRes }) => {
   const router = useRouter();
   const [title, setTitle] = useValueField("", "배너 이름");
   const [description, setDescription] = useValueField<string>("", "배너 설명");
@@ -69,7 +36,7 @@ const BannerEditView = (props: { res?: ShowBannerRes }) => {
         return;
       }
 
-      editAlert(isNil(props.res));
+      editAlert(isNil(props.data));
       ignorePromise(() => router.replace(Urls.banner.edit["[pk]"].url({ pk: res.pk })));
     },
   });
@@ -86,16 +53,16 @@ const BannerEditView = (props: { res?: ShowBannerRes }) => {
   });
 
   useEffect(() => {
-    if (isNil(props.res)) {
+    if (isNil(props.data)) {
       return;
     }
 
-    setTitle.set(props.res.title);
-    setSubTitle.set(props.res.subTitle);
-    setImage.set(props.res.image);
-    setCategory.set(props.res.category as ProductCategory);
-    setDescription.set(props.res.description ?? "");
-  }, [props.res]);
+    setTitle.set(props.data.title);
+    setSubTitle.set(props.data.subTitle);
+    setImage.set(props.data.image);
+    setCategory.set(props.data.category as ProductCategory);
+    setDescription.set(props.data.description ?? "");
+  }, [props.data]);
 
   const onEdit = useCallback(() => {
     if (
@@ -108,7 +75,7 @@ const BannerEditView = (props: { res?: ShowBannerRes }) => {
     }
 
     onEditApi({
-      pk: isNil(props.res) ? null : props.res.pk,
+      pk: isNil(props.data) ? null : props.data.pk,
       title: title.value,
       description: description.value,
       subTitle: subTitle.value,
@@ -118,7 +85,7 @@ const BannerEditView = (props: { res?: ShowBannerRes }) => {
   }, [title, description, subTitle, category, image]);
 
   const onDelete = useCallback(() => {
-    if (isNil(props.res)) {
+    if (isNil(props.data)) {
       return;
     }
 
@@ -126,8 +93,8 @@ const BannerEditView = (props: { res?: ShowBannerRes }) => {
       return;
     }
 
-    onDeleteApi({ pk: props.res.pk });
-  }, [props.res]);
+    onDeleteApi({ pk: props.data.pk });
+  }, [props.data]);
 
   return (
     <div className="w-full px-4">
@@ -146,7 +113,7 @@ const BannerEditView = (props: { res?: ShowBannerRes }) => {
         <ProductSelectView value={category} onChange={(value) => setCategory.set(value)} />
         <ImageUploadView field={image} onChange={(res) => setImage.set({ ...res.fileSet })} />
         <EditButtonView
-          isNew={isNil(props.res)}
+          isNew={isNil(props.data)}
           onClick={() => onEdit()}
           onDelete={() => onDelete()}
         />
