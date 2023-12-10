@@ -36,6 +36,7 @@ import {
 } from "./dto/common.dto";
 import { FailPurchaseReqDto } from "./dto/fail-purchase.dto";
 import { CartService } from "../cart/cart.service";
+import { config } from "../../config";
 
 @Injectable()
 export class PurchaseService {
@@ -48,8 +49,8 @@ export class PurchaseService {
     private httpService: HttpService,
     private cartService: CartService
   ) {
-    this.tossClientKey = this.configService.get<string>("TOSS_PAYMENT_CLIENT_API_KEY") ?? "";
-    this.tossSecretKey = this.configService.get<string>("TOSS_PAYMENT_SECRET_KEY") ?? "";
+    this.tossClientKey = config.tossPaymentClientApiKey;
+    this.tossSecretKey = config.tossPaymentSecretKey;
   }
 
   show(pk: number, user: User) {
