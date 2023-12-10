@@ -46,15 +46,20 @@ export class PurchaseListResPurchaseDto {
   @IsNotEmpty()
   phone: string;
 
-  @ApiProperty({ description: "상품 개수", nullable: false, type: "number" })
+  @ApiProperty({ description: "결제 금액", nullable: false, type: "number" })
   @IsNumber()
   @IsNotEmpty()
-  count: number;
+  totalPrice: number;
 
   @ApiProperty({ description: "주문 번호", nullable: false, type: "string" })
   @IsString()
   @IsNotEmpty()
   orderCode: string;
+
+  @ApiProperty({ description: "결제 수단", nullable: false, type: "string" })
+  @IsString()
+  @IsNotEmpty()
+  method: string;
 
   @ApiProperty({ description: "생성 일자", nullable: false, format: "date-time", type: "string" })
   @IsDate()
