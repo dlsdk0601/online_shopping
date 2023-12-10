@@ -1,14 +1,17 @@
 import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
-import { isArray, isNil } from "lodash";
+import { isNil } from "lodash";
 import { useQuery } from "react-query";
-import React, { isValidElement, PropsWithChildren } from "react";
+import React, { ComponentType } from "react";
 import { isNotNil, validatePk } from "../ex/utils";
 import { isGlobalLoading } from "../store/loading";
 
-function ShowContainer<T>(
-  props: PropsWithChildren<{ key: string; api: (req: { pk: number }) => Promise<T> }>,
-) {
+function ShowContainer<T>(props: {
+  queryKey: string;
+  api: (req: { pk: number }) => Promise<T>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  Component: ComponentType<{ data: T | undefined }>;
+}) {
   const router = useRouter();
   const pk = validatePk(router.query.pk);
   const setIsLoading = useSetRecoilState(isGlobalLoading);
@@ -21,10 +24,10 @@ function ShowContainer<T>(
   // new
   if (isNil(pk)) {
     setIsLoading(false);
-    return <></>;
+    return <props.Component data={undefined} />;
   }
 
-  const { data, isLoading } = useQuery([props.key, pk], () => props.api({ pk }), {
+  const { data, isLoading } = useQuery([props.queryKey, pk], () => props.api({ pk }), {
     enabled: router.isReady && isNotNil(pk),
     onSuccess: (res) => {
       if (isNil(res)) {
@@ -40,14 +43,7 @@ function ShowContainer<T>(
 
   setIsLoading(false);
 
-  return (
-    <>
-      {props.children &&
-        isValidElement(props.children) &&
-        isArray(props.children) &&
-        props.children.map((child) => React.cloneElement(child, { data }))}
-    </>
-  );
+  return <props.Component data={data} />;
 }
 
 export default ShowContainer;
