@@ -56,7 +56,7 @@ const PurchaseListPage = () => {
       searchType,
     };
 
-    ignorePromise(() => router.push(Urls.order.purchase.index.url(query)));
+    ignorePromise(() => router.push(Urls.order.index.url(query)));
   }, [page, search, searchType]);
 
   return (
@@ -82,10 +82,11 @@ const PurchaseListPage = () => {
           title="상품 구매 리스트"
           pagination={purchaseList ?? null}
           mapper={(value) => [
+            ["주문 번호", value.orderCode],
             ["주문자", value.name],
             ["주문자 연락처", value.phone],
-            ["주문 상품 수량", value.count],
-            ["주문 번호", value.orderCode],
+            ["결제 금액", value.totalPrice],
+            ["결제 수단", value.method],
             ["생성 일자", d2(value.createAt)],
           ]}
           links={(purchaseList?.rows ?? []).map((purchase) =>
