@@ -311,3 +311,10 @@ export class TossPaymentHttpApproveResDto {
   @IsNotEmpty()
   method: string;
 }
+
+export class TossPaymentHttpCancelReqDto {
+  @ApiProperty({ type: "string", nullable: false, description: "취소 사유" })
+  @IsString()
+  @IsNotEmpty()
+  cancelReason: string;
+}
