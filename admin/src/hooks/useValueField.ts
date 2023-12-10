@@ -53,6 +53,9 @@ const useValueField = <T>(
 
     for (let i = 0; i < validator.length; i++) {
       const val = validator[i];
+      if (isNil(val)) {
+        continue;
+      }
       const errorMessage = val(state.value);
       if (isNotNil(errorMessage)) {
         setState({ ...state, error: errorMessage });
