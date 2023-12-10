@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { memo, useCallback, useEffect, useRef } from "react";
 import { loadPaymentWidget, PaymentWidgetInstance } from "@tosspayments/payment-widget-sdk";
 import { isNil } from "lodash";
+import { nanoid } from "nanoid";
 import { ShowPurchaseRes } from "../../api/type.g";
 import { mf2 } from "../../ex/numberEx";
 import { ignorePromise } from "../../ex/utils";
@@ -29,16 +30,21 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
       return;
     }
 
-    const customerKey = user.pk.toString();
+    // CustomerKey: 영문 대소문자, 숫자, 특수문자(`-`,`_`,`=`,`.`,`@`)로 최소 2자 이상 최대 50자 이하
+    const customerKey = nanoid();
 
-    // 회원 결제
-    const paymentWidget = await loadPaymentWidget(baseConfig.toss_client_key, customerKey);
-    const paymentMethodsWidget = paymentWidget.renderPaymentMethods(`#${paymentId}`, {
-      value: props.purchase.totalPrice,
-    });
-    paymentWidget.renderAgreement(`#${agreementId}`);
-    paymentWidgetRef.current = paymentWidget;
-    paymentMethodsWidgetRef.current = paymentMethodsWidget;
+    try {
+      // 회원 결제
+      const paymentWidget = await loadPaymentWidget(baseConfig.toss_client_key, customerKey);
+      const paymentMethodsWidget = paymentWidget.renderPaymentMethods(`#${paymentId}`, {
+        value: props.purchase.totalPrice,
+      });
+      paymentWidget.renderAgreement(`#${agreementId}`);
+      paymentWidgetRef.current = paymentWidget;
+      paymentMethodsWidgetRef.current = paymentMethodsWidget;
+    } catch (e) {
+      alert(e);
+    }
   }, [user, props]);
 
   const onClickPay = useCallback(async () => {
