@@ -11,9 +11,15 @@ export const TextFieldView = (props: {
   onChange: (value: string) => void;
   isShowingLabel?: boolean;
   disabled?: boolean;
+  isWidthFull?: boolean;
 }) => {
   return (
-    <div className="relative mb-3 w-full lg:w-6/12">
+    <div
+      className={classNames("relative mb-3", {
+        "w-full lg:w-6/12": !props.isWidthFull,
+        "w-full": props.isWidthFull,
+      })}
+    >
       {props.isShowingLabel && (
         <label className="mb-2 block text-xs font-bold uppercase text-blueGray-600">
           {props.value.name}
@@ -22,8 +28,10 @@ export const TextFieldView = (props: {
       <input
         type="text"
         className={classNames(
-          "w-full rounded px-3 py-3 text-sm text-blueGray-600 placeholder-blueGray-300 shadow transition-all duration-150 ease-linear focus:outline-none focus:ring lg:w-10/12",
+          " rounded  px-3 py-3 text-sm text-blueGray-600 placeholder-blueGray-300 shadow transition-all duration-150 ease-linear focus:outline-none focus:ring ",
           {
+            "w-full lg:w-10/12": !props.isWidthFull,
+            "w-full": props.isWidthFull,
             "bg-white": !props.disabled,
             "bg-gray-100": props.disabled,
             "border-red-500": !isBlank(props.value.error),
