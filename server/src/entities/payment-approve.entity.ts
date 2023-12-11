@@ -1,4 +1,13 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import TimeSet from "./timeSet.entity";
 import {
   TossPaymentStatus,
@@ -26,6 +35,9 @@ export class TossPaymentApprove extends TimeSet {
 
   @OneToOne(() => TossPaymentEasypay, (easy) => easy.approve, { nullable: true })
   easypay: TossPaymentEasypay | null;
+
+  @OneToMany(() => PaymentCancelHistory, (cancel) => cancel.approve, { nullable: true })
+  cancels: PaymentCancelHistory[] | null;
 
   @Column({ type: "varchar", nullable: false, length: 16, comment: "상점 코드" })
   mid: string;
@@ -203,7 +215,7 @@ export class PaymentCancelHistory extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: "pk" })
   pk: number;
 
-  @OneToOne(() => TossPaymentApprove, { nullable: false })
+  @ManyToOne(() => TossPaymentApprove, { nullable: false })
   @JoinColumn({ name: "toss_payment_approve_pk", referencedColumnName: "pk" })
   approve: TossPaymentApprove;
 
