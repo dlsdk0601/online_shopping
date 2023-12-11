@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
-import { isArray, isNil } from "lodash";
+import { isNil } from "lodash";
 import useValueField from "../../hooks/useValueField";
 import { PurchaseSearchType } from "../../api/enum.g";
 import { api } from "../../api/url.g";
 import { PurchaseListReq, PurchaseListRes, PurchaseListResPurchase } from "../../api/type.g";
 import useIsReady from "../../hooks/useIsReady";
 import { labelToPurchaseSearchType } from "../../api/enum";
-import { ignorePromise } from "../../ex/utils";
+import { codecNumber, codecString, ignorePromise } from "../../ex/utils";
 import { Urls } from "../../url/url.g";
 import SearchBarView from "../../components/table/searchBarView";
 import SelectView from "../../view/SelectView";
@@ -35,13 +35,9 @@ const PurchaseListPage = () => {
   useIsReady(() => {
     const { page, search, searchType } = router.query;
 
-    if (isArray(page) || isArray(search) || isArray(searchType)) {
-      return;
-    }
-
-    const parsedPage = Number(page ?? 1);
-    const parsedSearch = search ?? "";
-    const parsedSearchType = labelToPurchaseSearchType(searchType) ?? null;
+    const parsedPage = codecNumber(page) ?? 1;
+    const parsedSearch = codecString(search);
+    const parsedSearchType = labelToPurchaseSearchType(codecString(searchType)) ?? null;
 
     setPage(parsedPage);
     setSearch.set(parsedSearch);
