@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Purchase } from "./Purchase.entity";
-import { TossPaymentType } from "../type/commonType";
+import { TossPaymentStatus, TossPaymentType } from "../type/commonType";
 import { PaymentFailure, TossPaymentApprove } from "./payment-approve.entity";
 import { isNotNil } from "../ex/ex";
 
@@ -42,6 +42,13 @@ export class Payment extends BaseEntity {
   create_at: Date;
 
   get isSuccess() {
-    return isNotNil(this.payment_approve);
+    return isNotNil(this.payment_approve) && this.payment_approve.status === TossPaymentStatus.DONE;
+  }
+
+  get isRefund() {
+    return (
+      isNotNil(this.payment_approve?.cancels) &&
+      this.payment_approve?.status === TossPaymentStatus.CANCELED
+    );
   }
 }
