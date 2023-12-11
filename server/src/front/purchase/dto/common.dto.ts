@@ -342,10 +342,10 @@ export class TossPaymentCancelDto {
   @IsNotEmpty()
   transactionKey: string;
 
-  @ApiProperty({ type: "string", nullable: false, description: "취소 건의 현금영수증 키 값" })
+  @ApiProperty({ type: "string", nullable: true, description: "취소 건의 현금영수증 키 값" })
   @IsString()
-  @IsNotEmpty()
-  receiptKey: string;
+  @IsOptional()
+  receiptKey: string | null;
 }
 
 export class TossPaymentEasyPayDto {
