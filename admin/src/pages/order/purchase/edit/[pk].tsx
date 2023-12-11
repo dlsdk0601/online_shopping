@@ -155,7 +155,7 @@ const RefundModal = forwardRef<
     }
 
     onRefundApi({ pk: props.pk, cancelReason: reason.value });
-  }, []);
+  }, [reason.value]);
 
   return (
     <div
@@ -196,10 +196,10 @@ const RefundModal = forwardRef<
           </div>
           <div className="space-y-4 p-4 md:p-5">
             <p className="text-base leading-relaxed text-gray-500">환불 사유를 적어주세요</p>
-            {/* TODO :: 길이 조정 */}
             <TextFieldView
               value={reason}
               onChange={(value) => setReason.set(value)}
+              isWidthFull
               isShowingLabel
             />
           </div>
