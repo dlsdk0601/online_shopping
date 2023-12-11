@@ -32,11 +32,12 @@ dev-restart: dev-clean dev
 
 dev-reinitialize: dev-clean dev import-faker
 
-gen:
-	ts-node ./bin/copiedTypes.ts
-	ts-node ./bin/tempDelete.ts
+watch:
+	nodemon --watch src bin/copiedTypes.ts bin/tempDelete.ts bin/binApiInterface.ts bin/binApiInterface.ts
+	#ts-node ./bin/copiedTypes.ts
+	#ts-node ./bin/tempDelete.ts
 
-watch: gen
+run:
 	npm run start:dev
 
 gen-interface:
