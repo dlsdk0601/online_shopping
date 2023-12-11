@@ -9,7 +9,6 @@ import {
 import { LIMIT } from "../../type/pagination.dto";
 import errorMessage from "../../constant/errorMessage";
 import { Payment } from "../../entities/payment.entity";
-import { isNotNil } from "../../ex/ex";
 import { PaymentCancelHistory, TossPaymentApprove } from "../../entities/payment-approve.entity";
 import { RefundPurchaseReqDto } from "./dto/purchase-refund.dto";
 import { HttpService } from "../../front/http/http.service";
@@ -19,18 +18,18 @@ import {
   TossPaymentHttpCancelReqDto,
 } from "../../front/purchase/dto/toss-payment.dto";
 import { TossPaymentCancelDto } from "../../front/purchase/dto/common.dto";
+import { RefundListReqDto, RefundListResDto, ShowRefundReqDto } from "./dto/show-refund.dto";
 
 @Injectable()
 export class PurchaseService {
-  private readonly tossClientKey: string;
   private readonly tossSecretKey: string;
 
   constructor(private assetService: AssetService, private httpService: HttpService) {
-    this.tossClientKey = config.tossPaymentClientApiKey;
     this.tossSecretKey = config.tossPaymentSecretKey;
   }
 
-  async list(body: PurchaseListReqDto) {
+  // TODO :: 검색
+  async purchaseList(body: PurchaseListReqDto) {
     const [payments, count] = await Payment.findAndCount({
       take: LIMIT,
       skip: LIMIT * (body.page - 1),
@@ -39,12 +38,15 @@ export class PurchaseService {
           user: true,
           purchase_items: true,
         },
-        payment_approve: true,
+        payment_approve: {
+          cancels: true,
+        },
       },
     });
 
     const items = payments
-      .filter((item) => isNotNil(item.payment_approve))
+      .filter((item) => item.isSuccess)
+      .filter((item) => !item.isRefund)
       .map((item) => ({
         pk: item.pk,
         name: item.purchase.user.name,
@@ -58,7 +60,37 @@ export class PurchaseService {
     return new PurchaseListResDto(items, count, body.page);
   }
 
-  async show(body: ShowPurchaseReqDto) {
+  // TODO :: 검색
+  async refundList(body: RefundListReqDto) {
+    const [cancels, count] = await PaymentCancelHistory.findAndCount({
+      take: LIMIT,
+      skip: LIMIT * (body.page - 1),
+      relations: {
+        approve: {
+          payment: {
+            purchase: {
+              user: true,
+            },
+          },
+        },
+      },
+    });
+
+    const items = cancels.map((item) => ({
+      pk: item.pk,
+      name: item.approve.payment.purchase.user.name,
+      phone: item.approve.payment.purchase.user.phone ?? "",
+      cancelPrice: item.cancel_amount,
+      orderCode: item.approve.order_id,
+      method: item.approve.method,
+      createAt: item.approve.create_at,
+      canceledAt: item.canceled_at,
+    }));
+
+    return new RefundListResDto(items, count, body.page);
+  }
+
+  async showPurchase(body: ShowPurchaseReqDto) {
     const payment = await Payment.findOne({
       where: {
         pk: body.pk,
@@ -87,6 +119,47 @@ export class PurchaseService {
       orderCode: payment.payment_approve.order_id,
       createAt: payment.create_at,
       purchaseItems: payment.purchase.purchase_items.map((item) => ({
+        pk: item.pk,
+        name: item.product.name,
+        price: item.product.price,
+        count: item.count,
+        status: item.status,
+        image: this.assetService.getFileSet(item.product.main_image),
+      })),
+    };
+  }
+
+  async showRefund(body: ShowRefundReqDto) {
+    const cancel = await PaymentCancelHistory.findOne({
+      where: {
+        pk: body.pk,
+      },
+      relations: {
+        approve: {
+          payment: {
+            purchase: {
+              user: true,
+              purchase_items: {
+                product: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (isNil(cancel)) {
+      throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
+    }
+
+    return {
+      pk: cancel.pk,
+      name: cancel.approve.payment.purchase.user.name,
+      phone: cancel.approve.payment.purchase.user.phone ?? "",
+      orderCode: cancel.approve.order_id,
+      createAt: cancel.approve.create_at,
+      canceledAt: cancel.canceled_at,
+      purchaseItems: cancel.approve.payment.purchase.purchase_items.map((item) => ({
         pk: item.pk,
         name: item.product.name,
         price: item.product.price,
@@ -131,7 +204,9 @@ export class PurchaseService {
     }
 
     try {
+      payment.payment_approve.status = res.status;
       const cancels = this.saveCancelHistory(payment.payment_approve, res.cancels);
+      await payment.payment_approve.save();
       await PaymentCancelHistory.save(cancels);
       return { pk: payment.pk };
     } catch (e) {
@@ -154,7 +229,7 @@ export class PurchaseService {
       paymentCancelHistory.easy_pay_discount_amount = cancel.easyPayDiscountAmount;
       paymentCancelHistory.canceled_at = cancel.canceledAt;
       paymentCancelHistory.transaction_key = cancel.transactionKey;
-      paymentCancelHistory.receipt_key = cancel.receiptKey;
+      paymentCancelHistory.receipt_key = cancel.receiptKey ?? "";
 
       cancelHistories.push(paymentCancelHistory);
     }
