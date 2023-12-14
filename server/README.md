@@ -20,6 +20,9 @@ $ make watch
 # make API interface in admin and front
 $ make gen-interface
 
+# project run
+$ make run
+
 ```
 
 ## Test (테스트 코드 작성 x)
