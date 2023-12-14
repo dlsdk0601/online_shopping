@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
 import { isNil } from "lodash";
+import { useSetRecoilState } from "recoil";
 import UseValueField from "../../hooks/useValueField";
 import { ProductCategory } from "../../api/enum.g";
 import { ProductListReq, ProductListRes, ProductListResProduct } from "../../api/type.g";
@@ -17,23 +18,30 @@ import { mf1 } from "../../ex/numberEx";
 import { CreateButtonView } from "../../components/tailwindEx/EditButtonView";
 import { NEWPK } from "../../lib/contants";
 import SelectView from "../../view/SelectView";
+import { isGlobalLoading } from "../../store/loading";
 
 const ProductListPage = () => {
   const router = useRouter();
+  const setIsLoading = useSetRecoilState(isGlobalLoading);
   const [page, setPage] = useState(1);
   const [search, setSearch] = UseValueField("", "검색어");
   const [category, setCategory] = useState<ProductCategory | null>(null);
   const [products, setProducts] = useState<ProductListRes | null>(null);
 
-  const { mutate: onSearchApi } = useMutation((req: ProductListReq) => api.productList(req), {
-    onSuccess: (res) => {
-      if (isNil(res)) {
-        return;
-      }
+  const { mutate: onSearchApi, isLoading } = useMutation(
+    (req: ProductListReq) => api.productList(req),
+    {
+      onSuccess: (res) => {
+        if (isNil(res)) {
+          return;
+        }
 
-      setProducts({ ...res });
+        setProducts({ ...res });
+      },
     },
-  });
+  );
+
+  setIsLoading(isLoading);
 
   useIsReady(() => {
     const { page, search, category } = router.query;

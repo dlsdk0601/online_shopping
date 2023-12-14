@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
 import { isNil } from "lodash";
+import { useSetRecoilState } from "recoil";
 import UseValueField from "../../hooks/useValueField";
 import { codecNumber, codecString, ignorePromise } from "../../ex/utils";
 import {
@@ -19,23 +20,30 @@ import { PaginationTableView } from "../../components/table/Table";
 import { d2 } from "../../ex/dateEx";
 import { Urls } from "../../url/url.g";
 import SelectView from "../../view/SelectView";
+import { isGlobalLoading } from "../../store/loading";
 
 const SubscribeListPage = () => {
   const router = useRouter();
+  const setIsLoading = useSetRecoilState(isGlobalLoading);
   const [page, setPage] = useState(1);
   const [search, setSearch] = UseValueField("", "검색어");
   const [searchType, setSearchType] = useState<SubscribeSearchType | null>(null);
   const [subscribeList, setSubscribeList] = useState<SubscribeListRes | null>(null);
 
-  const { mutate: onEditApi } = useMutation((req: SubscribeListReq) => api.subscribeList(req), {
-    onSuccess: (res) => {
-      if (isNil(res)) {
-        return;
-      }
+  const { mutate: onEditApi, isLoading } = useMutation(
+    (req: SubscribeListReq) => api.subscribeList(req),
+    {
+      onSuccess: (res) => {
+        if (isNil(res)) {
+          return;
+        }
 
-      setSubscribeList({ ...res });
+        setSubscribeList({ ...res });
+      },
     },
-  });
+  );
+
+  setIsLoading(isLoading);
 
   const { mutate: onDeleteApi } = useMutation(
     (req: DeleteSubscribeReq) => api.deleteSubscribe(req),

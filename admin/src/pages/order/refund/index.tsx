@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
 import { isNil } from "lodash";
+import { useSetRecoilState } from "recoil";
 import useValueField from "../../../hooks/useValueField";
 import { PurchaseSearchType } from "../../../api/enum.g";
 import { RefundListReq, RefundListRes, RefundListResRefund } from "../../../api/type.g";
@@ -14,23 +15,30 @@ import SearchBarView from "../../../components/table/searchBarView";
 import SelectView from "../../../view/SelectView";
 import { PaginationTableView } from "../../../components/table/Table";
 import { d2 } from "../../../ex/dateEx";
+import { isGlobalLoading } from "../../../store/loading";
 
 const RefundListPage = () => {
   const router = useRouter();
+  const setIsLoading = useSetRecoilState(isGlobalLoading);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useValueField("", "검색어");
   const [searchType, setSearchType] = useState<PurchaseSearchType | null>(null);
   const [refundList, setRefundList] = useState<RefundListRes | null>(null);
 
-  const { mutate: onSearchApi } = useMutation((req: RefundListReq) => api.refundList(req), {
-    onSuccess: (res) => {
-      if (isNil(res)) {
-        return;
-      }
+  const { mutate: onSearchApi, isLoading } = useMutation(
+    (req: RefundListReq) => api.refundList(req),
+    {
+      onSuccess: (res) => {
+        if (isNil(res)) {
+          return;
+        }
 
-      setRefundList({ ...res });
+        setRefundList({ ...res });
+      },
     },
-  });
+  );
+
+  setIsLoading(isLoading);
 
   useIsReady(() => {
     const { page, search, searchType } = router.query;
@@ -52,7 +60,7 @@ const RefundListPage = () => {
       searchType,
     };
 
-    ignorePromise(() => router.push(Urls.order.index.url(query)));
+    ignorePromise(() => router.push(Urls.order.refund.index.url(query)));
   }, [page, search, searchType]);
 
   return (

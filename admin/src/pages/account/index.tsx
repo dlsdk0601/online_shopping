@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
+import { useSetRecoilState } from "recoil";
 import { UserListReq, UserListRes, UserListResUser } from "../../api/type.g";
 import { UserSearchType, UserType } from "../../api/enum.g";
 import { api } from "../../api/url.g";
@@ -13,9 +14,11 @@ import UseValueField from "../../hooks/useValueField";
 import { userSearchTypeEnumToLabel } from "../../api/enum";
 import { codecNumber, codecString, ignorePromise } from "../../ex/utils";
 import SelectView from "../../view/SelectView";
+import { isGlobalLoading } from "../../store/loading";
 
 const UserListPage = () => {
   const router = useRouter();
+  const setIsLoading = useSetRecoilState(isGlobalLoading);
   const [page, setPage] = useState(1);
   const [search, setSearch] = UseValueField("", "검색어");
   const [searchType, setSearchType] = useState<UserSearchType | null>(null);
@@ -44,11 +47,13 @@ const UserListPage = () => {
     }
   };
 
-  const { mutate } = useMutation((req: UserListReq) => api.userList(req), {
+  const { mutate, isLoading } = useMutation((req: UserListReq) => api.userList(req), {
     onSuccess: (res) => {
       setPaginationUserList({ ...res });
     },
   });
+
+  setIsLoading(isLoading);
 
   useIsReady(() => {
     const { page, search, searchType } = router.query;

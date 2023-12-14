@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { isArray, isNil } from "lodash";
 import { useMutation } from "react-query";
+import { useSetRecoilState } from "recoil";
 import useValueField from "../../hooks/useValueField";
 import useIsReady from "../../hooks/useIsReady";
 import { ignorePromise } from "../../ex/utils";
@@ -10,14 +11,16 @@ import SearchBarView from "../../components/table/searchBarView";
 import { CartListReq, CartListRes } from "../../api/type.g";
 import { api } from "../../api/url.g";
 import { PaginationTableView } from "../../components/table/Table";
+import { isGlobalLoading } from "../../store/loading";
 
 const CartListPage = () => {
   const router = useRouter();
+  const setIsLoading = useSetRecoilState(isGlobalLoading);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useValueField("", "검색어");
   const [carts, setCart] = useState<CartListRes | null>(null);
 
-  const { mutate: onSearchApi } = useMutation((req: CartListReq) => api.cartList(req), {
+  const { mutate: onSearchApi, isLoading } = useMutation((req: CartListReq) => api.cartList(req), {
     onSuccess: (res) => {
       if (isNil(res)) {
         return;
@@ -26,6 +29,8 @@ const CartListPage = () => {
       setCart({ ...res });
     },
   });
+
+  setIsLoading(isLoading);
 
   useIsReady(() => {
     const { page, search } = router.query;

@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useMutation } from "react-query";
 import { isArray, isNil } from "lodash";
+import { useSetRecoilState } from "recoil";
 import SearchBarView from "../../../components/table/searchBarView";
 import { SubscribeHistorySearchType } from "../../../api/enum.g";
 import { PaginationTableView } from "../../../components/table/Table";
@@ -20,23 +21,30 @@ import { subscribeHistorySearchTypeEnumToLabel } from "../../../api/enum";
 import { CreateButtonView } from "../../../components/tailwindEx/EditButtonView";
 import { NEWPK } from "../../../lib/contants";
 import SelectView from "../../../view/SelectView";
+import { isGlobalLoading } from "../../../store/loading";
 
 const SubscribeHistoryListPage = () => {
   const router = useRouter();
+  const setIsLoading = useSetRecoilState(isGlobalLoading);
   const [page, setPage] = useState(1);
   const [search, setSearch] = UseValueField("", "검색어");
   const [searchType, setSearchType] = useState<SubscribeHistorySearchType | null>(null);
   const [historyList, setHistoryList] = useState<SubscribeHistoryListRes | null>(null);
 
-  const { mutate } = useMutation((req: SubscribeHistoryListReq) => api.subscribeHistoryList(req), {
-    onSuccess: (res) => {
-      if (isNil(res)) {
-        return;
-      }
+  const { mutate, isLoading } = useMutation(
+    (req: SubscribeHistoryListReq) => api.subscribeHistoryList(req),
+    {
+      onSuccess: (res) => {
+        if (isNil(res)) {
+          return;
+        }
 
-      setHistoryList({ ...res });
+        setHistoryList({ ...res });
+      },
     },
-  });
+  );
+
+  setIsLoading(isLoading);
 
   useIsReady(() => {
     const { page, search, searchType } = router.query;
