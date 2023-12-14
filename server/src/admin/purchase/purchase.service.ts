@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
+import { FindOptionsWhere, Like } from "typeorm";
 import { AssetService } from "../../asset/asset.service";
 import {
   PurchaseListReqDto,
@@ -19,6 +20,7 @@ import {
 } from "../../front/purchase/dto/toss-payment.dto";
 import { TossPaymentCancelDto } from "../../front/purchase/dto/common.dto";
 import { RefundListReqDto, RefundListResDto, ShowRefundReqDto } from "./dto/show-refund.dto";
+import { PurchaseSearchType } from "../../type/commonType";
 
 @Injectable()
 export class PurchaseService {
@@ -28,8 +30,50 @@ export class PurchaseService {
     this.tossSecretKey = config.tossPaymentSecretKey;
   }
 
-  // TODO :: 검색
   async purchaseList(body: PurchaseListReqDto) {
+    let options: FindOptionsWhere<Payment> | FindOptionsWhere<Payment>[];
+
+    if (isNil(body.searchType)) {
+      options = [
+        {
+          payment_approve: {
+            order_id: Like(`%${body.search}%`),
+          },
+        },
+        {
+          purchase: {
+            user: {
+              name: Like(`%${body.search}%`),
+            },
+          },
+        },
+        {
+          purchase: {
+            user: {
+              phone: Like(`%${body.search}%`),
+            },
+          },
+        },
+      ];
+    } else {
+      options = {
+        payment_approve: {
+          order_id:
+            body.searchType === PurchaseSearchType.ORDER_CODE
+              ? Like(`%${body.search}%`)
+              : undefined,
+        },
+        purchase: {
+          user: {
+            name:
+              body.searchType === PurchaseSearchType.NAME ? Like(`%${body.search}%`) : undefined,
+            phone:
+              body.searchType === PurchaseSearchType.PHONE ? Like(`%${body.search}%`) : undefined,
+          },
+        },
+      };
+    }
+
     const [payments, count] = await Payment.findAndCount({
       take: LIMIT,
       skip: LIMIT * (body.page - 1),
@@ -42,6 +86,7 @@ export class PurchaseService {
           cancels: true,
         },
       },
+      where: options,
     });
 
     const items = payments
@@ -60,8 +105,64 @@ export class PurchaseService {
     return new PurchaseListResDto(items, count, body.page);
   }
 
-  // TODO :: 검색
   async refundList(body: RefundListReqDto) {
+    let options: FindOptionsWhere<PaymentCancelHistory> | FindOptionsWhere<PaymentCancelHistory>[];
+
+    if (isNil(body.searchType)) {
+      options = [
+        {
+          approve: {
+            order_id: Like(`%${body.search}%`),
+          },
+        },
+        {
+          approve: {
+            payment: {
+              purchase: {
+                user: {
+                  name: Like(`%${body.search}%`),
+                },
+              },
+            },
+          },
+        },
+        {
+          approve: {
+            payment: {
+              purchase: {
+                user: {
+                  phone: Like(`%${body.search}%`),
+                },
+              },
+            },
+          },
+        },
+      ];
+    } else {
+      options = {
+        approve: {
+          order_id:
+            body.searchType === PurchaseSearchType.ORDER_CODE
+              ? Like(`%${body.search}%`)
+              : undefined,
+          payment: {
+            purchase: {
+              user: {
+                name:
+                  body.searchType === PurchaseSearchType.NAME
+                    ? Like(`%${body.search}%`)
+                    : undefined,
+                phone:
+                  body.searchType === PurchaseSearchType.PHONE
+                    ? Like(`%${body.search}%`)
+                    : undefined,
+              },
+            },
+          },
+        },
+      };
+    }
+
     const [cancels, count] = await PaymentCancelHistory.findAndCount({
       take: LIMIT,
       skip: LIMIT * (body.page - 1),
@@ -74,6 +175,7 @@ export class PurchaseService {
           },
         },
       },
+      where: options,
     });
 
     const items = cancels.map((item) => ({
