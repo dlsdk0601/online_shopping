@@ -77,11 +77,6 @@ const menu: MenuItem[] = [
         pathname: Urls.order.refund.index.pathname,
         url: Urls.order.refund.index.url(),
       },
-      {
-        name: "취소 내역",
-        pathname: Urls.order.cancel.index.pathname,
-        url: Urls.order.cancel.index.url(),
-      },
     ],
   },
 ];
