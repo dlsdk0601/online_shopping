@@ -23,8 +23,7 @@ export class ProductListReqDto {
   @IsEnum(ProductCategory)
   category: ProductCategory | null;
 
-  @ApiProperty({ description: "search", nullable: true, type: "string" })
-  @IsOptional()
+  @ApiProperty({ description: "search", nullable: false, type: "string" })
   @IsString()
   search: string;
 }

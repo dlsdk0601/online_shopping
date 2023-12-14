@@ -2,7 +2,6 @@ import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
 import {
   IsArray,
   IsDate,
-  IsEmpty,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -25,7 +24,6 @@ export class RefundListReqDto {
   searchType: PurchaseSearchType | null;
 
   @ApiProperty({ description: "search", nullable: false, type: "string" })
-  @IsEmpty()
   @IsString()
   search: string;
 }

@@ -1,5 +1,5 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { PaginationDto } from "../../../type/pagination.dto";
 import { FileSetDto } from "../../../asset/dto/fileSet.dto";
 
@@ -11,7 +11,6 @@ export class CartListReqDto {
 
   @ApiProperty({ description: "검색어", nullable: false, type: "string" })
   @IsString()
-  @IsOptional()
   search: string;
 }
 

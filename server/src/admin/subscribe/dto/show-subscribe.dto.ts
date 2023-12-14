@@ -25,8 +25,7 @@ export class SubscribeListReqDto {
   @IsEnum(SubscribeSearchType)
   searchType: SubscribeSearchType | null;
 
-  @ApiProperty({ description: "search", nullable: true, type: "string" })
-  @IsOptional()
+  @ApiProperty({ description: "search", nullable: false, type: "string" })
   @IsString()
   search: string;
 }
@@ -80,8 +79,7 @@ export class SubscribeHistoryListReqDto {
   @IsEnum(SubscribeHistorySearchType)
   searchType: SubscribeHistorySearchType | null;
 
-  @ApiProperty({ description: "search", nullable: true, type: "string" })
-  @IsOptional()
+  @ApiProperty({ description: "search", nullable: false, type: "string" })
   @IsString()
   search: string;
 }

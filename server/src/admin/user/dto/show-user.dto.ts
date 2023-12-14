@@ -83,8 +83,7 @@ export class UserListReqDto {
   @IsEnum(UserSearchType)
   searchType: UserSearchType | null;
 
-  @ApiProperty({ description: "search", nullable: true, type: "string" })
-  @IsOptional()
+  @ApiProperty({ description: "search", nullable: false, type: "string" })
   @IsString()
   search: string;
 }
