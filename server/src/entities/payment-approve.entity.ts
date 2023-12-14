@@ -9,12 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import TimeSet from "./timeSet.entity";
-import {
-  TossPaymentStatus,
-  TossPaymentType,
-  VirtualAccountRefundStatus,
-  VirtualAccountSettlementStatus,
-} from "../type/commonType";
+import { TossPaymentStatus, TossPaymentType } from "../type/commonType";
 import { TossPaymentCardAcquireStatus } from "../type/type";
 import { Payment } from "./payment.entity";
 
@@ -29,9 +24,6 @@ export class TossPaymentApprove extends TimeSet {
 
   @OneToOne(() => TossPaymentApproveCard, (card) => card.approve, { nullable: true })
   card_approve: TossPaymentApproveCard | null;
-
-  @OneToOne(() => TossPaymentVirtualAccount, (virtual) => virtual.approve, { nullable: true })
-  virtual_account_approve: TossPaymentVirtualAccount | null;
 
   @OneToOne(() => TossPaymentEasypay, (easy) => easy.approve, { nullable: true })
   easypay: TossPaymentEasypay | null;
@@ -277,58 +269,6 @@ export class TossPaymentEasypay extends BaseEntity {
     comment: "간편결제 서비스의 적립 포인트나 쿠폰 등으로 즉시 할인된 금액",
   })
   discount_amount: number;
-}
-
-// 가상계좌 결제
-@Entity("toss_payment_virtual_account")
-export class TossPaymentVirtualAccount extends BaseEntity {
-  @PrimaryGeneratedColumn({ comment: "pk" })
-  pk: number;
-
-  @OneToOne(() => TossPaymentApprove, { nullable: false })
-  @JoinColumn({ name: "toss_payment_approve_pk", referencedColumnName: "pk" })
-  approve: TossPaymentApprove;
-
-  @Column({
-    type: "varchar",
-    nullable: false,
-    length: 16,
-    comment: "가상계좌 타입(일반, 고정 중 하나)",
-  })
-  account_type: string;
-
-  @Column({ type: "varchar", nullable: false, length: 32, comment: "발급된 계좌번호" })
-  account_number: string;
-
-  @Column({ type: "varchar", nullable: false, length: 4, comment: "가상계좌 은행 숫자 코드" })
-  bank_code: string;
-
-  @Column({ type: "varchar", nullable: false, length: 124, comment: "가상계좌를 발급한 고객 이름" })
-  customer_name: string;
-
-  @Column({ type: "timestamptz", nullable: false, comment: "입금 기한" })
-  due_date: Date;
-
-  @Column({
-    type: "enum",
-    enum: VirtualAccountRefundStatus,
-    nullable: false,
-    comment: "환불 처리 상태",
-  })
-  refund_status: VirtualAccountRefundStatus;
-
-  @Column({ type: "boolean", nullable: false, comment: "가상계좌가 만료되었는지 여부" })
-  expired: boolean;
-
-  @Column({
-    type: "enum",
-    enum: VirtualAccountSettlementStatus,
-    nullable: false,
-    comment: "정산 상태",
-  })
-  settlement_status: VirtualAccountSettlementStatus;
-
-  // TODO :: 환불 계좌를 추가해야할지 환불쪽 진행할때 테이블 수정
 }
 
 // 결제 실패

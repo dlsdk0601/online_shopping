@@ -26,14 +26,8 @@ import {
   TossPaymentApprove,
   TossPaymentApproveCard,
   TossPaymentEasypay,
-  TossPaymentVirtualAccount,
 } from "../../entities/payment-approve.entity";
-import {
-  TossPaymentCardDto,
-  TossPaymentEasyPayDto,
-  TossPaymentErrorDto,
-  TossPaymentVirtualAccountDto,
-} from "./dto/common.dto";
+import { TossPaymentCardDto, TossPaymentEasyPayDto, TossPaymentErrorDto } from "./dto/common.dto";
 import { FailPurchaseReqDto } from "./dto/fail-purchase.dto";
 import { CartService } from "../cart/cart.service";
 import { config } from "../../config";
@@ -200,14 +194,9 @@ export class PurchaseService {
       return { result: false, pk: approve.pk, error: res.failure };
     }
 
-    // 카드 결제
+    // 카드 결제 (카드 결제 외에는 하지 않는다)
     if (isNotNil(res.card)) {
       await this.saveCard(res.card, approve);
-    }
-
-    // 무통장 입금
-    if (isNotNil(res.virtualAccount)) {
-      await this.saveVirtualAccount(res.virtualAccount, approve);
     }
 
     // 간편결제
@@ -318,29 +307,6 @@ export class PurchaseService {
     try {
       await cardApprove.save();
       return cardApprove;
-    } catch (e) {
-      throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
-    }
-  }
-
-  async saveVirtualAccount(
-    virtualAccount: TossPaymentVirtualAccountDto,
-    approve: TossPaymentApprove
-  ): Promise<TossPaymentVirtualAccount> {
-    const virtualApprove = new TossPaymentVirtualAccount();
-    virtualApprove.approve = approve;
-    virtualApprove.account_type = virtualAccount.accountType;
-    virtualApprove.account_number = virtualAccount.accountNumber;
-    virtualApprove.bank_code = virtualAccount.bankCode;
-    virtualApprove.customer_name = virtualAccount.customerName;
-    virtualApprove.due_date = virtualAccount.dueDate;
-    virtualApprove.refund_status = virtualAccount.refundStatus;
-    virtualApprove.expired = virtualAccount.expired;
-    virtualApprove.settlement_status = virtualAccount.settlementStatus;
-
-    try {
-      await virtualApprove.save();
-      return virtualApprove;
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
