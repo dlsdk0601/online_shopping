@@ -3,10 +3,12 @@
 ## Installation
 
 ```bash
+#nix-shell 기반이기에 npm i 불필요
 $ make
 ``` 
-nix-shell 기반이기에 npm i 불필요
+<br />
 
+## Run
 ```bash
 # Router Generate
 $ make watch
