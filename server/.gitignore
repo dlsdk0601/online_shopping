@@ -43,7 +43,6 @@ lerna-debug.log*
 *.env.*
 *.env*
 api.json
-/src/temp/
 front-api.json
 admin-api.json
 http/
