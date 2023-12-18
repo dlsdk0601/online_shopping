@@ -17,7 +17,13 @@ export class MainBanner extends TimeSet {
   @Column({ type: "text", nullable: true, comment: "배너 설명" })
   description: string | null;
 
-  @Column({ type: "enum", enum: ProductCategory, nullable: false, comment: "카테고리" })
+  @Column({
+    type: "enum",
+    enum: ProductCategory,
+    nullable: false,
+    comment: "카테고리",
+    unique: true,
+  })
   category: ProductCategory;
 
   @OneToOne(() => Asset, (asset) => asset, { nullable: false, createForeignKeyConstraints: false })
