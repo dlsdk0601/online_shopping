@@ -32,5 +32,10 @@ export class FailPurchaseResDto {
   @ApiProperty({ type: "string", nullable: false, description: "에러 코드" })
   @IsString()
   @IsNotEmpty()
-  code: string;
+  errorCode: string;
+
+  @ApiProperty({ type: "string", nullable: false, description: "주문 번호" })
+  @IsString()
+  @IsNotEmpty()
+  orderCode: string;
 }
