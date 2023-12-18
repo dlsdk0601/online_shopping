@@ -335,7 +335,6 @@ export class PurchaseService {
       for (let i = 0; i < purchaseItems.length; i++) {
         // eslint-disable-next-line no-param-reassign
         purchaseItems[i].status = status;
-        // eslint-disable-next-line no-await-in-loop
         await purchaseItems[i].save();
       }
     } catch (e) {
