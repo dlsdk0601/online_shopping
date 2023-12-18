@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
 import { isNil } from "lodash";
-import { ignorePromise, isBlank, isNotNil, queryFilter } from "../../ex/utils";
+import { codecString, ignorePromise, isBlank, isNotNil } from "../../ex/utils";
 import { Urls } from "../../url/url.g";
 import { api } from "../../api/url.g";
 import { TossPaymentApproveReq } from "../../api/type.g";
@@ -39,10 +39,10 @@ const BridgePage = () => {
       return;
     }
 
-    const paymentType = queryFilter(router.query.paymentType);
-    const orderId = queryFilter(router.query.orderId);
-    const paymentKey = queryFilter(router.query.paymentKey);
-    const amount = queryFilter(router.query.amount);
+    const paymentType = codecString(router.query.paymentType);
+    const orderId = codecString(router.query.orderId);
+    const paymentKey = codecString(router.query.paymentKey);
+    const amount = codecString(router.query.amount);
 
     if (isBlank(paymentKey) || isBlank(orderId) || isBlank(paymentKey) || isBlank(amount)) {
       ignorePromise(() => router.replace(Urls.purchase.fail.url()));

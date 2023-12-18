@@ -221,7 +221,7 @@ export function validatePk(pk: string | string[] | undefined): number | null {
 }
 
 // 제일 기본 query 처리 함수
-export function queryFilter(query: string | string[] | undefined): string {
+export function codecString(query: string | string[] | undefined): string {
   // undefined 나 query[0] 이 제대로 된값이 아니면 어차피 에러 처리가 되어야 한다.
   if (isNil(query)) {
     return "";
@@ -232,4 +232,36 @@ export function queryFilter(query: string | string[] | undefined): string {
   }
 
   return query;
+}
+
+export function codecNumber(query: string | string[] | undefined): number | null {
+  if (isNil(query) || isArray(query)) {
+    return null;
+  }
+
+  const value = Number(query);
+
+  if (isNaN(value)) {
+    return null;
+  }
+
+  return value;
+}
+
+export function codecBoolean(query: string | string[] | undefined): boolean | null {
+  // undefined 나 query[0] 이 제대로 된값이 아니면 어차피 에러 처리가 되어야 한다.
+  if (isNil(query)) {
+    return null;
+  }
+
+  const value = isArray(query) ? head(query) : query;
+
+  switch (value) {
+    case "true":
+      return true;
+    case "false":
+      return false;
+    default:
+      return null;
+  }
 }
