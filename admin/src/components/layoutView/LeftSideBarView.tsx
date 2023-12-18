@@ -77,6 +77,11 @@ const menu: MenuItem[] = [
         pathname: Urls.order.refund.index.pathname,
         url: Urls.order.refund.index.url(),
       },
+      {
+        name: "실패 내역",
+        pathname: Urls.order.fail.index.pathname,
+        url: Urls.order.fail.index.url(),
+      },
     ],
   },
 ];
