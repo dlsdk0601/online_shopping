@@ -17,11 +17,12 @@ $ make dev-reinitialize
 # copy type files and watch mode
 $ make watch
 
-# make API interface in admin and front
-$ make gen-interface
-
 # project run
 $ make run
+
+# make API interface in admin and front
+# 프로젝트가 실행되고 swagger 가 셋팅되어야 interface 생성 가능
+$ make gen-interface
 
 ```
 

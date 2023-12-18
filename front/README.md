@@ -2,17 +2,15 @@
 
 ## Installation
 
-```
+```bash
+# nix-shell 기반이기에 npm i 불필요
 $ make
 ``` 
-nix-shell 기반이기에 npm i 불필요
-
+## Run
+```bash
 # Router Generate
-```
 $ make watch
-``` 
 
-## Running the app
-```
+# Running the app
 $ npm run dev
-```
+``` 
