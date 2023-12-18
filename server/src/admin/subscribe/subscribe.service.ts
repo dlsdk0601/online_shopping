@@ -92,7 +92,6 @@ export class SubscribeService {
   }
 
   async historyList(body: SubscribeHistoryListReqDto) {
-    // TODO :: 검색
     const [histories, count] = await SubscribeHistory.findAndCount({
       take: LIMIT,
       skip: LIMIT * (body.page - 1),
@@ -101,6 +100,9 @@ export class SubscribeService {
         title: true,
         send_time: true,
         is_send: true,
+      },
+      where: {
+        title: Like(`%${body.search}%`),
       },
     });
 
@@ -194,7 +196,6 @@ export class SubscribeService {
     }
   }
 
-  // TODO :: 이메일 전송 API
   async sendEmail(body: ResendEmailReqDto) {
     if (isNil(this.transporter)) {
       throw new InternalServerErrorException(errorMessage.FAIL_SEND_EMAIL);

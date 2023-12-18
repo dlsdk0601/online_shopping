@@ -11,7 +11,7 @@ import {
   IsOptional,
   IsString,
 } from "class-validator";
-import { SubscribeHistorySearchType, SubscribeSearchType } from "../../../type/commonType";
+import { SubscribeSearchType } from "../../../type/commonType";
 import { PaginationDto } from "../../../type/pagination.dto";
 
 export class SubscribeListReqDto {
@@ -73,11 +73,6 @@ export class SubscribeHistoryListReqDto {
   @IsNumber()
   @IsNotEmpty()
   page: number;
-
-  @ApiProperty({ description: "search type", enum: SubscribeHistorySearchType, nullable: true })
-  @IsOptional()
-  @IsEnum(SubscribeHistorySearchType)
-  searchType: SubscribeHistorySearchType | null;
 
   @ApiProperty({ description: "search", nullable: false, type: "string" })
   @IsString()
