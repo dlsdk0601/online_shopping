@@ -67,13 +67,6 @@ const UserDropdown = () => {
         <button
           type="button"
           className="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-blueGray-700"
-          onClick={(e) => e.preventDefault()}
-        >
-          My Account
-        </button>
-        <button
-          type="button"
-          className="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-blueGray-700"
           onClick={() => mutate({})}
         >
           sign-out
