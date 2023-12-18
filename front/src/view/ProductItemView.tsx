@@ -61,11 +61,6 @@ const ProductItemView = (props: { item: ProductListItem }) => {
               </button>
             </li>
             <li>
-              <button type="button">
-                <i className="fa fa-star" />
-              </button>
-            </li>
-            <li>
               <button type="button" onClick={() => onAddCart()}>
                 <i className="fa fa-shopping-cart" />
               </button>

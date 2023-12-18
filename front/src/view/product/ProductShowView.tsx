@@ -5,7 +5,6 @@ import { useRecoilValue } from "recoil";
 import { AddCartReq, ShowProductRes } from "../../api/type.g";
 import useValueField from "../../hooks/useValueField";
 import { mf1 } from "../../ex/numberEx";
-import Stars from "../../layout/components/Stars";
 import { api } from "../../api/url.g";
 import { tokenModel } from "../../store/user";
 
@@ -80,7 +79,6 @@ const ProductShowView = (props: { product: ShowProductRes }) => {
               <div className="right-content">
                 <h4>{props.product.name}</h4>
                 <span className="price">₩{mf1(props.product.price)}</span>
-                <Stars starScore={5} />
                 <span>{props.product.description}</span>
                 <div className="quote">
                   <i className="fa fa-quote-left" />
