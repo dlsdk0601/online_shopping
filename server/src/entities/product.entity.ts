@@ -50,6 +50,4 @@ export class Product extends TimeSet {
 
   @Column({ enum: ProductCategory, type: "enum", nullable: false })
   category: ProductCategory;
-
-  // TODO :: 별점
 }

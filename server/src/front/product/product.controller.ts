@@ -15,7 +15,7 @@ export class ProductController {
 
   @Get("/product-list")
   @ApiCreatedResponse({ type: ProductListResDto })
-  @ApiBody({ type: ProductListReqDto, required: false }) // TODO :: 쿼리는 interface 가 생성되지 않는다. 꼼수로 넣은거 수정
+  @ApiBody({ type: ProductListReqDto, required: false }) // 쿼리는 interface 가 생성되지 않는다. 꼼수로 넣음
   async list(@Query() query: ProductListReqDto) {
     return this.productService.list(query);
   }

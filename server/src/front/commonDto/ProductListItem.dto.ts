@@ -37,6 +37,4 @@ export class ProductListItem {
   })
   @IsNotEmpty()
   image: FileSetDto;
-
-  // TODO :: 별점 추가
 }

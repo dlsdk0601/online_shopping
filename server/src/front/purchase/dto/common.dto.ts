@@ -167,7 +167,6 @@ export class TossPaymentVirtualAccountDto {
   @IsNotEmpty()
   settlementStatus: VirtualAccountSettlementStatus;
 
-  // TODO :: 문서 설명만으로는 이해 불가 확인 해야함
   // * 구매자의 환불계좌 정보는 결제창을 띄운 시점부터 30분 동안만 조회할 수 있습니다. 이후에는 값이 내려가지 않습니다.
   // 환불계좌 정보입니다. 은행 코드(bankCode), 계좌번호(accountNumber), 예금주 정보(holderName)가 담긴 객체입니다.
   refundReceiveAccount: {
