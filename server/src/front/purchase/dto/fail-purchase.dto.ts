@@ -28,4 +28,9 @@ export class FailPurchaseResDto {
   @IsString()
   @IsNotEmpty()
   message: string;
+
+  @ApiProperty({ type: "string", nullable: false, description: "에러 코드" })
+  @IsString()
+  @IsNotEmpty()
+  code: string;
 }

@@ -6,7 +6,6 @@ import {
 } from "@nestjs/common";
 import { isNil } from "lodash";
 import { In } from "typeorm";
-import { ConfigService } from "@nestjs/config";
 import { Purchase, PurchaseItem } from "../../entities/Purchase.entity";
 import errorMessage from "../../constant/errorMessage";
 import { AddPurchaseReqDto } from "./dto/add-purchase.dto";
@@ -38,11 +37,7 @@ export class PurchaseService {
   private readonly tossSecretKey: string;
   private readonly tossPaymentApproveUrl = "https://api.tosspayments.com/v1/payments/confirm";
 
-  constructor(
-    private configService: ConfigService,
-    private httpService: HttpService,
-    private cartService: CartService
-  ) {
+  constructor(private httpService: HttpService, private cartService: CartService) {
     this.tossClientKey = config.tossPaymentClientApiKey;
     this.tossSecretKey = config.tossPaymentSecretKey;
   }
@@ -132,7 +127,7 @@ export class PurchaseService {
       paymentFailure.payment = payment;
       await paymentFailure.save();
 
-      return { pk: paymentFailure.pk, message: paymentFailure.message };
+      return { pk: paymentFailure.pk, message: paymentFailure.message, code: paymentFailure.code };
     } catch (e) {
       throw new InternalServerErrorException(errorMessage.INTERNAL_FAILED);
     }
