@@ -14,6 +14,7 @@ import {
   ShowRefundReqDto,
   ShowRefundResDto,
 } from "./dto/show-refund.dto";
+import { FailListReqDto, FailListResDto } from "./dto/show-fail.dto";
 
 @Controller("/admin/purchase")
 @ApiTags("어드민 - 구매")
@@ -48,5 +49,11 @@ export class PurchaseController {
   @ApiCreatedResponse({ type: ShowRefundResDto })
   async showRefund(@Body() body: ShowRefundReqDto) {
     return this.purchaseService.showRefund(body);
+  }
+
+  @Post("fail-list")
+  @ApiCreatedResponse({ type: FailListResDto })
+  async failList(@Body() body: FailListReqDto) {
+    return this.purchaseService.failList(body);
   }
 }

@@ -10,7 +10,11 @@ import {
 import { LIMIT } from "../../type/pagination.dto";
 import errorMessage from "../../constant/errorMessage";
 import { Payment } from "../../entities/payment.entity";
-import { PaymentCancelHistory, TossPaymentApprove } from "../../entities/payment-approve.entity";
+import {
+  PaymentCancelHistory,
+  PaymentFailure,
+  TossPaymentApprove,
+} from "../../entities/payment-approve.entity";
 import { RefundPurchaseReqDto } from "./dto/purchase-refund.dto";
 import { HttpService } from "../../front/http/http.service";
 import { config } from "../../config";
@@ -21,6 +25,7 @@ import {
 import { TossPaymentCancelDto } from "../../front/purchase/dto/common.dto";
 import { RefundListReqDto, RefundListResDto, ShowRefundReqDto } from "./dto/show-refund.dto";
 import { PurchaseSearchType } from "../../type/commonType";
+import { FailListReqDto, FailListResDto } from "./dto/show-fail.dto";
 
 @Injectable()
 export class PurchaseService {
@@ -190,6 +195,81 @@ export class PurchaseService {
     }));
 
     return new RefundListResDto(items, count, body.page);
+  }
+
+  async failList(body: FailListReqDto) {
+    let options: FindOptionsWhere<PaymentFailure> | FindOptionsWhere<PaymentFailure>[];
+
+    if (isNil(body.searchType)) {
+      options = [
+        {
+          payment: {
+            purchase: {
+              order_code: Like(`%${body.search}%`),
+            },
+          },
+        },
+        {
+          payment: {
+            purchase: {
+              user: {
+                name: Like(`%${body.search}%`),
+              },
+            },
+          },
+        },
+        {
+          payment: {
+            purchase: {
+              user: {
+                phone: Like(`%${body.search}%`),
+              },
+            },
+          },
+        },
+      ];
+    } else {
+      options = {
+        payment: {
+          purchase: {
+            order_code:
+              body.searchType === PurchaseSearchType.ORDER_CODE
+                ? Like(`%${body.search}%`)
+                : undefined,
+            user: {
+              name:
+                body.searchType === PurchaseSearchType.NAME ? Like(`%${body.search}%`) : undefined,
+              phone:
+                body.searchType === PurchaseSearchType.PHONE ? Like(`%${body.search}%`) : undefined,
+            },
+          },
+        },
+      };
+    }
+
+    const [fails, count] = await PaymentFailure.findAndCount({
+      take: LIMIT,
+      skip: LIMIT * (body.page - 1),
+      relations: {
+        payment: {
+          purchase: {
+            user: true,
+          },
+        },
+      },
+      where: options,
+    });
+
+    const items = fails.map((item) => ({
+      pk: item.pk,
+      name: item.payment.purchase.user.name,
+      phone: item.payment.purchase.user.phone ?? "",
+      orderCode: item.payment.purchase.order_code,
+      errorCode: item.code,
+      createAt: item.payment.create_at,
+    }));
+
+    return new FailListResDto(items, count, body.page);
   }
 
   async showPurchase(body: ShowPurchaseReqDto) {
