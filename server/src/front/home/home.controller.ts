@@ -10,7 +10,7 @@ export class HomeController {
 
   @Get("home")
   @ApiCreatedResponse({ type: HomeResDto })
-  @ApiBody({ type: HomeReqDto, required: false }) // TODO :: 쿼리는 interface 가 생성되지 않는다. 꼼수로 넣은거 수정
+  @ApiBody({ type: HomeReqDto, required: false }) // 쿼리는 interface 가 생성되지 않는다. 꼼수로 넣음
   async home(@Query() query: HomeReqDto) {
     return this.homeService.home(query);
   }

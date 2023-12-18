@@ -18,31 +18,28 @@ export class PurchaseController {
   @Post("show-purchase")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: ShowPurchaseResDto })
-  show(@Body() body: ShowPurchaseReqDto, @GetUser() user: User): ShowPurchaseResDto {
+  show(@Body() body: ShowPurchaseReqDto, @GetUser() user: User) {
     return this.purchaseService.show(body.pk, user);
   }
 
   @Post("add-purchase")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: AddPurchaseResDto })
-  async add(@Body() body: AddPurchaseReqDto, @GetUser() user: User): Promise<AddPurchaseResDto> {
+  async add(@Body() body: AddPurchaseReqDto, @GetUser() user: User) {
     return this.purchaseService.add(body, user);
   }
 
   @Post("toss-payment-approve")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: TossPaymentApproveResDto })
-  async tossPaymentApprove(
-    @Body() body: TossPaymentApproveReqDto,
-    @GetUser() user: User
-  ): Promise<TossPaymentApproveResDto> {
+  async tossPaymentApprove(@Body() body: TossPaymentApproveReqDto, @GetUser() user: User) {
     return this.purchaseService.tossPaymentApprove(body, user);
   }
 
   @Post("fail-purchase")
   @UseGuards(AuthGuard("jwt"))
   @ApiCreatedResponse({ type: FailPurchaseResDto })
-  async failPurchase(@Body() body: FailPurchaseReqDto): Promise<FailPurchaseResDto> {
+  async failPurchase(@Body() body: FailPurchaseReqDto) {
     return this.purchaseService.failPurchase(body);
   }
 }
