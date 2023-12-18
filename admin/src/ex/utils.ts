@@ -162,18 +162,18 @@ export function editAlert(isNew: boolean) {
   return alert(isNew ? "등록 되었습니다." : "수정 되었습니다.");
 }
 
-export function codecNumber(page: string | string[] | undefined): number | null {
-  if (isNil(page) || isArray(page)) {
+export function codecNumber(query: string | string[] | undefined): number | null {
+  if (isNil(query) || isArray(query)) {
     return null;
   }
 
-  const pageNum = Number(page);
+  const value = Number(query);
 
-  if (isNaN(pageNum)) {
+  if (isNaN(value)) {
     return null;
   }
 
-  return pageNum;
+  return value;
 }
 
 export function codecString(query: string | string[] | undefined): string {
