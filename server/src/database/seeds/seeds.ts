@@ -276,7 +276,7 @@ export default class TypeOrmSeeder implements Seeder {
       product.name = faker.name.fullName();
       product.description_title = faker.random.words(4);
       product.description = faker.random.words(50);
-      product.price = Number(faker.random.numeric(3));
+      product.price = Number(faker.random.numeric(5));
       product.main_image = mainImage;
       product.sub_images = subImages;
       product.category = category;
