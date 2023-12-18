@@ -4,7 +4,7 @@ import { isNil } from "lodash";
 import { isNotNil, validatePk } from "../../../../ex/utils";
 import { api } from "../../../../api/url.g";
 import { queryKeys } from "../../../../lib/contants";
-import { mf2 } from "../../../../ex/numberEx";
+import { mf1 } from "../../../../ex/numberEx";
 import { purchaseStatusEnumToLabel } from "../../../../api/enum";
 import { PurchaseItemStatus } from "../../../../api/enum.g";
 import { Replace } from "../../../../layout/App";
@@ -42,7 +42,7 @@ const OrderShowPage = () => {
             <li className="w-50 px-3 mb-2">주문 명:</li>
             <li className="w-50 text-right px-3 mb-2">{data.title}</li>
             <li className="w-50 px-3 mb-2">결제 가격:</li>
-            <li className="w-50 text-right px-3 mb-2">${mf2(data.totalPrice)}</li>
+            <li className="w-50 text-right px-3 mb-2">₩{mf1(data.totalPrice)}</li>
           </ul>
         </div>
         <ul className="w-75 mx-auto mt-3">
@@ -75,7 +75,7 @@ const OrderShowPage = () => {
                 {item.count}
               </p>
               <p style={{ width: "20%" }} className="text-center">
-                {mf2(item.price)}
+                ₩{mf1(item.price)}
               </p>
               <p style={{ width: "20%" }} className="text-center">
                 {purchaseStatusEnumToLabel(item.status as PurchaseItemStatus)}

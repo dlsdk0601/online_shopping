@@ -4,7 +4,7 @@ import { loadPaymentWidget, PaymentWidgetInstance } from "@tosspayments/payment-
 import { isNil } from "lodash";
 import { nanoid } from "nanoid";
 import { ShowPurchaseRes } from "../../api/type.g";
-import { mf2 } from "../../ex/numberEx";
+import { mf1 } from "../../ex/numberEx";
 import { ignorePromise } from "../../ex/utils";
 import { useUser } from "../../hooks/useUser";
 import { baseConfig } from "../../lib/config";
@@ -96,7 +96,7 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
                   <span style={{ fontSize: "12px" }} className="text-danger">
                     카드 결제 및 간편 결제만 지원합니다.
                   </span>
-                  <h4>Total: ${mf2(props.purchase.totalPrice)}</h4>
+                  <h4>Total: ₩{mf1(props.purchase.totalPrice)}</h4>
                   <div className="main-border-button">
                     <button className="rounded" type="button" onClick={() => onClickPay()}>
                       Buy

@@ -4,7 +4,7 @@ import { isEmpty, isNil } from "lodash";
 import { validatePageQuery } from "../../../ex/utils";
 import { useOrders } from "../../../hooks/useOrders";
 import { Replace } from "../../../layout/App";
-import { mf2 } from "../../../ex/numberEx";
+import { mf1 } from "../../../ex/numberEx";
 import { d1 } from "../../../ex/dateEx";
 import PaginationBarView from "../../../view/PaginationBarView";
 import { Urls } from "../../../url/url.g";
@@ -47,7 +47,7 @@ const OrderPage = () => {
                   >
                     <p>{d1(item.createAt)}</p>
                     <p>{item.orderCode}</p>
-                    <p>${mf2(item.price)}</p>
+                    <p>₩{mf1(item.price)}</p>
                     <p>{item.method}</p>
                     <p>{paymentStatusEnumToLabel(item.status as TossPaymentStatus)}</p>
                   </li>

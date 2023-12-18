@@ -118,7 +118,7 @@ const CartListView = (props: { list: CartListItem[] }) => {
                   구매 하기
                 </button>
               </div>
-              <p className="total-price">Total: ${mf1(totalPrice)}</p>
+              <p className="total-price">Total: ₩{mf1(totalPrice)}</p>
             </li>
             {isEmpty(props.list) && (
               <li>
@@ -201,7 +201,7 @@ const CartListItemView = memo(
             </button>
           </div>
         </div>
-        <p className="price">${mf1(cartItem.count * cartItem.price)}</p>
+        <p className="price">₩{mf1(cartItem.count * cartItem.price)}</p>
       </li>
     );
   },

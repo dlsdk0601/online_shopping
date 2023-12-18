@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 import { useMutation } from "react-query";
 import { isNil } from "lodash";
 import { useRecoilValue } from "recoil";
-import { mf2 } from "../ex/numberEx";
 import { AddCartReq, ProductListItem } from "../api/type.g";
 import { Urls } from "../url/url.g";
 import { api } from "../api/url.g";
 import { tokenModel } from "../store/user";
+import { mf1 } from "../ex/numberEx";
 
 const ProductItemView = (props: { item: ProductListItem }) => {
   const router = useRouter();
@@ -76,7 +76,7 @@ const ProductItemView = (props: { item: ProductListItem }) => {
       </div>
       <div className="down-content">
         <h4>{props.item.name}</h4>
-        <span>${mf2(props.item.price)}</span>
+        <span>₩{mf1(props.item.price)}</span>
       </div>
     </li>
   );

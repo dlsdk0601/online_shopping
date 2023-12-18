@@ -4,7 +4,7 @@ import { isNil } from "lodash";
 import { useRecoilValue } from "recoil";
 import { AddCartReq, ShowProductRes } from "../../api/type.g";
 import useValueField from "../../hooks/useValueField";
-import { mf2 } from "../../ex/numberEx";
+import { mf1 } from "../../ex/numberEx";
 import Stars from "../../layout/components/Stars";
 import { api } from "../../api/url.g";
 import { tokenModel } from "../../store/user";
@@ -79,7 +79,7 @@ const ProductShowView = (props: { product: ShowProductRes }) => {
             <div className="col-lg-4">
               <div className="right-content">
                 <h4>{props.product.name}</h4>
-                <span className="price">${mf2(props.product.price)}</span>
+                <span className="price">₩{mf1(props.product.price)}</span>
                 <Stars starScore={5} />
                 <span>{props.product.description}</span>
                 <div className="quote">
@@ -114,7 +114,7 @@ const ProductShowView = (props: { product: ShowProductRes }) => {
                   </div>
                 </div>
                 <div className="total">
-                  <h4>Total: {mf2(props.product.price * productCount.value)}</h4>
+                  <h4>Total: ₩{mf1(props.product.price * productCount.value)}</h4>
                   <div className="main-border-button">
                     <button type="button" onClick={() => onAddCart()}>
                       Add To Cart
