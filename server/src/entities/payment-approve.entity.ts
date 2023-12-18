@@ -288,6 +288,3 @@ export class PaymentFailure extends BaseEntity {
   @Column({ type: "varchar", nullable: false, length: 512, comment: "에러 코드" })
   message: string;
 }
-
-// TODO :: 현금 영수증 history 테이블, 가상 계좌 개발할때 같이 진행
-// TossPaymentCashReceipts;

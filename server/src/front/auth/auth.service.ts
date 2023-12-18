@@ -351,7 +351,6 @@ export class AuthService {
 
       const token = this.jwtService.sign({ pk: newLocalUser.pk, type: "FRONT" });
 
-      // TODO :: 회원 가입 후 바로 로그인 시키지 말고 다시 로그인 화면으로 보내자
       const localAuth = new LocalAuthentication();
       localAuth.token = token;
       localAuth.ip = req.ip;
