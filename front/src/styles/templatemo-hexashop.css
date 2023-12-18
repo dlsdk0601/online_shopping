@@ -2257,3 +2257,8 @@ responsive
     color: black;
     background-color: white;
 }
+
+.skeleton{
+    height: 20px;
+    width: 200px;
+}
