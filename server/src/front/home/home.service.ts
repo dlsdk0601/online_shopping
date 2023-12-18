@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { isEmpty, isNil } from "lodash";
+import { head, isNil } from "lodash";
 import { AssetService } from "../../asset/asset.service";
 import { HomeReqDto } from "./dto/home.dto";
 import { Product } from "../../entities/product.entity";
@@ -35,10 +35,7 @@ export class HomeService {
     };
   }
 
-  // TODO :: 배너 타입 따로 만들기
   async getBanner(category: ProductCategory) {
-    // findOne 으로 찾으면 고유 값인 pk 가 없다고 에러가 난다.
-    // TODO :: category 를 유니크 값으로 걸어보기
     const banners = await MainBanner.find({
       where: { category },
       relations: { image: true },
@@ -50,16 +47,18 @@ export class HomeService {
       },
     });
 
-    if (isNil(banners) || isEmpty(banners)) {
+    const banner = head(banners);
+
+    if (isNil(banner)) {
       throw new NotFoundException(errorMessage.NOT_FOUND_DATA);
     }
 
     return {
-      title: banners[0].title,
-      subTitle: banners[0].sub_title,
-      description: banners[0].description,
-      category: banners[0].category,
-      image: this.assetService.getFileSet(banners[0].image),
+      title: banner.title,
+      subTitle: banner.sub_title,
+      description: banner.description,
+      category: banner.category,
+      image: this.assetService.getFileSet(banner.image),
     };
   }
 
