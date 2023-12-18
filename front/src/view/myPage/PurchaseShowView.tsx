@@ -63,7 +63,6 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
         failUrl: `${window.location.origin}${Urls.purchase.fail.pathname}`,
       });
     } catch (e) {
-      // TODO :: 여기서 실패시의 처리도 있어야 한다.
       await router.replace(Urls.purchase.fail.url());
     }
   }, [props, user]);
@@ -94,6 +93,9 @@ const PurchaseShowView = (props: { purchase: ShowPurchaseRes }) => {
             <div className="col-lg-4">
               <div className="right-content">
                 <div className="total">
+                  <span style={{ fontSize: "12px" }} className="text-danger">
+                    카드 결제 및 간편 결제만 지원합니다.
+                  </span>
                   <h4>Total: ${mf2(props.purchase.totalPrice)}</h4>
                   <div className="main-border-button">
                     <button className="rounded" type="button" onClick={() => onClickPay()}>
