@@ -9,6 +9,7 @@ export const queryKeys = {
   cart: "cart",
   purchase: "purchase",
   refund: "REFUND",
+  index: "INDEX",
 };
 
 export const CONSTANT = {
