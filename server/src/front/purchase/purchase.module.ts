@@ -13,7 +13,6 @@ import {
   TossPaymentApprove,
   TossPaymentApproveCard,
   TossPaymentEasypay,
-  TossPaymentVirtualAccount,
 } from "../../entities/payment-approve.entity";
 import { CartService } from "../cart/cart.service";
 
@@ -27,7 +26,6 @@ import { CartService } from "../cart/cart.service";
       TossPaymentApproveCard,
       PaymentCancelHistory,
       TossPaymentEasypay,
-      TossPaymentVirtualAccount,
       PaymentFailure,
     ]),
   ],

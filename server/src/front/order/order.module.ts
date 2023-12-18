@@ -11,7 +11,6 @@ import {
   TossPaymentApprove,
   TossPaymentApproveCard,
   TossPaymentEasypay,
-  TossPaymentVirtualAccount,
 } from "../../entities/payment-approve.entity";
 import { AssetService } from "../../asset/asset.service";
 
@@ -25,7 +24,6 @@ import { AssetService } from "../../asset/asset.service";
       TossPaymentApproveCard,
       PaymentCancelHistory,
       TossPaymentEasypay,
-      TossPaymentVirtualAccount,
       PaymentFailure,
     ]),
   ],
