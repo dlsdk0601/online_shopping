@@ -20,12 +20,6 @@ export type FrontUserAuth =
   | GoogleAuthentication
   | NaverAuthentication;
 
-export type FrontUserAuths =
-  | LocalAuthentication[]
-  | KakaoAuthentication[]
-  | GoogleAuthentication[]
-  | NaverAuthentication[];
-
 @Entity("user")
 export class User extends TimeSet {
   @PrimaryGeneratedColumn({ comment: "pk" })
